@@ -8,10 +8,6 @@
     --error_color: #FF0000;
     --input_height: 2em;
     --padding: 0.2em;
-    --font_family: helvetica, arial, 'PT Sans', sans-serif;
-
-    font-family: helvetica, arial, 'PT Sans', sans-serif;
-    font-size: 11pt;
 }
 
 .stwJSONForm[disabled] .newRow,
