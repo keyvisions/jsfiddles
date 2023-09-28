@@ -1,0 +1,227 @@
+/* stwJSONForm.css */
+:root {
+    --special_color: rgb(250 70 22);
+    --light_color: rgba(250, 70, 22, 0.1);
+    --text_color: #3F3F3E;
+    --base_color: #FFFFFF;
+    --shade_color: #E0E0E0;
+    --error_color: #FF0000;
+    --input_height: 2em;
+    --padding: 0.2em;
+    --font_family: helvetica, arial, 'PT Sans', sans-serif;
+
+    font-family: helvetica, arial, 'PT Sans', sans-serif;
+    font-size: 11pt;
+}
+
+.stwJSONForm[disabled] .newRow,
+.stwJSONForm[disabled] .deleteRow,
+.stwJSONForm[disabled] .newColumn,
+.stwJSONForm[disabled] .deleteColumn
+{
+  display:none;
+}
+
+.stwJSONForm .modified {
+    border-color: #fa4616 !important;
+}
+
+.stwJSONForm .zoom {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background-color: #FFFFFF;
+}
+.stwJSONForm .zoom textarea, 
+.stwJSONForm .zoom [contenteditable] {
+    margin: 2px 2px 2px 0;
+    height: calc(100% - 5em);
+}
+
+.stwJSONForm .newRow,
+.stwJSONForm .deleteRow,
+.stwJSONForm .newColumn,
+.stwJSONForm .deleteColumn {
+    cursor: pointer;
+    font-size: smaller;
+    color: #fa4616;
+}
+
+.columnar th:first-child {
+    width: 1em;
+    white-space: nowrap;
+    text-align: left;
+    padding: 0 0.5em;
+}
+
+.stwJSONForm .newRow {
+    padding-bottom: 1em;
+}
+
+.stwJSONForm .deleteRow {
+    width: 1em;
+}
+
+.stwJSONForm {
+    /*display: grid;*/
+    padding: 0;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: start;
+}
+
+.stwJSONForm [readonly] {
+    border-color: transparent;
+    background-color: rgba(250, 70, 22, 0.05);
+}
+
+.stwJSONForm option:not([selected])[disabled] {
+    display: inherit;
+}
+
+.stwJSONForm table,
+.stwJSONForm h2,
+.stwJSONForm hr,
+.stwJSONForm label:has(textarea, div) {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    width: 100%;
+    /*grid-area: auto / 1 / auto / span 4;*/
+}
+
+.stwJSONForm caption {
+    text-align: left;
+    font-weight: bolder;
+    border-bottom: thin solid ;
+    padding-top: 0.5em;
+    color: #fa4616;
+}
+
+.stwJSONForm th {
+    font-size: smaller;
+}
+
+.stwJSONForm>label,
+.stwJSONForm legend {
+    display: block;
+    font-size: smaller;
+    font-weight: bolder;
+}
+
+.stwJSONForm option:not([selected])[disabled] {
+    display: none;
+}
+
+.stwJSONForm>label {
+    padding: 0.2em;
+    break-inside: avoid;
+}
+
+.stwJSONForm *:invalid {
+    border-color: #EE0000;
+}
+
+.stwJSONForm>table textarea {
+    border: thin solid #E0E0E0;
+}
+
+.stwJSONForm label output,
+.stwJSONForm label input,
+.stwJSONForm label select:not([multiple]) {
+    line-height: 2em;
+    height: 2em;
+    font-size: inherit;
+    border: thin solid #E0E0E0;
+    border-radius: 3px;
+    padding: 0 0.2em;
+}
+.JSONData {
+    background-color: rgba(250, 70, 22, 0.05);
+}
+
+.stwJSONForm option {
+    font-size: inherit;
+    padding: 0.2em;
+}
+
+.stwJSONForm output {
+    display: block;
+    font-weight: normal;
+}
+
+.stwJSONForm input,
+.stwJSONForm output,
+.stwJSONForm select,
+.stwJSONForm textarea,
+.stwJSONForm progress,
+.stwJSONForm meter {
+    width: -webkit-fill-available;
+    width: -moz-available;
+    width: fill-available;
+}
+
+.stwJSONForm input[type="checkbox"],
+.stwJSONForm input[type="radio"] {
+    height: 1em;
+    width: 1em;
+}
+
+.stwJSONForm textarea,
+.stwJSONForm div[contenteditable] {
+    font-family: helvetica, arial, 'PT Sans', sans-serif;
+    font-size: inherit;
+    font-weight: initial;
+    min-height: calc(3 * 2em);
+    padding: 0.2em;
+    border: thin solid #E0E0E0;
+}
+
+.stwJSONForm>fieldset {
+    display: flex;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    padding: calc(2 * 0.2em);
+    border: thin solid #E0E0E0;
+}
+
+.stwJSONForm>fieldset label {
+    font-weight: normal !important;
+    font-size: smaller;
+    padding-right: 1em;
+}
+
+@media screen and (max-width: 1024px) {
+
+    .stwJSONForm {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stwJSONForm table,
+    .stwJSONForm label:has(textarea, div) {
+        grid-area: auto / 1 / auto / span 2;
+    }
+}
+
+@media screen and (max-width: 512px) {
+
+    .stwJSONForm {
+        grid-template-columns: 1fr;
+    }
+
+    .stwJSONForm table,
+    .stwJSONForm label:has(textarea, div) {
+        grid-area: auto / 1 / auto / span 1;
+    }
+}
+
+#JSONToolbar {
+    position: absolute;
+    white-space: nowrap;
+    background-color: #FFFFFF;
+    border: 2px solid #3F3F3E;
+    z-index: 15;
+    padding: 0.25em;
+    cursor: pointer;
+}
