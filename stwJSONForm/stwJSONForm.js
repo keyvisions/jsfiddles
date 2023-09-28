@@ -1,35 +1,10 @@
 function stwJSONForm() {
-    if (!Element.prototype.closest) {
-        Element.prototype.closest = function (s) {
-            let el = this;
-            s = s.toLowerCase();
-            do {
-                if (el.tagName.toLowerCase() == s) return el;
-                el = el.parentElement || el.parentNode;
-            } while (el !== null && el.nodeType == 1);
-            return null;
-        };
-    }
-    if (!Element.prototype.remove) {
-        Element.prototype.remove = function () {
-            this.parentElement.removeChild(this);
-        };
-    }
-    if (!Array.prototype.find) {
-        Array.prototype.find = function (callback) {
-            for (let i = 0; i < this.length; ++i)
-                if (callback(this[i]))
-                    return this[i];
-            return null;
-        }
-    }
-
     Array.prototype.forEach.call(document.querySelectorAll('[data-mode="JSON"]'), function (jsonField) {
         let form = jsonField.form;
         if (form) {
             form.jsonField = jsonField;
 
-            if (form.querySelector('.JSONForm').hasAttribute('disabled')) {
+            if (form.querySelector('.stwJSONForm').hasAttribute('disabled')) {
                 Array.prototype.forEach.call(document.querySelectorAll('button, input[type="button"], input[type="submit"], input[type="reset"]'), function (el) {
                    el.style.display = 'none'; // setAttribute('disabled', 'true');
                 });
