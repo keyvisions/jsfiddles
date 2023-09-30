@@ -1,15 +1,15 @@
 window.addEventListener('load', event => {
   document.querySelectorAll('[data-json="stwProductionLine"]').forEach(widget => {
-  	const data = JSON.parse(widget.value);
-  
-		widget.insertAdjacentHTML('afterend', `
+    const data = JSON.parse(widget.value);
+
+    widget.insertAdjacentHTML('afterend', `
     	<table>
       <caption>${data.code}</caption>
     	<thead><tr><th>Componente</th><th>Descrizione</th></tr></thead>
       <tbody></tbody>
       <tfoot></tfoot>
       </table>`);
-  	widget.style.display = 'none';
+    widget.style.display = 'none';
     const table = widget.nextElementSibling;
 
     const UDC = data.udc; // Unità di carico presenti in linea
@@ -28,14 +28,14 @@ window.addEventListener('load', event => {
     tr = `<tr><td colspan="2">Totale componenti</td>${'<th></th>'.repeat(UDC)}</tr>`;
     table.querySelector('tfoot').insertAdjacentHTML('afterbegin', tr);
 
-    table.tally = function () {
+    table.tally = function() {
       let udc_c = Array(UDC);
       data.components.forEach(component => {
         udc_c[component.udc] = ++udc_c[component.udc] || 1;
       });
       table.querySelectorAll('tfoot > tr th').forEach((th, i) => th.innerHTML = typeof udc_c[i] == 'undefined' ? '' : udc_c[i]);
     };
-		table.tally();
+    table.tally();
 
     table.addEventListener('click', event => {
       let target = event.target;
