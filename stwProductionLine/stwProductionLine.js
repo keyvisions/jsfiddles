@@ -4,7 +4,7 @@ window.addEventListener('load', event => {
 
     widget.insertAdjacentHTML('afterend', `
     	<table>
-      <caption>${data.code}</caption>
+      <caption>${data.name}<br><span>${data.itemcode}</span></caption>
     	<thead><tr><th>Componente</th><th>Descrizione</th></tr></thead>
       <tbody></tbody>
       <tfoot></tfoot>
@@ -12,24 +12,22 @@ window.addEventListener('load', event => {
     widget.style.display = 'none';
     const table = widget.nextElementSibling;
 
-    const UDC = data.udc; // Unità di carico presenti in linea
-
     let tr = '';
-    for (let i = 1; i <= UDC; ++i)
+    for (let i = 1; i <= data.udc; ++i)
       tr += `<th>UDC<sub>${i}</sub></th>`;
     table.querySelector('thead > tr').insertAdjacentHTML('beforeend', tr);
 
     data.components.forEach((component, i) => {
-      tr = `<tr><td>${component.code}</td><td>${component.description}</td>${'<td><i class="fa-regular fa-fw fa-circle"></i></td>'.repeat(UDC)}</tr>`;
+      tr = `<tr><td>${component.code}</td><td>${component.description}</td>${'<td><i class="fa-regular fa-fw fa-circle"></i></td>'.repeat(data.udc)}</tr>`;
       table.querySelector('tbody').insertAdjacentHTML('beforeend', tr);
       table.querySelectorAll('tbody tr:last-child i')[component.udc].classList.replace('fa-regular', 'fa-solid');
     });
 
-    tr = `<tr><td colspan="2">Totale componenti</td>${'<th></th>'.repeat(UDC)}</tr>`;
+    tr = `<tr><td colspan="2">Totale componenti</td>${'<th></th>'.repeat(data.udc)}</tr>`;
     table.querySelector('tfoot').insertAdjacentHTML('afterbegin', tr);
 
     table.tally = function() {
-      let udc_c = Array(UDC);
+      let udc_c = Array(data.udc);
       data.components.forEach(component => {
         udc_c[component.udc] = ++udc_c[component.udc] || 1;
       });
