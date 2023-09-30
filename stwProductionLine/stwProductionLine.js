@@ -4,7 +4,7 @@ window.addEventListener('load', event => {
 
     widget.insertAdjacentHTML('afterend', `
     	<table>
-      <caption>${data.name}<br><span>${data.itemcode}</span></caption>
+      <caption>${data.name}<br><input name="itemcode" value="${data.showitem}" oninput="addComponents(event)"></caption>
     	<thead><tr><th>Componente</th><th>Descrizione</th></tr></thead>
       <tbody></tbody>
       <tfoot></tfoot>
@@ -18,12 +18,12 @@ window.addEventListener('load', event => {
     table.querySelector('thead > tr').insertAdjacentHTML('beforeend', tr);
 
     data.components.forEach((component, i) => {
-      tr = `<tr><td>${component.code}</td><td>${component.description}</td>${'<td><i class="fa-regular fa-fw fa-circle"></i></td>'.repeat(data.udc)}</tr>`;
+      tr = `<tr${component.included.includes(data.showitem) ? '' : ' class="notPartOf"'}><td>${component.code}</td><td>${component.description}</td>${'<td><i class="fa-regular fa-fw fa-circle"></i></td>'.repeat(data.udc)}</tr>`;
       table.querySelector('tbody').insertAdjacentHTML('beforeend', tr);
-      table.querySelectorAll('tbody tr:last-child i')[component.udc].classList.replace('fa-regular', 'fa-solid');
+      table.querySelectorAll('tbody tr:last-child i')[component.udc].classList.replace('fa-regular', 'fa-solid'); // &#x25EF; &#x23FA;
     });
 
-    tr = `<tr><td colspan="2">Totale componenti</td>${'<th></th>'.repeat(data.udc)}</tr>`;
+    tr = `<tr><td colspan="2">Numero di componenti nella UDC</td>${'<th></th>'.repeat(data.udc)}</tr>`;
     table.querySelector('tfoot').insertAdjacentHTML('afterbegin', tr);
 
     table.tally = function() {
@@ -44,7 +44,6 @@ window.addEventListener('load', event => {
           if (udc.className.indexOf('solid') != -1)
             data.components.find(component => component.code == target.closest('tr').firstChild.innerText).udc = i;
         });
-
         table.tally();
       }
     });
