@@ -1,0 +1,17 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 0.25em;
+}
+thead th {
+  border-bottom: medium solid black;
+}
+tbody td {
+  border-bottom: thin solid black;
+}
+td:nth-child(1n + 3) {
+  text-align: center;
+}
