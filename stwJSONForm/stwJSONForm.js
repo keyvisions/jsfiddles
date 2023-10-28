@@ -1,24 +1,29 @@
-function stwJSONForm() {
-    Array.prototype.forEach.call(document.querySelectorAll('[data-mode="JSON"]'), function (jsonField) {
+function JSONForm() {
+    document.querySelectorAll('[data-jsonform]').forEach(jsonField => {
         let form = jsonField.form;
         if (form) {
+            // jsonField.style.display = 'none';
             form.jsonField = jsonField;
 
-            if (form.querySelector('.stwJSONForm').hasAttribute('disabled')) {
-                Array.prototype.forEach.call(document.querySelectorAll('button, input[type="button"], input[type="submit"], input[type="reset"]'), function (el) {
-                   el.style.display = 'none'; // setAttribute('disabled', 'true');
+            if (form.hasAttribute('disabled')) {
+                form.querySelectorAll('button, input[type="button"], input[type="submit"], input[type="reset"]').forEach(el => {
+                    el.style.display = 'none';
                 });
-                Array.prototype.forEach.call(document.querySelectorAll('.JSONData'), function (el) {
+
+                form.querySelectorAll('.JSONData').forEach(el => {
                     if (el.tagName == 'DIV')
                         el.removeAttribute('contenteditable');
                     else if (el.tagName == 'TABLE')
                         ;
-                    else
-                        el.setAttribute('disabled', 'true');
+                    else {
+                        el.disabled = true;
+                        if (el.value == 'disabled')
+                            el.value = '';
+                    }
                 });
             }
 
-            form.newColumn = function (table) {
+            form.newColumn = table => {
                 if (!table.querySelector('tbody'))
                     table.querySelector('tfoot.dataRow').insertAdjacentHTML('beforebegin', '<tbody></tbody>');
                 if (!table.querySelector('tbody').childElementCount) {
@@ -43,22 +48,32 @@ function stwJSONForm() {
                 if (table) {
                     let tableName = table.getAttribute('name');
                     data[tableName] = [];
-                    if (!table.classList.contains('columnar')) {
-                        Array.prototype.forEach.call(table.querySelectorAll('tbody'), function (row) {
+                    if (table.classList.contains('columnar')) {
+                        for (let i = 0; i < table.querySelectorAll('tbody>tr:first-child .JSONData[name]').length; ++i)
+                            data[tableName].push({});
+
+                        table.querySelectorAll('tbody>tr').forEach(function (row, i) {
+                            row.querySelectorAll('.JSONData[name]').forEach(function (fld, i) {
+                                data[tableName][i][fld.getAttribute('name')] = form.valueStringify(fld);
+                            });
+                        });
+
+                    } else {
+                        table.querySelectorAll('tbody').forEach(row => {
                             let rowData = {};
-                            Array.prototype.forEach.call(row.querySelectorAll('.JSONData[name]'), function (fld) {
+                            row.querySelectorAll('.JSONData[name]').forEach(fld => {
                                 rowData[fld.getAttribute('name')] = form.valueStringify(fld);
                             });
                             data[tableName].push(rowData);
                         });
-                    } else {
-                        for (let i = 0; i < table.querySelectorAll('tbody>tr:first-child .JSONData[name]').length; ++i)
-                            data[tableName].push({});
 
-                        Array.prototype.forEach.call(table.querySelectorAll('tbody>tr'), function (row, i) {
-                            Array.prototype.forEach.call(row.querySelectorAll('.JSONData[name]'), function (fld, i) {
-                                data[tableName][i][fld.getAttribute('name')] = form.valueStringify(fld);
-                            });
+                        // Summary functions
+                        data[`${tableName}_summary`] = {}
+                        table.querySelectorAll(`tfoot output[for]`).forEach(output => {
+                            let sum = 0;
+                            table.querySelectorAll(`tbody input[name=${output.getAttribute('for')}]`).forEach(cell => sum += parseFloat(cell.value) || 0.0);
+                            output.value = sum;
+                            data[`${tableName}_summary`][output.getAttribute('for')] = sum;
                         });
                     }
 
@@ -70,34 +85,34 @@ function stwJSONForm() {
 
                 form.jsonField.value = JSON.stringify(data);
             }
-            form.valueStringify = function (el) {
+            form.valueStringify = el => {
                 let value;
 
                 if (el.type == 'checkbox' && (el.value == undefined || el.value == 'on')) {
                     value = 0;
                     if (el.closest('fieldset'))
-                        Array.prototype.forEach.call(el.closest('fieldset').querySelectorAll('[type=checkbox]'), function (checkbox) { value = (value || 0) << 1 | checkbox.checked });
+                        el.closest('fieldset').querySelectorAll('[type=checkbox]').forEach(checkbox => { value = (value || 0) << 1 | checkbox.checked });
                     else
                         value = el.checked;
                 } else if (el.type == 'checkbox') {
                     value = [];
-                    Array.prototype.forEach.call(el.closest('fieldset').querySelectorAll('[type=checkbox]'), function (checkbox) {
+                    el.closest('fieldset').querySelectorAll('[type=checkbox]').forEach(checkbox => {
                         if (checkbox.checked) value.push(checkbox.value)
                     });
                 } else if (el.type == 'select-multiple') {
                     value = [];
-                    Array.prototype.forEach.call(el.querySelectorAll('option'), function (option) {
+                    el.querySelectorAll('option').forEach(option => {
                         if (option.selected) value.push(option.value)
                     });
                 } else
-                    value = el.hasAttribute('contenteditable') ? el.innerHTML : el.value;
+                    value = typeof el.value != 'undefined' ? el.value : el.innerHTML;
 
                 el.classList.add('modified');
 
                 return value;
             }
-            form.JSONParse = function (event) {
-                let form = event.target.form;
+            form.JSONParse = event => {
+                let form = event.target.closest('form');
                 let data;
 
                 try {
@@ -110,22 +125,12 @@ function stwJSONForm() {
                     return;
                 }
 
-                Object.keys(data).forEach(function (datum) {
+                Object.keys(data).forEach(datum => {
                     let el = form.querySelector('.JSONData[name="' + datum + '"]');
                     if (el && el.tagName == 'TABLE' && el.classList.contains('JSONData')) {
-                        Array.prototype.forEach.call(el.querySelectorAll('tbody'), function (tbody) { tbody.remove(); });
-                        if (!el.classList.contains('columnar')) {
-                            data[datum].forEach(function (subdatum) {
-                                let tbody = document.createElement('tbody');
-                                tbody.innerHTML = el.querySelector('tfoot.dataRow').innerHTML;
-                                Object.keys(subdatum).forEach(function (datum) {
-                                    let subelement = tbody.querySelector('.JSONData[name="' + datum + '"]');
-                                    if (subelement)
-                                        form.parseValue(subelement, subdatum[datum]);
-                                });
-                                el.querySelector('tfoot.dataRow').insertAdjacentElement('beforebegin', tbody);
-                            });
-                        } else {
+                        if (!el.hasAttribute('data-key'))
+                            el.querySelectorAll('tbody').forEach(tbody => { tbody.remove(); });
+                        if (el.classList.contains('columnar')) {
                             el.querySelector('tfoot.dataRow').insertAdjacentHTML('beforebegin', '<tbody></tbody>');
                             let ths = el.querySelectorAll('.deleteColumn');
                             for (let i = ths.length - 1; i > 0; --i)
@@ -135,18 +140,60 @@ function stwJSONForm() {
                                 form.newColumn(el);
 
                             data[datum].forEach(function (subdatum, c) {
-                                Object.keys(subdatum).forEach(function (key) {
-                                    let subelement = el.querySelector('tbody td:nth-child(' + (c + 2) + ') .JSONData[name="' + key + '"]');
+                                Object.keys(subdatum).forEach(key => {
+                                    let subelement = el.querySelector(`tbody td:nth-child(${c + 2}) .JSONData[name="${key}"]`);
                                     if (subelement)
                                         form.parseValue(subelement, subdatum[key]);
                                 });
+                            });
+                        } else {
+                            if (el.hasAttribute('data-key')) {
+                                el.querySelectorAll('tbody[data-key]').forEach(tbody => {
+                                    let subdatum = data[datum].find(d => d[el.getAttribute('data-key')] == tbody.getAttribute('data-key')) ||
+                                        { [el.getAttribute('data-key')]: tbody.getAttribute('data-key') };
+
+                                    let _tbody = document.createElement('tbody');
+                                    _tbody.innerHTML = el.querySelector('tfoot.dataRow').innerHTML;
+
+                                    _tbody.querySelectorAll('td').forEach((_td, i) => {
+                                        if (_td.innerHTML != '')
+                                            tbody.querySelector(`td:nth-child(${i + 1})`).innerHTML = _td.innerHTML;
+                                    });
+
+                                    Object.keys(subdatum).forEach(datum => {
+                                        let subelement = tbody.querySelector(`.JSONData[name="${datum}"]`);
+                                        if (subelement)
+                                            form.parseValue(subelement, subdatum[datum]);
+                                    });
+                                });
+
+                            } else {
+                                data[datum].forEach(subdatum => {
+                                    let tbody = document.createElement('tbody');
+                                    tbody.innerHTML = el.querySelector('tfoot.dataRow').innerHTML;
+
+                                    Object.keys(subdatum).forEach(datum => {
+                                        let subelement = tbody.querySelector(`.JSONData[name="${datum}"]`);
+                                        if (subelement)
+                                            form.parseValue(subelement, subdatum[datum]);
+                                    });
+
+                                    el.querySelector('tfoot.dataRow').insertAdjacentElement('beforebegin', tbody);
+                                });
+                            }
+
+                            // Summary functions
+                            el.querySelectorAll(`tfoot output[for]`).forEach(output => {
+                                let sum = 0;
+                                el.querySelectorAll(`tbody input[name=${output.getAttribute('for')}]`).forEach(cell => sum += parseFloat(cell.value) || 0.0);
+                                output.value = sum;
                             });
                         }
                     } else
                         form.parseValue(el, data[datum]);
                 });
 
-                Array.prototype.forEach.call(form.querySelectorAll('table.JSONData'), function (table) {
+                form.querySelectorAll('table.JSONData').forEach(table => {
                     if (table.querySelector('tfoot.dataRow').onchange)
                         table.querySelector('tfoot.dataRow').onchange(table);
                 });
@@ -165,34 +212,42 @@ function stwJSONForm() {
             form.parseValue = function (el, value) {
                 if (!el)
                     return;
-                if (el.tagName == 'DIV') {
+                if (el.tagName == 'DIV' || el.tagName == 'TD') {
                     el.innerHTML = value;
 
                 } else if (el.type == 'checkbox' || el.type == 'radio') {
                     if (el.closest('fieldset')) {
                         if (Array.isArray(value))
-                            Array.prototype.forEach.call(el.closest('fieldset').querySelectorAll('[type=checkbox]'), function (checkbox) {
-                                checkbox.checked = value.find(function (value) { return value == checkbox.value }) ? true : false;
+                            el.closest('fieldset').querySelectorAll('[type=checkbox]').forEach(checkbox => {
+                                checkbox.checked = value.find(value => { return value == checkbox.value }) ? true : false;
+                                checkbox.setAttribute('form', 'JSONField');
                             });
                         else if (el.type == 'radio')
-                            Array.prototype.forEach.call(el.closest('fieldset').querySelectorAll('[type=radio]'), function (radio) {
+                            el.closest('fieldset').querySelectorAll('[type=radio]').forEach(radio => {
                                 radio.checked = (value == radio.value);
+                                radio.setAttribute('form', 'JSONField');
                             });
                         else
-                            Array.prototype.forEach.call(el.closest('fieldset').querySelectorAll('[type=checkbox]'), function (checkbox, i) {
+                            el.closest('fieldset').querySelectorAll('[type=checkbox]').forEach(function (checkbox, i) {
                                 checkbox.checked = (value || 0) & (1 << i) ? true : false;
+                                checkbox.setAttribute('form', 'JSONField');
                             });
-                    } else
+                    } else {
                         el.checked = value ? true : false;
+                        el.setAttribute('form', 'JSONField');
+                    }
 
                 } else if (el.type == 'select-multiple') {
-                    Array.prototype.forEach.call(el.querySelectorAll('option'), function (option) {
-                        if (value.find(function (value) { return value == option.value }))
+                    el.querySelectorAll('option').forEach(option => {
+                        if (value.find(value => { return value == option.value }))
                             option.setAttribute('selected', '');
                     });
+                    el.setAttribute('form', 'JSONField');
 
-                } else
+                } else {
                     el.value = value;
+                    el.setAttribute('form', 'JSONField');
+                }
             }
 
             // Normalize JSON field
@@ -224,7 +279,7 @@ function stwJSONForm() {
 
             form.addEventListener('keydown', form.zoom);
             form.addEventListener('input', form.JSONStringify);
-            form.addEventListener('click', function (event) {
+            form.addEventListener('click', event => {
                 if (event.target.hasAttribute('contenteditable')) {
                     event.preventDefault();
                     return;
@@ -271,8 +326,8 @@ function stwJSONForm() {
                 }
             });
 
-            Array.prototype.forEach.call(form.querySelectorAll('div[contenteditable]'), function (contenteditable) {
-                contenteditable.addEventListener('focus', function (event) {
+            form.querySelectorAll('div[contenteditable]').forEach(contenteditable => {
+                contenteditable.addEventListener('focus', event => {
                     let toolbar = document.getElementById('JSONToolbar');
                     if (!toolbar) {
                         document.body.insertAdjacentHTML('beforeend', '<div id="JSONToolbar"><i class="fas fa-fw fa-strikethrough" data-format="s" title="Barra testo selezionato"></i> <i class="fas fa-fw fa-highlighter" data-format="mark" title="Evidenzia testo selezionato"></i> <i class="fas fa-expand" data-action="expand" title="Zoom (F2)"></i></div>');
@@ -284,12 +339,12 @@ function stwJSONForm() {
                     toolbar.style.right = parseInt(window.innerWidth - rect.right) + 'px';
                     toolbar.style.display = '';
                 });
-                contenteditable.addEventListener('blur', function (event) {
+                contenteditable.addEventListener('blur', event => {
                     document.getElementById('JSONToolbar').style.display = 'none';
                 });
             });
 
-            form.formatText = function (event) {
+            form.formatText = event => {
                 let sel = window.getSelection();
                 if (event.target.dataset.format && sel && sel.rangeCount) {
                     let range = sel.getRangeAt(0);
@@ -310,4 +365,4 @@ function stwJSONForm() {
         }
     });
 }
-window.addEventListener('load', stwJSONForm);
+// window.addEventListener('load', JSONForm, { once: true });

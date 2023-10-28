@@ -1,49 +1,61 @@
-/* stwJSONForm.css */
 :root {
-    --special_color: rgb(250 70 22);
-    --light_color: rgba(250, 70, 22, 0.1);
+    --special_color: rgb(22, 140, 250);
+    --light_color: rgba(22, 178, 250, 0.1);
     --text_color: #3F3F3E;
     --base_color: #FFFFFF;
     --shade_color: #E0E0E0;
     --error_color: #FF0000;
     --input_height: 2em;
-    --padding: 0.2em;
+    --padding: 0.25em;
+    --font_family: helvetica, arial, 'PT Sans', sans-serif;
+
+    font-family: var(--font_family);
+    font-size: 11pt;
 }
 
-.stwJSONForm[disabled] .newRow,
-.stwJSONForm[disabled] .deleteRow,
-.stwJSONForm[disabled] .newColumn,
-.stwJSONForm[disabled] .deleteColumn
-{
-  display:none;
+.JSONForm .modified {
+    border-color: var(--special_color) !important;
 }
 
-.stwJSONForm .modified {
-    border-color: #fa4616 !important;
+.JSONForm [disabled],
+.JSONForm div.JSONData:not([contenteditable]) {
+    background-color: #efefef !important;
 }
 
-.stwJSONForm .zoom {
+.JSONForm[disabled] .newRow,
+.JSONForm[disabled] .deleteRow,
+.JSONForm[disabled] .newColumn,
+.JSONForm[disabled] .deleteColumn {
+    display: none;
+}
+
+.JSONForm .zoom {
     position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     z-index: 10;
-    background-color: #FFFFFF;
+    background-color: var(--base_color);
 }
-.stwJSONForm .zoom textarea, 
-.stwJSONForm .zoom [contenteditable] {
+
+.JSONForm .zoom textarea,
+.JSONForm .zoom [contenteditable] {
     margin: 2px 2px 2px 0;
     height: calc(100% - 5em);
 }
 
-.stwJSONForm .newRow,
-.stwJSONForm .deleteRow,
-.stwJSONForm .newColumn,
-.stwJSONForm .deleteColumn {
+.JSONForm .newRow,
+.JSONForm .deleteRow,
+.JSONForm .newColumn,
+.JSONForm .deleteColumn {
     cursor: pointer;
     font-size: smaller;
-    color: #fa4616;
+    color: var(--special_color);
+}
+
+.columnar {
+    table-layout: fixed;
 }
 
 .columnar th:first-child {
@@ -53,136 +65,146 @@
     padding: 0 0.5em;
 }
 
-.stwJSONForm .newRow {
+.JSONForm .newRow {
     padding-bottom: 1em;
 }
 
-.stwJSONForm .deleteRow {
+.JSONForm .deleteRow {
     width: 1em;
 }
 
-.stwJSONForm {
+.JSONForm {
     /*display: grid;*/
     padding: 0;
     grid-template-columns: repeat(4, 1fr);
     align-items: start;
 }
 
-.stwJSONForm [readonly] {
+.JSONForm [readonly] {
     border-color: transparent;
-    background-color: rgba(250, 70, 22, 0.05);
+    background-color: var(--light_color);
 }
 
-.stwJSONForm option:not([selected])[disabled] {
+.JSONForm option:not([selected])[disabled] {
     display: inherit;
 }
 
-.stwJSONForm table,
-.stwJSONForm h2,
-.stwJSONForm hr,
-.stwJSONForm label:has(textarea, div) {
+.JSONForm table,
+.JSONForm h2,
+.JSONForm hr,
+.JSONForm label:has(textarea, div) {
+    border-collapse: collapse;
     grid-column-start: 1;
     grid-column-end: 4;
     width: 100%;
     /*grid-area: auto / 1 / auto / span 4;*/
 }
 
-.stwJSONForm caption {
+.JSONForm td {
+    padding: var(--padding);
+}
+
+.JSONForm caption {
     text-align: left;
     font-weight: bolder;
-    border-bottom: thin solid ;
+    border-bottom: thin solid var(--special_color);
     padding-top: 0.5em;
-    color: #fa4616;
+    color: var(--special_color);
 }
 
-.stwJSONForm th {
+.JSONForm th {
     font-size: smaller;
+    background-color: var(--special_color);
+    color: var(--base_color);
+    padding: var(--padding);
 }
 
-.stwJSONForm>label,
-.stwJSONForm legend {
+.JSONForm>label,
+.JSONForm legend {
     display: block;
     font-size: smaller;
     font-weight: bolder;
 }
 
-.stwJSONForm option:not([selected])[disabled] {
+.JSONForm option:not([selected])[disabled] {
     display: none;
 }
 
-.stwJSONForm>label {
-    padding: 0.2em;
+.JSONForm>label {
+    padding: var(--padding);
     break-inside: avoid;
 }
 
-.stwJSONForm *:invalid {
-    border-color: #EE0000;
+.JSONForm *:invalid {
+    border-color: var(--error_color);
 }
 
-.stwJSONForm>table textarea {
-    border: thin solid #E0E0E0;
+.JSONForm>table textarea {
+    border: thin solid var(--shade_color);
 }
 
-.stwJSONForm label output,
-.stwJSONForm label input,
-.stwJSONForm label select:not([multiple]) {
-    line-height: 2em;
-    height: 2em;
+.JSONForm label input,
+.JSONForm label select:not([multiple]) {
+    line-height: var(--input_height);
+    height: var(--input_height);
     font-size: inherit;
-    border: thin solid #E0E0E0;
-    border-radius: 3px;
-    padding: 0 0.2em;
-}
-.JSONData {
-    background-color: rgba(250, 70, 22, 0.05);
+    border: thin solid var(--shade_color);
+    padding: 0 var(--padding);
 }
 
-.stwJSONForm option {
+.JSONData:not(td),
+JSONData:not(table) {
+    background-color: var(--light_color);
+}
+
+.JSONForm option {
     font-size: inherit;
-    padding: 0.2em;
+    padding: var(--padding);
 }
 
-.stwJSONForm output {
+.JSONForm output {
     display: block;
     font-weight: normal;
+    border: none;
+    padding: var(--padding);
 }
 
-.stwJSONForm input,
-.stwJSONForm output,
-.stwJSONForm select,
-.stwJSONForm textarea,
-.stwJSONForm progress,
-.stwJSONForm meter {
+.JSONForm input,
+.JSONForm select,
+.JSONForm textarea,
+.JSONForm progress,
+.JSONForm meter {
     width: -webkit-fill-available;
     width: -moz-available;
     width: fill-available;
+    border: thin solid var(--shade_color);
+    padding: var(--padding);
 }
 
-.stwJSONForm input[type="checkbox"],
-.stwJSONForm input[type="radio"] {
+.JSONForm input[type="checkbox"],
+.JSONForm input[type="radio"] {
     height: 1em;
     width: 1em;
 }
 
-.stwJSONForm textarea,
-.stwJSONForm div[contenteditable] {
-    font-family: helvetica, arial, 'PT Sans', sans-serif;
+.JSONForm textarea,
+.JSONForm div[contenteditable] {
+    font-family: var(--font_family);
     font-size: inherit;
     font-weight: initial;
-    min-height: calc(3 * 2em);
-    padding: 0.2em;
-    border: thin solid #E0E0E0;
+    padding: var(--padding);
+    border: thin solid var(--shade_color);
 }
 
-.stwJSONForm>fieldset {
+.JSONForm>fieldset {
     display: flex;
     align-content: flex-start;
     flex-wrap: wrap;
-    padding: calc(2 * 0.2em);
-    border: thin solid #E0E0E0;
+    padding: calc(2 * var(--padding));
+    border: thin solid var(--shade_color);
 }
 
-.stwJSONForm>fieldset label {
+.JSONForm>fieldset label {
     font-weight: normal !important;
     font-size: smaller;
     padding-right: 1em;
@@ -190,24 +212,24 @@
 
 @media screen and (max-width: 1024px) {
 
-    .stwJSONForm {
+    .JSONForm {
         grid-template-columns: 1fr 1fr;
     }
 
-    .stwJSONForm table,
-    .stwJSONForm label:has(textarea, div) {
+    .JSONForm table,
+    .JSONForm label:has(textarea, div) {
         grid-area: auto / 1 / auto / span 2;
     }
 }
 
 @media screen and (max-width: 512px) {
 
-    .stwJSONForm {
+    .JSONForm {
         grid-template-columns: 1fr;
     }
 
-    .stwJSONForm table,
-    .stwJSONForm label:has(textarea, div) {
+    .JSONForm table,
+    .JSONForm label:has(textarea, div) {
         grid-area: auto / 1 / auto / span 1;
     }
 }
@@ -215,8 +237,8 @@
 #JSONToolbar {
     position: absolute;
     white-space: nowrap;
-    background-color: #FFFFFF;
-    border: 2px solid #3F3F3E;
+    background-color: var(--base_color);
+    border: 2px solid var(--text_color);
     z-index: 15;
     padding: 0.25em;
     cursor: pointer;

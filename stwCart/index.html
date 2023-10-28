@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link rel="stylesheet" href="./stwCart.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="./stwCart.js"></script>
+</head>
+
+<body>
+    <form>
+        <textarea name="cart" data-GUID="0F9F6223-28F8-419E-9CB4-20E5C2C15AFB" style="display:none">
+            [
+            {"code": "220.2300", "option": null, "description": "fufi", "quantity": 5, "timestamp": null, "note": "", "flags": 0, "restrictions":"5/5"},
+            {"code": "220.2300", "option": null, "quantity": 5, "timestamp": null, "note": "", "flags": 1, "restrictions":"5/5"},
+            {"code": "220.2300", "option": null, "quantity": 5, "timestamp": null, "note": "", "flags": 0, "restrictions":"5/5"},
+            {"code": "220.2300", "option": null, "quantity": 5, "timestamp": null, "note": "", "flags": 0, "restrictions":"5/5"},
+            {"code": "220.2300", "option": null, "quantity": 5, "timestamp": null, "note": "", "flags": 0, "restrictions":"5/5"}
+            ]
+          </textarea>
+        <input type="search" name="code"> <button type="button" onclick="fetchCode(this.previousElementSibling.value)">+</button>
+    </form>
+
+    <form class="stwCart" id="cart" onchange="saveCart(this)">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">Code</th>
+                    <th>Alt code</th>
+                    <th style="width:100%">Description</th>
+                    <th>MOQ/PPP</th>
+                    <th>Quantity</th>
+                    <th>Request<br>type</th>
+                    <th style="width:1em"></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot style="display:none">
+                <tr>
+                    <td name="code"></td>
+                    <td name="option"></td>
+                    <td name="altcode"></td>
+                    <td>
+                        <div name="description"></div>
+                        <input name="note" style="width:100%" placeholder="notes"></div>
+                    </td>
+                    <td name="restrictions" style="text-align: center;"></td>
+                    <td><input name="quantity" type="number" min="1" max="10000" step="1" style="width:6ex"></td>
+                    <td><select name="flags">
+                            <option value="0">Quote</option>
+                            <option value="1">Order</option>
+                        </select></td>
+                    <td onclick="removeRow(this)"><i class="fas fa-fw fa-trash"></i></td>
+                </tr>
+            </tfoot>
+        </table>
+    </form>
+</body>
+
+</html>

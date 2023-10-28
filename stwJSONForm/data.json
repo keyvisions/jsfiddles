@@ -1,0 +1,456 @@
+{
+    "lvlRischio": "Basso",
+    "orp": "No",
+    "ope": "No",
+    "oea": "No",
+    "sgs": "No",
+    "sgq": "No",
+    "sga": "No",
+    "mog231": "No",
+    "incarico": "incarico continuativo",
+    "tutor": "tutor",
+    "attivita": "attività azienda",
+    "addetti": "2",
+    "tutor_VR": [
+        {
+            "_id": "1",
+            "description": "DVR generale",
+            "stato": "DVR",
+            "data": "2020-06-10",
+            "scadenza": "",
+            "note": "Da rivedere per inserire guanti in zona SKF e nuova insacchettatrice e Enrico Fermi 2",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "2",
+            "description": "VR ambienti confinati",
+            "stato": "Non applicabile",
+            "data": "",
+            "scadenza": "",
+            "note": "",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "3",
+            "description": "VR macchine/attrezzature (rischi meccanici)",
+            "stato": "Nel DVR generale",
+            "data": "",
+            "scadenza": "",
+            "note": "",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "4",
+            "description": "VR elettrico",
+            "stato": "Nel DVR generale",
+            "data": "",
+            "scadenza": "",
+            "note": "",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "5",
+            "description": "VR fulminazione",
+            "stato": "Necessario ma assente",
+            "data": "",
+            "scadenza": "",
+            "note": "Da fare per tutte le sedi",
+            "NC": "1",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "6",
+            "description": "VR incendio",
+            "stato": "Nel DVR generale",
+            "data": "",
+            "scadenza": "",
+            "note": "<div>Costabissara e Brescia vedi pratiche prevenzione incendi</div>",
+            "NC": "",
+            "RACC": "1",
+            "SUGG": ""
+        },
+        {
+            "_id": "7",
+            "description": "VR esplosione (ATEX)",
+            "stato": "Nel DVR generale",
+            "data": "",
+            "scadenza": "",
+            "note": "<div>Solo carica muletti a Costabissara (vedi pratica prevenzione incendi)</div>",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "8",
+            "description": "VR agenti chimici",
+            "stato": "Nel DVR generale",
+            "data": "",
+            "scadenza": "",
+            "note": "",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "9",
+            "description": "VR agenti cancerogeni",
+            "stato": "Non applicabile",
+            "data": "",
+            "scadenza": "",
+            "note": "",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "10",
+            "description": "VR biologico",
+            "stato": "Nel DVR generale",
+            "data": "",
+            "scadenza": "",
+            "note": "",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "11",
+            "description": "VR amianto",
+            "stato": "Non applicabile",
+            "data": "",
+            "scadenza": "",
+            "note": "",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "12",
+            "description": "VR rumore",
+            "stato": "Nel DVR generale",
+            "data": "",
+            "scadenza": "",
+            "note": "",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "13",
+            "description": "VR vibrazioni meccaniche",
+            "stato": "DVR specifico",
+            "data": "2019-11-04",
+            "scadenza": "2023-11-04",
+            "note": "",
+            "NC": "",
+            "RACC": "6",
+            "SUGG": ""
+        },
+        {
+            "_id": "14",
+            "description": "VR radiazioni ottiche artificiali (ROA)",
+            "stato": "Nel DVR generale",
+            "data": "",
+            "scadenza": "",
+            "note": "",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "15",
+            "description": "VR campi elettromagnetici (CEM)",
+            "stato": "Necessario ma assente",
+            "data": "",
+            "scadenza": "",
+            "note": "",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "16",
+            "description": "VR MMC - Sollevamento e trasporto",
+            "stato": "DVR specifico",
+            "data": "2022-06-09",
+            "scadenza": "",
+            "note": "<span style=\"font-size: 13.3333px;\">Costabissara/Brescia/Suzzara!!!!!!</span>",
+            "NC": "1",
+            "RACC": "",
+            "SUGG": "5"
+        },
+        {
+            "_id": "17",
+            "description": "VR MMC - Movimenti ripetitivi",
+            "stato": "DVR specifico",
+            "data": "2022-06-09",
+            "scadenza": "",
+            "note": "<span style=\"font-size: 13.3333px;\">Costabissara/Brescia/Suzzara</span>",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "18",
+            "description": "VR MMC - Spinta e traino",
+            "stato": "DVR specifico",
+            "data": "2022-06-09",
+            "scadenza": "",
+            "note": "<div>Costabissara/Brescia/Suzzara</div>",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "19",
+            "description": "VR lavoro al videoterminale",
+            "stato": "Nel DVR generale",
+            "data": "",
+            "scadenza": "",
+            "note": "",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "20",
+            "description": "VR stress lavoro correlato",
+            "stato": "Necessario ma assente",
+            "data": "2020-11-03",
+            "scadenza": "2021-11-03",
+            "note": "Rischio Medio - da aggiornare",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "21",
+            "description": "VR lavoratrici madri",
+            "stato": "Nel DVR generale",
+            "data": "",
+            "scadenza": "",
+            "note": "Da estrarre",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "22",
+            "description": "VR lavoratori minori",
+            "stato": "Nel DVR generale",
+            "data": "",
+            "scadenza": "",
+            "note": "",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "23",
+            "description": "VR lavoro notturno",
+            "stato": "Non applicabile",
+            "data": "2023-06-15",
+            "scadenza": "",
+            "note": "",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "24",
+            "description": "VR differenze di genere, età, tipologia contrattuale",
+            "stato": "Nel DVR generale",
+            "data": "",
+            "scadenza": "",
+            "note": "",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "25",
+            "description": "VR interferenze appalti (DUVRI)",
+            "stato": "DVR specifico",
+            "data": "",
+            "scadenza": "",
+            "note": "",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "26",
+            "description": "Piano sicurezza lavori esterni (POS o simile)",
+            "stato": "Non applicabile",
+            "data": "",
+            "scadenza": "",
+            "note": "",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "27",
+            "description": "VR altri fattori (VEDI NOTE)",
+            "stato": "Non applicabile",
+            "data": "",
+            "scadenza": "",
+            "note": "",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        },
+        {
+            "_id": "28",
+            "description": "VR stress lavoro solitario-isolato",
+            "stato": "Nel DVR generale",
+            "data": "",
+            "scadenza": "",
+            "note": "",
+            "NC": "",
+            "RACC": "",
+            "SUGG": ""
+        }
+    ],
+    "tutor_NF": [
+        {
+            "_id": "4",
+            "atto": "Presente",
+            "stato": "Non applicabile",
+            "note": "<div>23/03/2015</div>"
+        },
+        {
+            "_id": "1",
+            "atto": "Presente",
+            "note": "<div>01/01/2019</div>"
+        },
+        {
+            "_id": "2",
+            "atto": "Presente",
+            "note": "<div>Da verificare data nomina Rizzo</div>"
+        },
+        {
+            "_id": "3",
+            "atto": "Presente",
+            "stato": "Presente",
+            "note": "<div>23/03/2015 - Aggiornamento annuale in corso (fatte prime 4 ore, da completare)</div>"
+        },
+        {
+            "_id": "5",
+            "atto": "Non applicabile",
+            "stato": "Presente",
+            "note": "<div>Formazione base gestita da ufficio risorse umane tramite ESAC</div>"
+        },
+        {
+            "_id": "6",
+            "atto": "Non presente",
+            "stato": "Presente",
+            "note": "<div>Da predisporre nomina</div>",
+            "NC": "1"
+        },
+        {
+            "_id": "7",
+            "atto": "Non applicabile",
+            "stato": "Presente"
+        },
+        {
+            "_id": "8",
+            "atto": "Presente",
+            "stato": "Presente",
+            "note": "<div>Nomina del 20/05/2022</div>"
+        },
+        {
+            "_id": "9",
+            "atto": "Presente",
+            "stato": "Presente",
+            "note": "<div>Nomina del 20/05/2022</div>"
+        },
+        {
+            "_id": "11",
+            "atto": "Presente",
+            "stato": "Presente",
+            "note": "<div>Ultime nomine del 27/07/2022 (rifatte anche per chi era già abilitato)</div>"
+        },
+        {
+            "_id": "12",
+            "atto": "Non applicabile"
+        },
+        {
+            "_id": "13",
+            "atto": "Non applicabile"
+        },
+        {
+            "_id": "14",
+            "atto": "Non applicabile"
+        },
+        {
+            "_id": "15",
+            "atto": "Non applicabile"
+        },
+        {
+            "_id": "18",
+            "atto": "Non applicabile"
+        },
+        {
+            "_id": "17",
+            "atto": "Non applicabile"
+        },
+        {
+            "_id": "16",
+            "atto": "Non applicabile"
+        },
+        {
+            "_id": "sums",
+            "NC_tot": "1"
+        }
+    ],
+    "tutor_AA": [
+        {
+            "_id": "1",
+            "presenza": "Presente",
+            "data": "2022-11-07",
+            "scadenza": "2023-12-31"
+        },
+        {
+            "_id": "2",
+            "presenza": "Da aggiornare"
+        },
+        {
+            "_id": "3",
+            "presenza": "Presente",
+            "data": "2023-05-07"
+        },
+        {
+            "_id": "4",
+            "presenza": "Presente",
+            "data": "2023-05-07"
+        },
+        {
+            "_id": "5",
+            "presenza": "Presente"
+        },
+        {
+            "_id": "6",
+            "presenza": "Presente",
+            "note": ""
+        }
+    ],
+    "sedeLegale": "sede legale",
+    "sedeOperativa": "sede operativa",
+    "tel": "123456789",
+    "codiceFiscale": "213213213",
+    "tutor_VR_aggregate": {
+        "NC": 2,
+        "RACC": 7,
+        "SUGG": 5
+    }
+}

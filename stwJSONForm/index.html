@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Form</title>
+    <link rel="stylesheet" href="./stwJSONForm.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="./stwJSONForm.js"></script>
+    <script>
+        async function setup() {
+            let response = await fetch('./data.json');
+            document.querySelector('[data-jsonform="schedaTutor"]').value = await response.text();
+            JSONForm();
+        }
+    </script>
+</head>
+
+<body onload="setup()">
+    <form>
+        <p><textarea name="fDati" data-jsonform="schedaTutor"></textarea></p>
+        <p><button>Salva</button></p>
+
+        <p><label><span>Form data</span><input name="faa"></label></p>
+        <p><label><span>JSONForm data</span><input class="JSONData" name="foo"></label></p>
+
+        <table class="JSONData" name="tutor_VR" data-key="_id">
+            <caption>SEZIONE DI CONTROLLO STATO ADEMPIMENTI: VR = Documenti di Valutazione Rischi</caption>
+            <thead>
+                <tr>
+                    <th colspan="6"></th>
+                    <th colspan="3">Esito della verifica</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th style="width:35%">Adempimento</th>
+                    <th>Stato</th>
+                    <th>Data</th>
+                    <th>Scadenza</th>
+                    <th style="width:30%">Conclusioni e Note</th>
+                    <th>NC</th>
+                    <th>RACC</th>
+                    <th>SUGG</th>
+                </tr>
+            </thead>
+            <tbody data-key="1"><tr><td></td><td class="JSONData save" name="description">DVR generale</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="2"><tr><td></td><td class="JSONData save" name="description">VR ambienti confinati</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="3"><tr><td></td><td class="JSONData save" name="description">VR macchine/attrezzature (rischi meccanici)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="4"><tr><td></td><td class="JSONData save" name="description">VR elettrico</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="5"><tr><td></td><td class="JSONData save" name="description">VR fulminazione</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="6"><tr><td></td><td class="JSONData save" name="description">VR incendio</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="7"><tr><td></td><td class="JSONData save" name="description">VR esplosione (ATEX)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="8"><tr><td></td><td class="JSONData save" name="description">VR agenti chimici</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="9"><tr><td></td><td class="JSONData save" name="description">VR agenti cancerogeni</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="10"><tr><td></td><td class="JSONData save" name="description">VR biologico</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="11"><tr><td></td><td class="JSONData save" name="description">VR amianto</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="12"><tr><td></td><td class="JSONData save" name="description">VR rumore</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="13"><tr><td></td><td class="JSONData save" name="description">VR vibrazioni meccaniche</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="14"><tr><td></td><td class="JSONData save" name="description">VR radiazioni ottiche artificiali (ROA)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="15"><tr><td></td><td class="JSONData save" name="description">VR campi elettromagnetici (CEM)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="16"><tr><td></td><td class="JSONData save" name="description">VR MMC - Sollevamento e trasporto</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="17"><tr><td></td><td class="JSONData save" name="description">VR MMC - Movimenti ripetitivi</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="18"><tr><td></td><td class="JSONData save" name="description">VR MMC - Spinta e traino</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="19"><tr><td></td><td class="JSONData save" name="description">VR lavoro al videoterminale</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="20"><tr><td></td><td class="JSONData save" name="description">VR stress lavoro correlato</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="28"><tr><td></td><td class="JSONData save" name="description">VR stress lavoro solitario-isolato</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="21"><tr><td></td><td class="JSONData save" name="description">VR lavoratrici madri</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="22"><tr><td></td><td class="JSONData save" name="description">VR lavoratori minori</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="23"><tr><td></td><td class="JSONData save" name="description">VR lavoro notturno</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="24"><tr><td></td><td class="JSONData save" name="description">VR differenze di genere, età, tipologia contrattuale</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="25"><tr><td></td><td class="JSONData save" name="description">VR interferenze appalti (DUVRI)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="26"><tr><td></td><td class="JSONData save" name="description">Piano sicurezza lavori esterni (POS o simile)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="27"><tr><td></td><td class="JSONData save" name="description">VR altri fattori (VEDI NOTE)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="128"><tr><td></td><td class="JSONData save" name="description">Fufi</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="6" style="text-align: left">Totali</th>
+                    <th><output name="NC_tot" for="NC" data-action="sum"></output></th>
+                    <th><output name="RACC_tot" for="RACC" data-action="sum"></output></th>
+                    <th><output name="SUGG_tot" for="SUGG" data-action="sum"></output></th>
+                </tr>
+            </tfoot>
+            <tfoot class="dataRow" style="display:none">
+                <tr>
+                    <td><input class="JSONData" type="hidden" name="_id"></td>
+                    <td class="JSONData save" name="description"></td>
+                    <td><select class="JSONData" name="stato">
+                            <option></option>
+                            <option>DVR</option>
+                            <option>DVR specifico</option>
+                            <option>Nel DVR generale</option>
+                            <option style="color:red">Necessario ma assente</option>
+                            <option>Non applicabile</option>
+                        </select></td>
+                    <td><input class="JSONData" type="date" name="data"></td>
+                    <td><input class="JSONData" type="date" name="scadenza"></td>
+                    <td>
+                        <div class="JSONData" name="note" contenteditable="true"></div>
+                    </td>
+                    <td><input class="JSONData" type="number" name="NC" style="width:6ex" min="0"></td>
+                    <td><input class="JSONData" type="number" name="RACC" style="width:6ex" min="0"></td>
+                    <td><input class="JSONData" type="number" name="SUGG" style="width:6ex" min="0"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </form>
+</body>
+
+</html>

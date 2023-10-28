@@ -1,0 +1,26 @@
+:root {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12pt;
+}
+
+.stwCart table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.stwCart th:nth-child(n + 2) {
+  white-space: nowrap;
+}
+
+.stwCart td,
+.stwCart th {
+  padding: 0.25em;
+  border-bottom: thin solid black;
+}
+
+.stwCart .stwCartQuote {
+  background-color: lightyellow;
+}
+.stwCart .stwCartOrder {
+  background-color: lightgreen;
+}

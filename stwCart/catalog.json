@@ -1,0 +1,18 @@
+[
+    {
+        "customer": "",
+        "code": "530.0670                 ",
+        "option": "",
+        "altcode": "",
+        "description": "This is the description",
+        "restrictions": "5/5"
+    },
+    {
+        "customer": "",
+        "code": "220.2000",
+        "option": "E0",
+        "altcode": "foo",
+        "description": "This is the description",
+        "restrictions": "5/1"
+    }
+]

@@ -1,25 +1,63 @@
-table {
+table.stwProductionLines,
+table.stwProductionLine {
   width: 100%;
   border-collapse: collapse;
 }
 
-th,
-td {
+.stwProductionLine .hidden {
+  display: none;
+}
+
+.stwProductionLine th,
+.stwProductionLine td {
   padding: 0.25em;
 }
 
-thead th {
+.stwProductionLine thead th {
   border-bottom: medium solid black;
 }
 
-tbody td {
+.stwProductionLine tbody td {
+  border-top: thin solid black;
   border-bottom: thin solid black;
 }
 
-td:nth-child(1n + 3) {
+.stwProductionLine td:nth-child(1n + 4) {
   text-align: center;
 }
 
-tr.notPartOf {
+.stwProductionLine tr.notPartOf {
   opacity: 0.2;
+}
+
+.stwProductionLine thead {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1;
+}
+
+.stwProductionLine tfoot {
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  z-index: 1;
+}
+
+.stwProductionLine .selected {
+  background-color: lightgreen;
+}
+
+.stwProductionLine tbody tr:hover {
+  background-color: yellow;
+}
+
+.stwProductionLine .udc {
+  cursor: pointer;
+  border-left: thin solid black;
+  border-right: thin solid black;
+}
+
+.stwProductionLine input {
+  border: thin solid black;
 }
