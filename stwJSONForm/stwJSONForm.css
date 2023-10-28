@@ -153,9 +153,12 @@
     padding: 0 var(--padding);
 }
 
-.JSONData:not(td),
-JSONData:not(table) {
+.JSONData {
     background-color: var(--light_color);
+}
+td.JSONData,
+table.JSONData {
+    background-color: inherit;
 }
 
 .JSONForm option {

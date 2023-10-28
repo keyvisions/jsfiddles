@@ -5,6 +5,10 @@ function JSONForm() {
             jsonField.style.display = 'none';
             form.jsonField = jsonField;
 
+            form.querySelectorAll('[form="JSONField"]').forEach(el => {
+                el.classList.add('JSONData');
+            });
+
             if (form.hasAttribute('disabled')) {
                 form.querySelectorAll('button, input[type="button"], input[type="submit"], input[type="reset"]').forEach(el => {
                     el.style.display = 'none';
@@ -220,21 +224,17 @@ function JSONForm() {
                         if (Array.isArray(value))
                             el.closest('fieldset').querySelectorAll('[type=checkbox]').forEach(checkbox => {
                                 checkbox.checked = value.find(value => { return value == checkbox.value }) ? true : false;
-                                checkbox.setAttribute('form', 'JSONField');
                             });
                         else if (el.type == 'radio')
                             el.closest('fieldset').querySelectorAll('[type=radio]').forEach(radio => {
                                 radio.checked = (value == radio.value);
-                                radio.setAttribute('form', 'JSONField');
                             });
                         else
                             el.closest('fieldset').querySelectorAll('[type=checkbox]').forEach(function (checkbox, i) {
                                 checkbox.checked = (value || 0) & (1 << i) ? true : false;
-                                checkbox.setAttribute('form', 'JSONField');
                             });
                     } else {
                         el.checked = value ? true : false;
-                        el.setAttribute('form', 'JSONField');
                     }
 
                 } else if (el.type == 'select-multiple') {
@@ -242,11 +242,9 @@ function JSONForm() {
                         if (value.find(value => { return value == option.value }))
                             option.setAttribute('selected', '');
                     });
-                    el.setAttribute('form', 'JSONField');
 
                 } else {
                     el.value = value;
-                    el.setAttribute('form', 'JSONField');
                 }
             }
 
