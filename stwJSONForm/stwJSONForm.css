@@ -22,6 +22,10 @@ form div.JSONData:not([contenteditable]) {
     background-color: #efefef !important;
 }
 
+form tbody {
+    border-bottom: thin solid var(--special_color);
+}
+
 form .dataRow,
 form[disabled] .newRow,
 form[disabled] .deleteRow,
@@ -120,7 +124,7 @@ form th {
     padding: var(--padding);
 }
 
-form>label,
+form label,
 form legend {
     display: block;
     font-size: smaller;
@@ -131,7 +135,7 @@ form option:not([selected])[disabled] {
     display: none;
 }
 
-form>label {
+form label {
     padding: var(--padding);
     break-inside: avoid;
 }

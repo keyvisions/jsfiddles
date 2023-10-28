@@ -1,11 +1,11 @@
 function JSONForm() {
-    document.querySelectorAll('[data-jsonform]').forEach(jsonField => {
+    document.querySelectorAll('[data-json]').forEach(jsonField => {
         let form = jsonField.form;
         if (form) {
             jsonField.style.display = 'none';
             form.jsonField = jsonField;
 
-            form.querySelectorAll('[form="JSONField"]').forEach(el => {
+            form.querySelectorAll('[form="json"]').forEach(el => {
                 el.classList.add('JSONData');
             });
 
@@ -72,7 +72,7 @@ function JSONForm() {
                         });
 
                         // Summary functions
-                        data[`${tableName}_summary`] = {}
+                        data[`${tableName}_summary`] = {};
                         table.querySelectorAll(`tfoot output[for]`).forEach(output => {
                             let sum = 0;
                             table.querySelectorAll(`tbody input[name=${output.getAttribute('for')}]`).forEach(cell => sum += parseFloat(cell.value) || 0.0);
@@ -214,10 +214,10 @@ function JSONForm() {
                 }
             }
             form.parseValue = function (el, value) {
-                if (!el)
+                if (!el || el.tagName == 'TD' || (el.tagName == 'DIV' && el.contentEditable == 'false'))
                     return;
-                if (el.tagName == 'DIV' || el.tagName == 'TD') {
-                    ;
+                if (el.tagName == 'DIV') {
+                    el.innerHTML = value;
 
                 } else if (el.type == 'checkbox' || el.type == 'radio') {
                     if (el.closest('fieldset')) {
