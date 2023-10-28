@@ -2,7 +2,7 @@ function JSONForm() {
     document.querySelectorAll('[data-jsonform]').forEach(jsonField => {
         let form = jsonField.form;
         if (form) {
-            // jsonField.style.display = 'none';
+            jsonField.style.display = 'none';
             form.jsonField = jsonField;
 
             if (form.hasAttribute('disabled')) {
@@ -148,16 +148,16 @@ function JSONForm() {
                             });
                         } else {
                             if (el.hasAttribute('data-key')) {
-                                el.querySelectorAll('tbody[data-key]').forEach(tbody => {
+                                el.querySelectorAll('tbody[data-key]').forEach((tbody, row) => {
                                     let subdatum = data[datum].find(d => d[el.getAttribute('data-key')] == tbody.getAttribute('data-key')) ||
                                         { [el.getAttribute('data-key')]: tbody.getAttribute('data-key') };
 
                                     let _tbody = document.createElement('tbody');
                                     _tbody.innerHTML = el.querySelector('tfoot.dataRow').innerHTML;
 
-                                    _tbody.querySelectorAll('td').forEach((_td, i) => {
+                                    _tbody.querySelectorAll('td').forEach((_td, col) => {
                                         if (_td.innerHTML != '')
-                                            tbody.querySelector(`td:nth-child(${i + 1})`).innerHTML = _td.innerHTML;
+                                            tbody.querySelector(`td:nth-child(${col + 1})`).innerHTML = (col == 0 ? `${row + 1}.` : '') + _td.innerHTML;
                                     });
 
                                     Object.keys(subdatum).forEach(datum => {
@@ -213,7 +213,7 @@ function JSONForm() {
                 if (!el)
                     return;
                 if (el.tagName == 'DIV' || el.tagName == 'TD') {
-                    el.innerHTML = value;
+                    ;
 
                 } else if (el.type == 'checkbox' || el.type == 'radio') {
                     if (el.closest('fieldset')) {
@@ -292,7 +292,7 @@ function JSONForm() {
                 let table = event.target.closest('table');
                 action = action.classList;
                 if (action.contains('newRow')) {
-                    table.querySelector('tfoot.dataRow').insertAdjacentHTML('beforeBegin', '<tbody>' + table.querySelector('tfoot.dataRow').innerHTML + '</tbody>');
+                    table.querySelector('tfoot').insertAdjacentHTML('beforeBegin', '<tbody>' + table.querySelector('tfoot.dataRow').innerHTML + '</tbody>');
                     event.stopPropagation();
                 }
                 if (action.contains('deleteRow') && confirm('Sicuri di voler eliminare la riga?')) {
