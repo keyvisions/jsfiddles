@@ -13,24 +13,24 @@
     font-size: 11pt;
 }
 
-.JSONForm .modified {
+form .modified {
     border-color: var(--special_color) !important;
 }
 
-.JSONForm [disabled],
-.JSONForm div.JSONData:not([contenteditable]) {
+form [disabled],
+form div.JSONData:not([contenteditable]) {
     background-color: #efefef !important;
 }
 
-.JSONForm .dataRow,
-.JSONForm[disabled] .newRow,
-.JSONForm[disabled] .deleteRow,
-.JSONForm[disabled] .newColumn,
-.JSONForm[disabled] .deleteColumn {
+form .dataRow,
+form[disabled] .newRow,
+form[disabled] .deleteRow,
+form[disabled] .newColumn,
+form[disabled] .deleteColumn {
     display: none;
 }
 
-.JSONForm .zoom {
+form .zoom {
     position: fixed;
     top: 0;
     bottom: 0;
@@ -40,16 +40,16 @@
     background-color: var(--base_color);
 }
 
-.JSONForm .zoom textarea,
-.JSONForm .zoom [contenteditable] {
+form .zoom textarea,
+form .zoom [contenteditable] {
     margin: 2px 2px 2px 0;
     height: calc(100% - 5em);
 }
 
-.JSONForm .newRow,
-.JSONForm .deleteRow,
-.JSONForm .newColumn,
-.JSONForm .deleteColumn {
+form .newRow,
+form .deleteRow,
+form .newColumn,
+form .deleteColumn {
     cursor: pointer;
     font-size: smaller;
     color: var(--special_color);
@@ -66,34 +66,34 @@
     padding: 0 0.5em;
 }
 
-.JSONForm .newRow {
+form .newRow {
     padding-bottom: 1em;
 }
 
-.JSONForm .deleteRow {
+form .deleteRow {
     width: 1em;
 }
 
-.JSONForm {
+form {
     /*display: grid;*/
     padding: 0;
     grid-template-columns: repeat(4, 1fr);
     align-items: start;
 }
 
-.JSONForm [readonly] {
+form [readonly] {
     border-color: transparent;
     background-color: var(--light_color);
 }
 
-.JSONForm option:not([selected])[disabled] {
+form option:not([selected])[disabled] {
     display: inherit;
 }
 
-.JSONForm table,
-.JSONForm h2,
-.JSONForm hr,
-.JSONForm label:has(textarea, div) {
+form table,
+form h2,
+form hr,
+form label:has(textarea, div) {
     border-collapse: collapse;
     grid-column-start: 1;
     grid-column-end: 4;
@@ -101,11 +101,11 @@
     /*grid-area: auto / 1 / auto / span 4;*/
 }
 
-.JSONForm td {
+form td {
     padding: var(--padding);
 }
 
-.JSONForm caption {
+form caption {
     text-align: left;
     font-weight: bolder;
     border-bottom: thin solid var(--special_color);
@@ -113,39 +113,39 @@
     color: var(--special_color);
 }
 
-.JSONForm th {
+form th {
     font-size: smaller;
     background-color: var(--special_color);
     color: var(--base_color);
     padding: var(--padding);
 }
 
-.JSONForm>label,
-.JSONForm legend {
+form>label,
+form legend {
     display: block;
     font-size: smaller;
     font-weight: bolder;
 }
 
-.JSONForm option:not([selected])[disabled] {
+form option:not([selected])[disabled] {
     display: none;
 }
 
-.JSONForm>label {
+form>label {
     padding: var(--padding);
     break-inside: avoid;
 }
 
-.JSONForm *:invalid {
+form *:invalid {
     border-color: var(--error_color);
 }
 
-.JSONForm>table textarea {
+form>table textarea {
     border: thin solid var(--shade_color);
 }
 
-.JSONForm label input,
-.JSONForm label select:not([multiple]) {
+form label input,
+form label select:not([multiple]) {
     line-height: var(--input_height);
     height: var(--input_height);
     font-size: inherit;
@@ -161,23 +161,23 @@ table.JSONData {
     background-color: inherit;
 }
 
-.JSONForm option {
+form option {
     font-size: inherit;
     padding: var(--padding);
 }
 
-.JSONForm output {
+form output {
     display: block;
     font-weight: normal;
     border: none;
     padding: var(--padding);
 }
 
-.JSONForm input,
-.JSONForm select,
-.JSONForm textarea,
-.JSONForm progress,
-.JSONForm meter {
+form input,
+form select,
+form textarea,
+form progress,
+form meter {
     width: -webkit-fill-available;
     width: -moz-available;
     width: fill-available;
@@ -185,14 +185,14 @@ table.JSONData {
     padding: var(--padding);
 }
 
-.JSONForm input[type="checkbox"],
-.JSONForm input[type="radio"] {
+form input[type="checkbox"],
+form input[type="radio"] {
     height: 1em;
     width: 1em;
 }
 
-.JSONForm textarea,
-.JSONForm div[contenteditable] {
+form textarea,
+form div[contenteditable] {
     font-family: var(--font_family);
     font-size: inherit;
     font-weight: initial;
@@ -200,7 +200,7 @@ table.JSONData {
     border: thin solid var(--shade_color);
 }
 
-.JSONForm>fieldset {
+form>fieldset {
     display: flex;
     align-content: flex-start;
     flex-wrap: wrap;
@@ -208,7 +208,7 @@ table.JSONData {
     border: thin solid var(--shade_color);
 }
 
-.JSONForm>fieldset label {
+form>fieldset label {
     font-weight: normal !important;
     font-size: smaller;
     padding-right: 1em;
@@ -216,24 +216,24 @@ table.JSONData {
 
 @media screen and (max-width: 1024px) {
 
-    .JSONForm {
+    form {
         grid-template-columns: 1fr 1fr;
     }
 
-    .JSONForm table,
-    .JSONForm label:has(textarea, div) {
+    form table,
+    form label:has(textarea, div) {
         grid-area: auto / 1 / auto / span 2;
     }
 }
 
 @media screen and (max-width: 512px) {
 
-    .JSONForm {
+    form {
         grid-template-columns: 1fr;
     }
 
-    .JSONForm table,
-    .JSONForm label:has(textarea, div) {
+    form table,
+    form label:has(textarea, div) {
         grid-area: auto / 1 / auto / span 1;
     }
 }
