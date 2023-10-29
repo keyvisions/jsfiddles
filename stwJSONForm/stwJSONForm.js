@@ -205,12 +205,11 @@ function JSONForm() {
                 // Reflect form default values if data fields are undefined
                 for (let i = 0; i < form.childElementCount; ++i) {
                     let el = form[i];
-                    if (!el.value || typeof data[el.getAttribute('name')] != 'undefined' || !el.classList.contains('JSONData'))
-                        continue;
-                    form.JSONStringify({
-                        currentTarget: form,
-                        target: el
-                    });
+                    if (el && el.value && typeof data[el.getAttribute('name')] == 'undefined' && el.classList.contains('JSONData'))
+                        form.JSONStringify({
+                            currentTarget: form,
+                            target: el
+                        });
                 }
             }
             form.parseValue = function (el, value) {

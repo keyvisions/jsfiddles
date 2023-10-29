@@ -17,13 +17,14 @@
     </script>
 </head>
 
-<body onload="setup()">
+<body class="stwJSONForm" onload="setup()">
     <form>
-        <p><textarea name="fDati" data-json="schedaTutor"></textarea></p>
-        <p><button>Salva</button></p>
+        <textarea name="fDati" data-json="schedaTutor"></textarea>
 
-        <p><label><span>Regular Form data</span> <input name="faa"></label></p>
-        <p><label><span>JSON Field data</span> <input form="json" name="foo"></label></p>
+        <h2>Regular data inputs</h2>
+        <label><span>Regular Form data</span> <input name="faa"></label>
+        <hr>
+        <label><span>JSON Field data</span> <input form="json" name="foo"></label>
 
         <table form="json" name="tutor_VR" data-key="_id">
             <caption>SEZIONE DI CONTROLLO STATO ADEMPIMENTI: VR = Documenti di Valutazione Rischi</caption>
@@ -103,6 +104,8 @@
                 </tr>
             </tfoot>
         </table>
+
+        <button type="submit" style="position:absolute; bottom:0; right:10em; font-size: larger; border-radius: 0; padding: 0.5em 2em; border: none; background-color: var(--special_color); color: var(--base_color)">Salva</button>
     </form>
 </body>
 

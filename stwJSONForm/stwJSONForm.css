@@ -1,40 +1,40 @@
 :root {
-    --special_color: rgb(22, 140, 250);
-    --light_color: rgba(22, 178, 250, 0.1);
+    --special_color: #00408b;
+    --light_color: rgba(0, 84, 159, 0.25);
     --text_color: #3F3F3E;
     --base_color: #FFFFFF;
     --shade_color: #E0E0E0;
     --error_color: #FF0000;
     --input_height: 2em;
-    --padding: 0.25em;
+    --padding: 0.2em;
     --font_family: helvetica, arial, 'PT Sans', sans-serif;
 
     font-family: var(--font_family);
-    font-size: 11pt;
+    font-size: 10pt;
 }
 
-form .modified {
+.stwJSONForm .modified {
     border-color: var(--special_color) !important;
 }
 
-form [disabled],
-form div.JSONData:not([contenteditable]) {
+.stwJSONForm [disabled],
+.stwJSONForm div.JSONData:not([contenteditable]) {
     background-color: #efefef !important;
 }
 
-form tbody {
+.stwJSONForm tbody {
     border-bottom: thin solid var(--special_color);
 }
 
-form .dataRow,
-form[disabled] .newRow,
-form[disabled] .deleteRow,
-form[disabled] .newColumn,
-form[disabled] .deleteColumn {
+.stwJSONForm .dataRow,
+.stwJSONForm[disabled] .newRow,
+.stwJSONForm[disabled] .deleteRow,
+.stwJSONForm[disabled] .newColumn,
+.stwJSONForm[disabled] .deleteColumn {
     display: none;
 }
 
-form .zoom {
+.stwJSONForm .zoom {
     position: fixed;
     top: 0;
     bottom: 0;
@@ -44,16 +44,16 @@ form .zoom {
     background-color: var(--base_color);
 }
 
-form .zoom textarea,
-form .zoom [contenteditable] {
+.stwJSONForm .zoom textarea,
+.stwJSONForm .zoom [contenteditable] {
     margin: 2px 2px 2px 0;
     height: calc(100% - 5em);
 }
 
-form .newRow,
-form .deleteRow,
-form .newColumn,
-form .deleteColumn {
+.stwJSONForm .newRow,
+.stwJSONForm .deleteRow,
+.stwJSONForm .newColumn,
+.stwJSONForm .deleteColumn {
     cursor: pointer;
     font-size: smaller;
     color: var(--special_color);
@@ -70,46 +70,47 @@ form .deleteColumn {
     padding: 0 0.5em;
 }
 
-form .newRow {
+.stwJSONForm .newRow {
     padding-bottom: 1em;
 }
 
-form .deleteRow {
+.stwJSONForm .deleteRow {
     width: 1em;
 }
 
-form {
-    /*display: grid;*/
+.stwJSONForm {
+    display: grid;
     padding: 0;
     grid-template-columns: repeat(4, 1fr);
     align-items: start;
 }
 
-form [readonly] {
+.stwJSONForm [readonly] {
     border-color: transparent;
     background-color: var(--light_color);
 }
 
-form option:not([selected])[disabled] {
+.stwJSONForm option:not([selected])[disabled] {
     display: inherit;
 }
 
-form table,
-form h2,
-form hr,
-form label:has(textarea, div) {
+.stwJSONForm form,
+.stwJSONForm table,
+.stwJSONForm h2,
+.stwJSONForm hr,
+.stwJSONForm label:has(textarea, div) {
     border-collapse: collapse;
     grid-column-start: 1;
     grid-column-end: 4;
     width: 100%;
-    /*grid-area: auto / 1 / auto / span 4;*/
+    grid-area: auto / 1 / auto / span 4;
 }
 
-form td {
+.stwJSONForm td {
     padding: var(--padding);
 }
 
-form caption {
+.stwJSONForm caption {
     text-align: left;
     font-weight: bolder;
     border-bottom: thin solid var(--special_color);
@@ -117,39 +118,39 @@ form caption {
     color: var(--special_color);
 }
 
-form th {
+.stwJSONForm th {
     font-size: smaller;
     background-color: var(--special_color);
     color: var(--base_color);
     padding: var(--padding);
 }
 
-form label,
-form legend {
+.stwJSONForm label,
+.stwJSONForm legend {
     display: block;
     font-size: smaller;
     font-weight: bolder;
 }
 
-form option:not([selected])[disabled] {
+.stwJSONForm option:not([selected])[disabled] {
     display: none;
 }
 
-form label {
+.stwJSONForm label {
     padding: var(--padding);
     break-inside: avoid;
 }
 
-form *:invalid {
+.stwJSONForm *:invalid {
     border-color: var(--error_color);
 }
 
-form>table textarea {
+.stwJSONForm>table textarea {
     border: thin solid var(--shade_color);
 }
 
-form label input,
-form label select:not([multiple]) {
+.stwJSONForm label input,
+.stwJSONForm label select:not([multiple]) {
     line-height: var(--input_height);
     height: var(--input_height);
     font-size: inherit;
@@ -165,23 +166,23 @@ table.JSONData {
     background-color: inherit;
 }
 
-form option {
+.stwJSONForm option {
     font-size: inherit;
     padding: var(--padding);
 }
 
-form output {
+.stwJSONForm output {
     display: block;
     font-weight: normal;
     border: none;
     padding: var(--padding);
 }
 
-form input,
-form select,
-form textarea,
-form progress,
-form meter {
+.stwJSONForm input,
+.stwJSONForm select,
+.stwJSONForm textarea,
+.stwJSONForm progress,
+.stwJSONForm meter {
     width: -webkit-fill-available;
     width: -moz-available;
     width: fill-available;
@@ -189,14 +190,14 @@ form meter {
     padding: var(--padding);
 }
 
-form input[type="checkbox"],
-form input[type="radio"] {
+.stwJSONForm input[type="checkbox"],
+.stwJSONForm input[type="radio"] {
     height: 1em;
     width: 1em;
 }
 
-form textarea,
-form div[contenteditable] {
+.stwJSONForm textarea,
+.stwJSONForm div[contenteditable] {
     font-family: var(--font_family);
     font-size: inherit;
     font-weight: initial;
@@ -204,7 +205,7 @@ form div[contenteditable] {
     border: thin solid var(--shade_color);
 }
 
-form>fieldset {
+.stwJSONForm>fieldset {
     display: flex;
     align-content: flex-start;
     flex-wrap: wrap;
@@ -212,32 +213,32 @@ form>fieldset {
     border: thin solid var(--shade_color);
 }
 
-form>fieldset label {
+.stwJSONForm>fieldset label {
     font-weight: normal !important;
     font-size: smaller;
     padding-right: 1em;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1280px) {
 
-    form {
+    .stwJSONForm {
         grid-template-columns: 1fr 1fr;
     }
 
-    form table,
-    form label:has(textarea, div) {
+    .stwJSONForm table,
+    .stwJSONForm label:has(textarea, div) {
         grid-area: auto / 1 / auto / span 2;
     }
 }
 
-@media screen and (max-width: 512px) {
+@media screen and (max-width: 640px) {
 
-    form {
+    .stwJSONForm {
         grid-template-columns: 1fr;
     }
 
-    form table,
-    form label:has(textarea, div) {
+    .stwJSONForm table,
+    .stwJSONForm label:has(textarea, div) {
         grid-area: auto / 1 / auto / span 1;
     }
 }
