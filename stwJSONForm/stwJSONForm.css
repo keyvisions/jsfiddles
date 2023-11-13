@@ -79,7 +79,7 @@
 }
 
 .stwJSONForm {
-    display: grid;
+    /*display: grid;*/
     padding: 0;
     grid-template-columns: repeat(4, 1fr);
     align-items: start;

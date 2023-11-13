@@ -2,7 +2,6 @@ function JSONForm() {
     document.querySelectorAll('[data-json]').forEach(jsonField => {
         let form = jsonField.form;
         if (form) {
-            jsonField.style.display = 'none';
             form.jsonField = jsonField;
 
             form.querySelectorAll('[form="json"]').forEach(el => {
@@ -213,7 +212,7 @@ function JSONForm() {
                 }
             }
             form.parseValue = function (el, value) {
-                if (!el || el.tagName == 'TD' || (el.tagName == 'DIV' && el.contentEditable == 'false'))
+                if (!el || el.tagName == 'TD' || (el.tagName == 'DIV' && !el.contentEditable == 'true'))
                     return;
                 if (el.tagName == 'DIV') {
                     el.innerHTML = value;
@@ -324,6 +323,9 @@ function JSONForm() {
             });
 
             form.querySelectorAll('div[contenteditable]').forEach(contenteditable => {
+                if (contenteditable.getAttribute('contenteditable') != 'true')
+                    return;
+
                 contenteditable.addEventListener('focus', event => {
                     let toolbar = document.getElementById('JSONToolbar');
                     if (!toolbar) {
