@@ -17,7 +17,7 @@ function JSONForm() {
                     if (el.tagName == 'DIV')
                         el.removeAttribute('contenteditable');
                     else if (el.tagName == 'TABLE')
-                        ;
+                        return;
                     else {
                         el.disabled = true;
                         if (el.value == 'disabled')
@@ -114,6 +114,28 @@ function JSONForm() {
 
                 return value;
             }
+
+            let dragged_tbody;
+            function sortableBody(tbody) {
+                tbody.setAttribute('draggable', true);
+                tbody.addEventListener('dragstart', event => {
+                    dragged_tbody = event.target;
+                    dragged_tbody.style.backgroundColor = '#EEE';
+                    event.dataTransfer.setDragImage(document.createElement('div'), 0, 0);
+                });
+                tbody.addEventListener('dragover', event => {
+                    event.preventDefault();
+                    event.dataTransfer.dropEffect = 'move';
+                    if (event.currentTarget == dragged_tbody.previousElementSibling || event.currentTarget.previousElementSibling.tagName == 'THEAD')
+                        event.currentTarget.insertAdjacentElement('beforeBegin', dragged_tbody);
+                    else
+                        event.currentTarget.insertAdjacentElement('afterEnd', dragged_tbody);
+                });
+                tbody.addEventListener('drop', () => {
+                    dragged_tbody.style.backgroundColor = null;
+                });
+            }
+
             form.JSONParse = event => {
                 let form = event.target.closest('form');
                 let data;
@@ -156,6 +178,8 @@ function JSONForm() {
                                         { [el.getAttribute('data-key')]: tbody.getAttribute('data-key') };
 
                                     let _tbody = document.createElement('tbody');
+                                    if (el.classList.contains('sortable'))
+                                        sortableBody(tbody);
                                     _tbody.innerHTML = el.querySelector('tfoot.dataRow').innerHTML;
 
                                     _tbody.querySelectorAll('td').forEach((_td, col) => {
@@ -173,6 +197,8 @@ function JSONForm() {
                             } else {
                                 data[datum].forEach(subdatum => {
                                     let tbody = document.createElement('tbody');
+                                    if (el.classList.contains('sortable'))
+                                        sortableBody(tbody);
                                     tbody.innerHTML = el.querySelector('tfoot.dataRow').innerHTML;
 
                                     Object.keys(subdatum).forEach(datum => {
@@ -289,6 +315,8 @@ function JSONForm() {
                 action = action.classList;
                 if (action.contains('newRow')) {
                     table.querySelector('tfoot').insertAdjacentHTML('beforeBegin', '<tbody>' + table.querySelector('tfoot.dataRow').innerHTML + '</tbody>');
+                    if (table.classList.contains('sortable'))
+                        sortableBody(table.querySelector('tfoot').previousElementSibling);
                     event.stopPropagation();
                 }
                 if (action.contains('deleteRow') && confirm('Sicuri di voler eliminare la riga?')) {
@@ -321,28 +349,28 @@ function JSONForm() {
                     event.stopPropagation();
                 }
             });
-
-            form.querySelectorAll('div[contenteditable]').forEach(contenteditable => {
-                if (contenteditable.getAttribute('contenteditable') != 'true')
-                    return;
-
-                contenteditable.addEventListener('focus', event => {
-                    let toolbar = document.getElementById('JSONToolbar');
-                    if (!toolbar) {
-                        document.body.insertAdjacentHTML('beforeend', '<div id="JSONToolbar"><i class="fas fa-fw fa-strikethrough" data-format="s" title="Barra testo selezionato"></i> <i class="fas fa-fw fa-highlighter" data-format="mark" title="Evidenzia testo selezionato"></i> <i class="fas fa-expand" data-action="expand" title="Zoom (F2)"></i></div>');
-                        toolbar = document.getElementById('JSONToolbar');
-                        toolbar.addEventListener('mousedown', form.formatText)
-                    }
-                    let rect = event.target.getBoundingClientRect();
-                    toolbar.style.top = parseInt(rect.top + window.scrollY + 1) + 'px';
-                    toolbar.style.right = parseInt(window.innerWidth - rect.right) + 'px';
-                    toolbar.style.display = '';
-                });
-                contenteditable.addEventListener('blur', event => {
-                    document.getElementById('JSONToolbar').style.display = 'none';
-                });
-            });
-
+            /*
+                        form.querySelectorAll('div[contenteditable]').forEach(contenteditable => {
+                            if (contenteditable.getAttribute('contenteditable') != 'true')
+                                return;
+            
+                            contenteditable.addEventListener('focus', event => {
+                                let toolbar = document.getElementById('JSONToolbar');
+                                if (!toolbar) {
+                                    document.body.insertAdjacentHTML('beforeend', '<div id="JSONToolbar"><i class="fas fa-fw fa-strikethrough" data-format="s" title="Barra testo selezionato"></i> <i class="fas fa-fw fa-highlighter" data-format="mark" title="Evidenzia testo selezionato"></i> <i class="fas fa-expand" data-action="expand" title="Zoom (F2)"></i></div>');
+                                    toolbar = document.getElementById('JSONToolbar');
+                                    toolbar.addEventListener('mousedown', form.formatText)
+                                }
+                                let rect = event.target.getBoundingClientRect();
+                                toolbar.style.top = parseInt(rect.top + window.scrollY + 1) + 'px';
+                                toolbar.style.right = parseInt(window.innerWidth - rect.right) + 'px';
+                                toolbar.style.display = '';
+                            });
+                            contenteditable.addEventListener('blur', event => {
+                                document.getElementById('JSONToolbar').style.display = 'none';
+                            });
+                        });
+            */
             form.formatText = event => {
                 let sel = window.getSelection();
                 if (event.target.dataset.format && sel && sel.rangeCount) {

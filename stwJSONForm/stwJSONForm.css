@@ -22,10 +22,6 @@
     background-color: #efefef !important;
 }
 
-.stwJSONForm tbody {
-    border-bottom: thin solid var(--special_color);
-}
-
 .stwJSONForm .dataRow,
 .stwJSONForm[disabled] .newRow,
 .stwJSONForm[disabled] .deleteRow,
@@ -130,6 +126,7 @@
     display: block;
     font-size: smaller;
     font-weight: bolder;
+    line-height: 1em;
 }
 
 .stwJSONForm option:not([selected])[disabled] {
@@ -217,6 +214,31 @@ table.JSONData {
     font-weight: normal !important;
     font-size: smaller;
     padding-right: 1em;
+}
+
+.sticky {
+    position: absolute;
+    width: auto !important;
+    bottom: 0;
+    right: 20em;
+    background-color: var(--special_color);
+    border-radius: 0.5em 0.5em 0 0;
+    color: var(--base_color);
+    padding: 0.75em 2em !important;
+    margin: 0;
+    z-index: 1;
+}
+
+.stickyWarning {
+    position: absolute;
+    width: auto !important;
+    bottom: 0;
+    background-color: var(--error_color) !important;
+    border-radius: 0.5em 0.5em 0 0;
+    color: var(--base_color) !important;
+    padding: 0.75em 2em !important;
+    margin: 0;
+    z-index: 1;
 }
 
 @media screen and (max-width: 1280px) {
