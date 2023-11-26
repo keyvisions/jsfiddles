@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JSON Form</title>
-    <link rel="stylesheet" href="./stwJSONForm.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="./stwJSONForm.js"></script>
+    <link rel="stylesheet" href="./deploy/stwJSONForm.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+        integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="./deploy/stwJSONForm.min.js"></script>
     <script>
         async function setup() {
             let response = await fetch('./data.json');
@@ -18,7 +20,68 @@
 </head>
 
 <body onload="setup()">
-    <form class="stwJSONForm">
+    <form name="foo" class="stwJSONForm">
+        <textarea name="Schema" data-json="Schema"></textarea>
+
+        <h2>Regular data inputs</h2>
+        <label><span>Regular Form data</span> <input name="faa"></label>
+        <hr>
+        <label><span>JSON Field data</span> <input form="json" name="foo" type="number"></label>
+        <label><span>JSON Field data</span> <input form="json" name="foo" type="color"></label>
+        <label><span>JSON Field data</span> <input form="json" name="foo" type="date"></label>
+        <label><span>JSON Field data</span> <input form="json" name="foo" type="checkbox"></label>
+        <h3>This is a section</h3>
+        <label><span>JSON Field data</span> <input form="json" name="foo" type="file"></label>
+        <fieldset><legend>JSON Field data</legend><label><input form="json" name="foo" type="checkbox">Fufi</label><label><input form="json" name="foo" type="checkbox">Fufi</label><label><input form="json" name="foo" type="checkbox">Fufi</label></fieldset>
+        <label><span>JSON Field data</span> <input form="json" name="foo"></label>
+        <label><span>JSON Field data</span> <input form="json" name="foo"></label>
+        <label><span>JSON Field data</span> <input form="json" name="foo"></label>
+
+        <table class="sortable" form="json" name="campi">
+            <thead>
+                <tr>
+                    <th style="width:1em"></th>
+                    <th>Tipo</th>
+                    <th style="width:100%">Etichetta</th>
+                    <th>Valore predefinito</th>
+                    <th>Privacy</th>
+                    <th style="width:1em"><i class="fas fa-exclamation" title="Obbligatorio"></i></th>
+                    <th style="width:1em"></th>
+            </thead>
+            <tfoot>
+                <tr>
+                    <td class="newRow" colspan="7"><i class="fas fa-fw fa-plus"></i> Aggiungi campo</td>
+                </tr>
+            </tfoot>
+            <tfoot class="dataRow">
+                <tr>
+                    <td><i class="fas fa-grip-vertical"></i></td>
+                    <td><select form="json" name="tipo">
+                            <option value="number">Numero</option>
+                            <option value="text">Testo</option>
+                            <option value="date">Data</option>
+                            <option value="select">Selezione</option>
+                            <option value="textarea">Note</option>
+                            <option value="section">Intestazione</option>
+                        </select></td>
+                    <td><input type="text" form="json" name="etichetta"></td>
+                    <td><input type="text" form="json" name="valore"></td>
+                    <td><select form="json" name="classe">
+                            <option value="1">-</option>
+                            <option value="2">Identificativo</option>
+                            <option value="4">Giudiziario</option>
+                            <option value="8">Sensibile</option>
+                            <option value="16">Sensibilissimo</option>
+                            <option value="0">Obsoleto</option>
+                        </select></td>
+                    <td><input form="json" type="checkbox" name="obbligatorio"></td>
+                    <td class="deleteRow"><i class="fas fa-fw fa-trash"></i></td>
+                </tr>
+                </tfooter>
+        </table>
+    </form>
+
+    <form name="fee" class="stwJSONForm">
         <textarea name="fDati" data-json="schedaTutor"></textarea>
 
         <h2>Regular data inputs</h2>
@@ -45,34 +108,370 @@
                     <th>SUGG</th>
                 </tr>
             </thead>
-            <tbody data-key="1"><tr><td></td><td form="json" name="adempimento">DVR generale</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="2"><tr><td></td><td form="json" name="adempimento">VR ambienti confinati</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="3"><tr><td></td><td form="json" name="adempimento">VR macchine/attrezzature (rischi meccanici)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="4"><tr><td></td><td form="json" name="adempimento">VR elettrico</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="5"><tr><td></td><td form="json" name="adempimento">VR fulminazione</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="6"><tr><td></td><td form="json" name="adempimento">VR incendio</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="7"><tr><td></td><td form="json" name="adempimento">VR esplosione (ATEX)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="8"><tr><td></td><td form="json" name="adempimento">VR agenti chimici</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="9"><tr><td></td><td form="json" name="adempimento">VR agenti cancerogeni</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="10"><tr><td></td><td form="json" name="adempimento">VR biologico</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="11"><tr><td></td><td form="json" name="adempimento">VR amianto</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="12"><tr><td></td><td form="json" name="adempimento">VR rumore</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="13"><tr><td></td><td form="json" name="adempimento">VR vibrazioni meccaniche</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="14"><tr><td></td><td form="json" name="adempimento">VR radiazioni ottiche artificiali (ROA)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="15"><tr><td></td><td form="json" name="adempimento">VR campi elettromagnetici (CEM)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="16"><tr><td></td><td form="json" name="adempimento">VR MMC - Sollevamento e trasporto</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="17"><tr><td></td><td form="json" name="adempimento">VR MMC - Movimenti ripetitivi</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="18"><tr><td></td><td form="json" name="adempimento">VR MMC - Spinta e traino</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="19"><tr><td></td><td form="json" name="adempimento">VR lavoro al videoterminale</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="20"><tr><td></td><td form="json" name="adempimento">VR stress lavoro correlato</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="28"><tr><td></td><td form="json" name="adempimento">VR stress lavoro solitario-isolato</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="21"><tr><td></td><td form="json" name="adempimento">VR lavoratrici madri</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="22"><tr><td></td><td form="json" name="adempimento">VR lavoratori minori</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="23"><tr><td></td><td form="json" name="adempimento">VR lavoro notturno</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="24"><tr><td></td><td form="json" name="adempimento">VR differenze di genere, età, tipologia contrattuale</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="25"><tr><td></td><td form="json" name="adempimento">VR interferenze appalti (DUVRI)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="26"><tr><td></td><td form="json" name="adempimento">Piano sicurezza lavori esterni (POS o simile)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-            <tbody data-key="27"><tr><td></td><td form="json" name="adempimento">VR altri fattori (VEDI NOTE)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            <tbody data-key="1">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">DVR generale</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="2">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR ambienti confinati</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="3">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR macchine/attrezzature (rischi meccanici)</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="4">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR elettrico</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="5">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR fulminazione</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="6">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR incendio</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="7">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR esplosione (ATEX)</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="8">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR agenti chimici</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="9">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR agenti cancerogeni</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="10">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR biologico</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="11">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR amianto</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="12">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR rumore</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="13">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR vibrazioni meccaniche</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="14">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR radiazioni ottiche artificiali (ROA)</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="15">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR campi elettromagnetici (CEM)</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="16">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR MMC - Sollevamento e trasporto</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="17">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR MMC - Movimenti ripetitivi</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="18">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR MMC - Spinta e traino</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="19">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR lavoro al videoterminale</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="20">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR stress lavoro correlato</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="28">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR stress lavoro solitario-isolato</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="21">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR lavoratrici madri</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="22">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR lavoratori minori</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="23">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR lavoro notturno</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="24">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR differenze di genere, età, tipologia contrattuale</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="25">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR interferenze appalti (DUVRI)</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="26">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">Piano sicurezza lavori esterni (POS o simile)</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody data-key="27">
+                <tr>
+                    <td></td>
+                    <td form="json" name="adempimento">VR altri fattori (VEDI NOTE)</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
             <tfoot>
                 <tr>
                     <th colspan="6" style="text-align: left">Totali</th>
@@ -105,7 +504,8 @@
             </tfoot>
         </table>
 
-        <button type="submit" style="position:fixed; bottom:0; right:10em; font-size: larger; border-radius: 0; padding: 0.5em 2em; border: none; background-color: var(--special_color); color: var(--base_color)">Salva</button>
+        <button type="submit"
+            style="position:fixed; bottom:0; right:10em; font-size: larger; border-radius: 0; padding: 0.5em 2em; border: none; background-color: var(--special_color); color: var(--base_color)">Salva</button>
     </form>
 </body>
 
