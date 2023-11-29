@@ -128,12 +128,12 @@
 }
 
 .stwJSONForm label {
-    display: inline-block;
     padding: var(--padding);
     break-inside: avoid;
 }
+
 .stwJSONForm label>span {
-    display:block;
+    display: block;
 }
 
 .stwJSONForm *:invalid {
@@ -153,9 +153,6 @@
     padding: 0 var(--padding);
 }
 
-.JSONData {
-    background-color: var(--light_color);
-}
 td.JSONData,
 table.JSONData {
     background-color: inherit;
@@ -173,20 +170,21 @@ table.JSONData {
     padding: var(--padding);
 }
 
-.stwJSONForm input,
-.stwJSONForm select,
+.stwJSONForm input[type="text"],
+.stwJSONForm input[type=""],
 .stwJSONForm textarea,
 .stwJSONForm progress,
 .stwJSONForm meter {
-    min-width: 12em;
+    width: -webkit-fill-available;
+    width: -moz-available;
+    width: fill-available;
     border: thin solid var(--shade_color);
     padding: var(--padding);
 }
 
-.stwJSONForm input[type="checkbox"],
-.stwJSONForm input[type="radio"] {
-    height: 1em;
-    min-width: 1em;
+.stwJSONForm input {
+    border: thin solid var(--shade_color);
+    padding: var(--padding);
 }
 
 .stwJSONForm textarea,

@@ -44,6 +44,9 @@ function JSONForm() {
         }
 
         form.JSONStringify = function (event, table) {
+            if (event.target && !event.target.classList.contains('JSONData'))
+                return;
+
             let form = event.currentTarget;
 
             let data = JSON.parse(form.jsonField.value || '{}'),
@@ -283,9 +286,7 @@ function JSONForm() {
         } catch (err) {
             jsonField.value = '{}';
         }
-        form.JSONParse({
-            target: jsonField
-        });
+        form.JSONParse({ target: jsonField });
 
         form.zoom = function (event, contenteditable) {
             contenteditable = contenteditable || event.target;
