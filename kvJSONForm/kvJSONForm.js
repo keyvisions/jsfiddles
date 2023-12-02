@@ -5,6 +5,7 @@ function JSONForm() {
         if (!form)
             return;
 
+        form.classList.add('kvJSONForm');
         form.jsonField = jsonField;
         form.querySelectorAll('[form="json"]').forEach(el => {
             el.classList.add('JSONData');
@@ -44,7 +45,7 @@ function JSONForm() {
         }
 
         form.JSONStringify = function (event, table) {
-            if (event.target && !event.target.classList.contains('JSONData'))
+            if (event.target && !event.target.classList.contains('JSONData') && !event.target.closest(".deleteRow"))
                 return;
 
             let form = event.currentTarget;
@@ -213,7 +214,14 @@ function JSONForm() {
                                         form.parseValue(subelement, subdatum[datum]);
                                 });
 
-                                el.querySelector('tfoot.dataRow').insertAdjacentElement('beforebegin', tbody);
+                                // Assign name to nameless field
+                                let fld = tbody.querySelector('input[name=""]');
+                                if (fld) {
+                                    fld.name = 'name';
+                                    fld.value = Object.keys(subdatum).name || 'U' + Math.floor(performance.now() * 10000000000000); // Assign unique name;
+                                }
+
+                                el.querySelector('tfoot').insertAdjacentElement('beforebegin', tbody);
                             });
                         }
 
@@ -318,6 +326,12 @@ function JSONForm() {
             let table = event.target.closest('table');
             action = action.classList;
             if (action.contains('newRow')) {
+                let fld = table.querySelector('tfoot input[name=""]');
+                if (fld) {
+                    fld.name = 'name';
+                    fld.value = 'U' + Math.floor(performance.now() * 10000000000000); // Assign unique name
+                }
+
                 table.querySelector('tfoot').insertAdjacentHTML('beforeBegin', '<tbody>' + table.querySelector('tfoot.dataRow').innerHTML + '</tbody>');
                 if (table.classList.contains('sortable'))
                     sortableBody(table.querySelector('tfoot').previousElementSibling);

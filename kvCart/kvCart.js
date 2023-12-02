@@ -30,7 +30,7 @@ function addRow(item) {
         } else
             el.value = item[el.getAttribute('name')]?.toString() || '';
     });
-    cart.querySelector('tbody').lastElementChild.className = item.flags & 1 ? 'stwCartOrder' : 'stwCartQuote';
+    cart.querySelector('tbody').lastElementChild.className = item.flags & 1 ? 'kvCartOrder' : 'kvCartQuote';
 }
 
 function fillCart(sort = true) {
@@ -60,7 +60,7 @@ function saveCart(el) {
             } else
                 item[el.getAttribute('name')] = el.value;
         });
-        tr.className = item.flags & 1 ? 'stwCartOrder' : 'stwCartQuote';
+        tr.className = item.flags & 1 ? 'kvCartOrder' : 'kvCartQuote';
         cart.push(item);
     });
     document.getElementsByName('cart')[0].value = JSON.stringify(cart);

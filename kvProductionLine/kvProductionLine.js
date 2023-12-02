@@ -1,11 +1,11 @@
 window.addEventListener('load', event => {
-  document.querySelectorAll('[data-json="stwProductionLine"]').forEach(async widget => {
+  document.querySelectorAll('[data-json="kvProductionLine"]').forEach(async widget => {
     let data = JSON.parse(widget.value), html;
 
     widget.style.display = 'none';
 
     widget.insertAdjacentHTML('beforebegin', `
-      <table class="stwProductionLines">
+      <table class="kvProductionLines">
       <caption>Linee di Produzione</caption>
       <thead><tr><th>Reparto</th><th>Codice linea</th><th>Descrizione</th><th>UDC</th><!--th></th--></tr></thead>
       <tbody></tbody>
@@ -17,7 +17,7 @@ window.addEventListener('load', event => {
       </table>
     `);
     const productionLines = widget.previousElementSibling;
-    widget.insertAdjacentHTML('afterend', '<table class="stwProductionLine"></table>');
+    widget.insertAdjacentHTML('afterend', '<table class="kvProductionLine"></table>');
     const productionLine = widget.nextElementSibling;
 
     // Carica LDP

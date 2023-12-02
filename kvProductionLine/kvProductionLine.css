@@ -1,63 +1,63 @@
-table.stwProductionLines,
-table.stwProductionLine {
+table.kvProductionLines,
+table.kvProductionLine {
   width: 100%;
   border-collapse: collapse;
 }
 
-.stwProductionLine .hidden {
+.kvProductionLine .hidden {
   display: none;
 }
 
-.stwProductionLine th,
-.stwProductionLine td {
+.kvProductionLine th,
+.kvProductionLine td {
   padding: 0.25em;
 }
 
-.stwProductionLine thead th {
+.kvProductionLine thead th {
   border-bottom: medium solid black;
 }
 
-.stwProductionLine tbody td {
+.kvProductionLine tbody td {
   border-top: thin solid black;
   border-bottom: thin solid black;
 }
 
-.stwProductionLine td:nth-child(1n + 4) {
+.kvProductionLine td:nth-child(1n + 4) {
   text-align: center;
 }
 
-.stwProductionLine tr.notPartOf {
+.kvProductionLine tr.notPartOf {
   opacity: 0.2;
 }
 
-.stwProductionLine thead {
+.kvProductionLine thead {
   position: sticky;
   top: 0;
   background-color: white;
   z-index: 1;
 }
 
-.stwProductionLine tfoot {
+.kvProductionLine tfoot {
   position: sticky;
   bottom: 0;
   background-color: white;
   z-index: 1;
 }
 
-.stwProductionLine .selected {
+.kvProductionLine .selected {
   background-color: lightgreen;
 }
 
-.stwProductionLine tbody tr:hover {
+.kvProductionLine tbody tr:hover {
   background-color: yellow;
 }
 
-.stwProductionLine .udc {
+.kvProductionLine .udc {
   cursor: pointer;
   border-left: thin solid black;
   border-right: thin solid black;
 }
 
-.stwProductionLine input {
+.kvProductionLine input {
   border: thin solid black;
 }

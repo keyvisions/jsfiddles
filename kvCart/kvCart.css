@@ -3,24 +3,24 @@
   font-size: 12pt;
 }
 
-.stwCart table {
+.kvCart table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.stwCart th:nth-child(n + 2) {
+.kvCart th:nth-child(n + 2) {
   white-space: nowrap;
 }
 
-.stwCart td,
-.stwCart th {
+.kvCart td,
+.kvCart th {
   padding: 0.25em;
   border-bottom: thin solid black;
 }
 
-.stwCart .stwCartQuote {
+.kvCart .kvCartQuote {
   background-color: lightyellow;
 }
-.stwCart .stwCartOrder {
+.kvCart .kvCartOrder {
   background-color: lightgreen;
 }

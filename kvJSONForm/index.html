@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JSON Form</title>
-    <link rel="stylesheet" href="./deploy/stwJSONForm.min.css">
+    <link rel="stylesheet" href="./deploy/kvJSONForm.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
         integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="./deploy/stwJSONForm.min.js"></script>
+    <script src="./deploy/kvJSONForm.min.js"></script>
     <script>
         async function setup() {
             let response = await fetch('./data.json');
@@ -20,7 +20,7 @@
 </head>
 
 <body onload="setup()">
-    <form name="foo" class="stwJSONForm">
+    <form name="foo">
         <textarea name="Schema" data-json="Schema"></textarea>
 
         <table class="sortable" form="json" name="campi">
@@ -67,7 +67,7 @@
         </table>
     </form>
 
-    <form name="fee" class="stwJSONForm">
+    <form name="fee">
         <textarea name="fDati" data-json="schedaTutor"></textarea>
 
         <h2>Regular data inputs</h2>
@@ -490,8 +490,8 @@
             </tfoot>
         </table>
 
-        <button type="submit"
-            style="position:fixed; bottom:0; right:10em; font-size: larger; border-radius: 0; padding: 0.5em 2em; border: none; background-color: var(--special_color); color: var(--base_color)">Salva</button>
+        <button type="submit" class="sticky">Salva</button>
+        <button type="submit" class="stickyWarning">Elimina</button>
     </form>
 </body>
 

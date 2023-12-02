@@ -1,0 +1,27 @@
+.kvTags {
+	display: inline-table;
+}
+
+.kvTags span {
+	cursor: pointer;
+}
+
+.kvTags input {
+	padding: 0.25em;
+}
+
+.kvTags li {
+	font-size: smaller;
+	display: inline-block;
+	background-color: var(--special_color, grey);
+	color: var(--base_color, white);
+	padding: 0.5em 1em 0.5em 1.75em;
+	margin: 0.5em 0.5em 0.5em 0;
+}
+
+.kvTags li::before {
+	content: "\2716";
+	position: relative;
+	left: -1em;
+	cursor: pointer;
+}

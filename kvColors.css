@@ -1,0 +1,9 @@
+:root {
+    --special_color: #00408b;
+    --light_color: rgba(0, 84, 159, 0.25);
+    --text_color: #3F3F3E;
+    --base_color: #FFFFFF;
+    --shade_color: #E0E0E0;
+    --faint_color: #efefef;
+    --error_color: #FF0000;
+}
