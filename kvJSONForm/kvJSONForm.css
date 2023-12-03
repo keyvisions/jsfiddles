@@ -96,6 +96,7 @@
 
 .kvJSONForm td {
     padding: var(--padding);
+    vertical-align: middle;
 }
 
 .kvJSONForm caption {
@@ -107,6 +108,7 @@
 }
 
 .kvJSONForm th {
+    vertical-align: middle;
     font-size: smaller;
     background-color: var(--special_color, #000);
     color: var(--base_color, #FFF);
@@ -152,12 +154,8 @@ table.JSONData {
     background-color: inherit;
 }
 
-.kvJSONForm option {
-    font-size: inherit;
-}
-
 .kvJSONForm output {
-    font-family: monospace;
+    font-family: inherit;
     display: block;
     font-weight: normal;
     border: none;
@@ -166,10 +164,9 @@ table.JSONData {
 
 .kvJSONForm input,
 .kvJSONForm select:not([multiple]) {
-    font-family: monospace;
-    font-size: inherit;
-    border: thin solid var(--shade_color, #DDD);
+    font-family: inherit;
     padding: var(--padding);
+    border: thin solid var(--shade_color, #DDD);
 }
 
 .kvJSONForm input[type="text"],
@@ -184,15 +181,17 @@ table.JSONData {
 
 .kvJSONForm textarea,
 .kvJSONForm div[contenteditable] {
-    font-family: monospace;
-    font-size: inherit;
+    font-family: inherit;
+    font-size: smaller;
     font-weight: initial;
     padding: var(--padding);
     border: thin solid var(--shade_color, #DDD);
+    border-radius: 0.25em;
 }
 
 .kvJSONForm>fieldset {
     border: thin solid var(--shade_color, #DDD);
+    border-radius: 0.25em;
 }
 
 .kvJSONForm>fieldset label {
