@@ -171,6 +171,7 @@ table.JSONData {
     border: thin solid var(--shade_color, #DDD);
 }
 
+.kvJSONForm input[type="search"],
 .kvJSONForm input[type="text"],
 .kvJSONForm input:not([type]),
 .kvJSONForm textarea,
