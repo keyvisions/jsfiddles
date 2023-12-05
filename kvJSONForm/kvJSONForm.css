@@ -70,7 +70,7 @@
 
 .kvJSONForm [readonly] {
     border-color: transparent;
-    background-color: var(--light_color, #DDD);
+    background-color: var(--light_color, #DDD) !important;
 }
 
 .kvJSONForm option:not([selected])[disabled] {
@@ -127,13 +127,15 @@
 }
 
 .kvJSONForm label {
-    display: block;
+    display: inline-block;
     padding: var(--padding);
     break-inside: avoid;
     font-size: smaller;
     line-height: 1em;
 }
-.kvJSONForm label:has(textarea) {
+.kvJSONForm label:has(textarea),
+.kvJSONForm label:has(input[type="text"]),
+.kvJSONForm label:has(input:not([type])) {
     display: block;
 }
 
@@ -145,7 +147,7 @@
     border-color: var(--error_color, #F00);
 }
 
-.kvJSONForm>table textarea {
+.kvJSONForm table textarea {
     border: thin solid var(--shade_color, #DDD);
 }
 
@@ -186,12 +188,11 @@ table.JSONData {
     font-weight: initial;
     padding: var(--padding);
     border: thin solid var(--shade_color, #DDD);
-    border-radius: 0.25em;
+    background-color: var(--base_color, #FFF);
 }
 
 .kvJSONForm>fieldset {
     border: thin solid var(--shade_color, #DDD);
-    border-radius: 0.25em;
 }
 
 .kvJSONForm>fieldset label {

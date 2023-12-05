@@ -31,14 +31,14 @@ function JSONForm() {
 
         form.newColumn = table => {
             if (!table.querySelector('tbody'))
-                table.querySelector('tfoot.dataRow').insertAdjacentHTML('beforebegin', '<tbody></tbody>');
+                table.querySelector('tbody.dataRow').insertAdjacentHTML('beforebegin', '<tbody></tbody>');
             if (!table.querySelector('tbody').childElementCount) {
-                table.querySelector('tbody').insertAdjacentHTML('afterbegin', table.querySelector('tfoot.dataRow').innerHTML);
+                table.querySelector('tbody').insertAdjacentHTML('afterbegin', table.querySelector('tbody.dataRow').innerHTML);
             } else {
                 let th = table.querySelector('thead>tr>th:nth-child(2)').cloneNode(true);
                 table.querySelector('thead>tr>th').insertAdjacentElement('afterend', th);
 
-                let rows = table.querySelectorAll('tfoot.dataRow td');
+                let rows = table.querySelectorAll('tbody.dataRow td');
                 for (let r = 0; r < rows.length; ++r)
                     table.querySelector('tbody').children[r].appendChild(rows[r].cloneNode(true));
             }
@@ -58,17 +58,17 @@ function JSONForm() {
                 let tableName = table.getAttribute('name');
                 data[tableName] = [];
                 if (table.classList.contains('columnar')) {
-                    for (let i = 0; i < table.querySelectorAll('tbody>tr:first-child .JSONData[name]').length; ++i)
+                    for (let i = 0; i < table.querySelectorAll('tbody:not(.dataRow)>tr:first-child .JSONData[name]').length; ++i)
                         data[tableName].push({});
 
-                    table.querySelectorAll('tbody>tr').forEach(function (row, i) {
+                    table.querySelectorAll('tbody:not(.dataRow)>tr').forEach(function (row, i) {
                         row.querySelectorAll('.JSONData[name]').forEach(function (fld, i) {
                             data[tableName][i][fld.getAttribute('name')] = form.valueStringify(fld);
                         });
                     });
 
                 } else {
-                    table.querySelectorAll('tbody').forEach(row => {
+                    table.querySelectorAll('tbody:not(.dataRow)').forEach(row => {
                         let rowData = {};
                         row.querySelectorAll('.JSONData[name]').forEach(fld => {
                             rowData[fld.getAttribute('name')] = form.valueStringify(fld);
@@ -86,8 +86,8 @@ function JSONForm() {
                     });
                 }
 
-                if (table.querySelector('tfoot.dataRow').onchange)
-                    table.querySelector('tfoot.dataRow').onchange(table);
+                if (table.querySelector('tbody.dataRow').onchange)
+                    table.querySelector('tbody.dataRow').onchange(table);
 
             } else
                 data[el.getAttribute('name')] = form.valueStringify(el);
@@ -161,9 +161,9 @@ function JSONForm() {
                 let el = form.querySelector('.JSONData[name="' + datum + '"]');
                 if (el && el.tagName == 'TABLE' && el.classList.contains('JSONData')) {
                     if (!el.hasAttribute('data-key'))
-                        el.querySelectorAll('tbody').forEach(tbody => { tbody.remove(); });
+                        el.querySelectorAll('tbody:not(.dataRow)').forEach(tbody => { tbody.remove(); });
                     if (el.classList.contains('columnar')) {
-                        el.querySelector('tfoot.dataRow').insertAdjacentHTML('beforebegin', '<tbody></tbody>');
+                        el.querySelector('tbody.dataRow').insertAdjacentHTML('beforebegin', '<tbody></tbody>');
                         let ths = el.querySelectorAll('.deleteColumn');
                         for (let i = ths.length - 1; i > 0; --i)
                             ths[i].parentElement.removeChild(ths[i]);
@@ -173,7 +173,7 @@ function JSONForm() {
 
                         data[datum].forEach(function (subdatum, c) {
                             Object.keys(subdatum).forEach(key => {
-                                let subelement = el.querySelector(`tbody td:nth-child(${c + 2}) .JSONData[name="${key}"]`);
+                                let subelement = el.querySelector(`tbody:not(.dataRow) td:nth-child(${c + 2}) .JSONData[name="${key}"]`);
                                 if (subelement)
                                     form.parseValue(subelement, subdatum[key]);
                             });
@@ -187,7 +187,7 @@ function JSONForm() {
                                 let _tbody = document.createElement('tbody');
                                 if (el.classList.contains('sortable'))
                                     sortableBody(tbody);
-                                _tbody.innerHTML = el.querySelector('tfoot.dataRow').innerHTML;
+                                _tbody.innerHTML = el.querySelector('tbody.dataRow').innerHTML;
 
                                 _tbody.querySelectorAll('td').forEach((_td, col) => {
                                     if (_td.innerHTML != '')
@@ -206,7 +206,7 @@ function JSONForm() {
                                 let tbody = document.createElement('tbody');
                                 if (el.classList.contains('sortable'))
                                     sortableBody(tbody);
-                                tbody.innerHTML = el.querySelector('tfoot.dataRow').innerHTML;
+                                tbody.innerHTML = el.querySelector('tbody.dataRow').innerHTML;
 
                                 Object.keys(subdatum).forEach(datum => {
                                     let subelement = tbody.querySelector(`.JSONData[name="${datum}"]`);
@@ -237,8 +237,8 @@ function JSONForm() {
             });
 
             form.querySelectorAll('table.JSONData').forEach(table => {
-                if (table.querySelector('tfoot.dataRow').onchange)
-                    table.querySelector('tfoot.dataRow').onchange(table);
+                if (table.querySelector('tbody.dataRow').onchange)
+                    table.querySelector('tbody.dataRow').onchange(table);
             });
 
             // Reflect form default values if data fields are undefined
@@ -326,21 +326,24 @@ function JSONForm() {
             let table = event.target.closest('table');
             action = action.classList;
             if (action.contains('newRow')) {
-                let fld = table.querySelector('tfoot input[name=""]');
+                let fld = table.querySelector('tbody.dataRow input[name=""]');
                 if (fld) {
                     fld.name = 'name';
                     fld.value = 'U' + Math.floor(performance.now() * 10000000000000); // Assign unique name
                 }
 
-                table.querySelector('tfoot').insertAdjacentHTML('beforeBegin', '<tbody>' + table.querySelector('tfoot.dataRow').innerHTML + '</tbody>');
+                let newRow = table.querySelector('tbody.dataRow').cloneNode(true);
+                newRow.classList.remove('dataRow');
+
+                table.querySelector('tfoot').insertAdjacentElement('beforeBegin', newRow);
                 if (table.classList.contains('sortable'))
                     sortableBody(table.querySelector('tfoot').previousElementSibling);
                 event.stopPropagation();
             }
             else if (action.contains('deleteRow') && confirm('Sicuri di voler eliminare la riga?')) {
                 event.target.closest('tbody').remove();
-                if (table.querySelector('tfoot.dataRow').onchange)
-                    table.querySelector('tfoot.dataRow').onchange(table);
+                if (table.querySelector('tbody.dataRow').onchange)
+                    table.querySelector('tbody.dataRow').onchange(table);
                 form.JSONStringify(event, table);
                 event.stopPropagation();
             }
