@@ -10,6 +10,11 @@
 	padding: 0.25em;
 }
 
+.kvTags ul {
+	padding: 0;
+	margin: 0;
+}
+
 .kvTags li {
 	font-size: smaller;
 	display: inline-block;

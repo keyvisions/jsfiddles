@@ -14,7 +14,7 @@
         async function setup() {
             let response = await fetch('./data.json');
             document.querySelector('[data-json="schedaTutor"]').value = await response.text();
-            JSONForm();
+            kvJSONForm();
         }
     </script>
 </head>

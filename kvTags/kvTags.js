@@ -50,7 +50,7 @@ function kvTags(input) {
 	datalist.innerHTML = options;
 	wrapper.appendChild(datalist);
 
-	let items = document.createElement("div");
+	let items = document.createElement("ul");
 	items.id = wrapper.tags.name + "_items";
 	wrapper.appendChild(items);
 

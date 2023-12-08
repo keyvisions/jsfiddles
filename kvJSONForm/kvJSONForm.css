@@ -202,13 +202,12 @@ table.JSONData {
 }
 
 .sticky, .stickyWarning {
-    position: fixed;
+    position: sticky;
     width: auto !important;
     bottom: 0;
-    left: 1em;
     background-color: var(--special_color, #000);
     border: none;
-    border-radius: 0.5em 0.5em 0 0;
+    border-radius: 0.5em;
     color: var(--base_color, #FFF);
     padding: 0.75em 2em !important;
     margin: 0 1em;
@@ -216,7 +215,5 @@ table.JSONData {
 }
 
 .stickyWarning {
-    left: auto;
-    right: 0;
     background-color: var(--error_color, #F00) !important;
 }
