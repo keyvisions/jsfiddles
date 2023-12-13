@@ -144,7 +144,7 @@
 }
 
 .kvJSONForm :invalid {
-    border-color: var(--error_color, #F00);
+    border-color: var(--error_color, #F00) !important;
 }
 
 .kvJSONForm table textarea {

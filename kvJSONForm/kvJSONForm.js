@@ -1,8 +1,10 @@
-function kvJSONForm(jsonField) {
+function kvJSONForm(jsonField, ith) {
     if (!(jsonField instanceof Element)) {
-        if (!document.querySelector('form[id="json"]'))
-            document.body.insertAdjacentHTML('beforeend', '<form id="json"></form>');
-        document.querySelectorAll('[data-json]').forEach(element => kvJSONForm(element));
+        document.querySelectorAll('[data-json]').forEach((element, i) => {
+            if (!document.querySelector(`form[id="json${i}"]`))
+                document.body.insertAdjacentHTML('beforeend', `<form id="json${i}"></form>`);
+            kvJSONForm(element, i);
+        });
         return;
     }
 
@@ -12,16 +14,17 @@ function kvJSONForm(jsonField) {
         return;
 
     form.addEventListener('submit', event => {
-        let invalid = form.querySelector(':not(.dataRow) [form=json]:invalid');
+        let invalid = form.querySelector(':not(.dataRow) [form^=json]:invalid');
         if (!invalid)
             return true;
-        
-        event.preventDefault(); 
-        document.forms["json"].reportValidity();
+
+        event.preventDefault();
+        invalid.form.reportValidity();
     });
     form.classList.add('kvJSONForm');
     form.jsonField = jsonField;
-    form.querySelectorAll('[form="json"]').forEach(el => {
+    form.querySelectorAll('[form=json]').forEach(el => {
+        el.setAttribute('form', `json${ith}`);
         el.classList.add('JSONData');
     });
 
