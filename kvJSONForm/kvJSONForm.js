@@ -1,5 +1,7 @@
 function kvJSONForm(jsonField) {
     if (!(jsonField instanceof Element)) {
+        if (!document.querySelector('form[id="json"]'))
+            document.body.insertAdjacentHTML('beforeend', '<form id="json"></form>');
         document.querySelectorAll('[data-json]').forEach(element => kvJSONForm(element));
         return;
     }
@@ -9,6 +11,14 @@ function kvJSONForm(jsonField) {
     if (!form)
         return;
 
+    form.addEventListener('submit', event => {
+        let invalid = form.querySelector(':not(.dataRow) [form=json]:invalid');
+        if (!invalid)
+            return true;
+        
+        event.preventDefault(); 
+        document.forms["json"].reportValidity();
+    });
     form.classList.add('kvJSONForm');
     form.jsonField = jsonField;
     form.querySelectorAll('[form="json"]').forEach(el => {
@@ -164,6 +174,9 @@ function kvJSONForm(jsonField) {
         Object.keys(data).forEach(datum => {
             let el = form.querySelector('.JSONData[name="' + datum + '"]');
             if (el && el.tagName == 'TABLE' && el.classList.contains('JSONData')) {
+                if (!el.querySelector('tfoot'))
+                    el.insertAdjacentHTML('beforeend', '<tfoot></tfoot>')
+
                 if (!el.hasAttribute('data-key'))
                     el.querySelectorAll('tbody:not(.dataRow)').forEach(tbody => { tbody.remove(); });
                 if (el.classList.contains('columnar')) {

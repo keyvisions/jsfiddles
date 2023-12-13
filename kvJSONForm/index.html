@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JSON Form</title>
-    <link rel="stylesheet" href="./deploy/kvJSONForm.min.css">
+    <link rel="stylesheet" href="./kvJSONForm.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
         integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="./deploy/kvJSONForm.min.js"></script>
+    <script src="./kvJSONForm.js"></script>
     <script>
         async function setup() {
             let response = await fetch('./data.json');
@@ -45,7 +45,7 @@
                             <option value="textarea">Note</option>
                             <option value="section">Intestazione</option>
                         </select></td>
-                    <td><input type="text" form="json" name="etichetta"></td>
+                    <td><input type="text" form="json" name="etichetta" required></td>
                     <td><input type="text" form="json" name="valore"></td>
                     <td><select form="json" name="classe">
                             <option value="1">-</option>
@@ -71,9 +71,9 @@
         <textarea name="fDati" data-json="schedaTutor"></textarea>
 
         <h2>Regular data inputs</h2>
-        <label><span>Regular Form data</span> <input name="faa"></label>
+        <label><span>Regular Form data</span> <input name="faa" required></label>
         <hr>
-        <label><span>JSON Field data</span> <input form="json" name="foo"></label>
+        <label><span>JSON Field data</span> <input form="json" name="foo" required></label>
 
         <table form="json" name="tutor_VR" data-key="_id">
             <caption>SEZIONE DI CONTROLLO STATO ADEMPIMENTI: VR = Documenti di Valutazione Rischi</caption>

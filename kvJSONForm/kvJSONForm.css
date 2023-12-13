@@ -1,9 +1,9 @@
 :root {
     --input_height: 2em;
-    --padding: 0.2em;
+    --padding: 0.4em;
 }
 
-.kvJSONForm .modified {
+.kvJSONForm .modified:valid {
     border-color: var(--special_color, #000) !important;
 }
 
@@ -143,7 +143,7 @@
     display: block;
 }
 
-.kvJSONForm *:invalid {
+.kvJSONForm :invalid {
     border-color: var(--error_color, #F00);
 }
 
@@ -192,13 +192,21 @@ table.JSONData {
     background-color: var(--base_color, #FFF);
 }
 
-.kvJSONForm>fieldset {
+.kvJSONForm fieldset {
     border: thin solid var(--shade_color, #DDD);
+    margin: var(--padding);
 }
 
-.kvJSONForm>fieldset label {
+.kvJSONForm fieldset label {
     font-weight: normal !important;
-    padding-right: 1em;
+    padding-right: 1.1em;
+    display: block;
+}
+  
+.kvJSONForm fieldset label>span {
+    display: block;
+    margin-top: -1.25em;
+    margin-left: 1.75em;
 }
 
 .sticky, .stickyWarning {
