@@ -229,6 +229,9 @@ function kvJSONForm(jsonField, ith) {
                             tbody.innerHTML = el.querySelector('tbody.dataRow').innerHTML;
 
                             Object.keys(subdatum).forEach(datum => {
+                                if (datum == 'name' && tbody.querySelector('input[name=""]'))
+                                    tbody.querySelector('input[name=""]').setAttribute('name', datum);
+
                                 let subelement = tbody.querySelector(`.JSONData[name="${datum}"]`);
                                 if (subelement)
                                     form.parseValue(subelement, subdatum[datum]);

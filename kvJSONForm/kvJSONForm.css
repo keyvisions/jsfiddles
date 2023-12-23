@@ -209,19 +209,9 @@ table.JSONData {
     margin-left: 1.75em;
 }
 
-.sticky, .stickyWarning {
-    position: sticky;
-    width: auto !important;
+.kvJSONForm .stickyBottom {
+    position: fixed;
     bottom: 0;
-    background-color: var(--special_color, #000);
-    border: none;
-    border-radius: 0.5em;
-    color: var(--base_color, #FFF);
-    padding: 0.75em 2em !important;
-    margin: 0 1em;
     z-index: 1;
-}
-
-.stickyWarning {
-    background-color: var(--error_color, #F00) !important;
+    box-sizing: border-box;
 }
