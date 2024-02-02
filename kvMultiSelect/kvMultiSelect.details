@@ -4,7 +4,4 @@ authors:
     - Giancarlo Trevisan
 resources:
     - https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css
-    - /index.html
-    - /kvMultiSelect.css
-    - /kvMultiSelect.js
 normalize_css: yes
