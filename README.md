@@ -13,3 +13,4 @@ This code snippet transforms the HTML input into...
 
 ## kvMultiSelect
 
+<a href="https://jsfiddle.net/gh/get/library/pure/keyvisions/jsfiddles/tree/master/kvMultiSelect/" target="_blank">https://jsfiddle.net/gh/get/library/pure/keyvisions/jsfiddles/tree/master/kvMultiSelect/</a>
