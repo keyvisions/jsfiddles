@@ -1,16 +1,10 @@
-name: kvMultiSelect
+name: kvMultiSelect - keyvisions/jsfiddles/kvMultiSelect
 description: Multi-selection widget
 authors:
     - Giancarlo Trevisan
-github_tree: keyvisions/jsfiddles/tree/main/kvMultiSelect
 resources:
     - https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css
     - /kvMultiSelect/index.html
     - /kvMultiSelect/kvMultiSelect.css
     - /kvMultiSelect/kvMultiSelect.js
-load_type: d
 normalize_css: yes
-panel_html: 0
-panel_css: 0
-panel_js: 0
-run_jsfiddle: https://jsfiddle.net/gh/get/library/pure/keyvisions/jsfiddles/
