@@ -21,7 +21,7 @@ function kvJSONForm(jsonField, ith) {
         event.preventDefault();
         invalid.form.reportValidity();
     });
-    form.classList.add('kvJSONForm');
+    form.classList.add(jsonField.hasAttribute('data-cssclass') ? jsonField.dataset.cssclass : 'kvJSONForm');
     form.jsonField = jsonField;
     form.querySelectorAll('[form=json]').forEach(el => {
         el.setAttribute('form', `json${ith}`);

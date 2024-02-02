@@ -1,0 +1,27 @@
+{
+    "fCognome": {
+        "name": "Cognome"
+    },
+    "fNome": {
+        "name": "Nome"
+    },
+    "fCF": {
+        "name": "Codice Fiscale"
+    },
+    "fDDN": {
+        "name": "D.D.N.",
+        "type": "date"
+    },
+    "fLDN": {
+        "name": "Luogo di nascita"
+    },
+    "fPDN": {
+        "name": "Provincia di nascita"
+    },
+    "fMansione": {
+        "name": "Mansione"
+    },
+    "fSesso": {
+        "name": "Sesso"
+    }
+}
