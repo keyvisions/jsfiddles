@@ -7,7 +7,7 @@ async function kvMultiSelect(input) {
         document.querySelectorAll(".kvMultiSelect").forEach(element => kvMultiSelect(element));
         return;
     }
-    input.style.display = 'none';
+//    input.style.display = 'none';
 
     const Key = input.dataset.key || '_id';
     const Data = JSON.parse(input.value).sort((a, b) => { return (a.name < b.name) ? -1 : 1 });
@@ -36,19 +36,26 @@ async function kvMultiSelect(input) {
             const selected = li.hasAttribute('selected');
             for (let li of event.currentTarget.children)
                 if (li.style.display !== 'none')
-                    if (selected)
+                    if (selected) {
+                        Data.find(datum => datum[Key] === li.dataset[Key]).selected = true;
                         li.setAttribute('selected', '');
-                    else
+                    } else {
+                        Data.find(datum => datum[Key] === li.dataset[Key]).selected = false;
                         li.removeAttribute('selected');
-        } else
+                    }
+        } else {
+            Data.find(datum => datum[Key] === li.dataset[Key]).selected = li.hasAttribute('selected');
             event.currentTarget.firstChild.removeAttribute('selected');
-
+        }
+        
         const list = [...event.currentTarget.children].sort((a, b) => {
             return ((a.hasAttribute('selected') ? '*' : '') + a.innerText) < ((b.hasAttribute('selected') ? '*' : '') + b.innerText) ? -1 : 1;
         });
         event.currentTarget.innerHTML = '';
         list.forEach(li => event.currentTarget.insertAdjacentElement('beforeend', li));
         li.focus();
+
+        input.value = JSON.stringify(Data);
     });
     ol.addEventListener('mousemove', event => {
         event.target.closest('li')?.focus();
