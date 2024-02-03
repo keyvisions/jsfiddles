@@ -16,6 +16,6 @@ This code snippet transforms the HTML input into...
 [https://jsfiddle.net/gh/get/library/pure/keyvisions/jsfiddles/kvJSONForm](https://jsfiddle.net/gh/get/library/pure/keyvisions/jsfiddles/kvJSONForm)
 
 ## kvSelect
-<select> rivisited
+The HTML Select element revisited
 
 [https://jsfiddle.net/gh/get/library/pure/keyvisions/jsfiddles/kvSelect](https://jsfiddle.net/gh/get/library/pure/keyvisions/jsfiddles/kvSelect)

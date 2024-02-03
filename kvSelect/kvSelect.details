@@ -1,7 +1,6 @@
---- https://github.com/keyvisions/jsfiddles/kvSelect
-
+# https://jsfiddle.net/gh/get/library/pure/keyvisions/jsfiddles/kvSelect
 name: kvSelect
-description: Multi-selection widget
+description: HTML select element revisited
 authors:
     - Giancarlo Trevisan
 resources:
