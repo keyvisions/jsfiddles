@@ -1,4 +1,6 @@
-name: kvMultiSelect - keyvisions/jsfiddles/tree/main/kvMultiSelect
+--- https://github.com/keyvisions/jsfiddles/kvSelect
+
+name: kvSelect
 description: Multi-selection widget
 authors:
     - Giancarlo Trevisan

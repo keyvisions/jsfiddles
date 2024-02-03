@@ -2,9 +2,9 @@
 Author: Giancarlo Trevisan
 Date:   2024/01/30 
 */
-async function kvMultiSelect(input) {
+async function kvSelect(input) {
     if (!(input instanceof Element)) {
-        document.querySelectorAll(".kvMultiSelect").forEach(element => kvMultiSelect(element));
+        document.querySelectorAll(".kvSelect").forEach(element => kvSelect(element));
         return;
     }
 //    input.style.display = 'none';
@@ -16,7 +16,7 @@ async function kvMultiSelect(input) {
     });
 
     const ol = document.createElement('ol');
-    ol.className = 'kvMultiSelect';
+    ol.className = 'kvSelect';
     ol.setAttribute('start', 0);
     ol.setAttribute('data-search', '');
     ol.insertAdjacentHTML('beforeend', '<li tabindex="0">*</li>')
@@ -101,4 +101,4 @@ async function kvMultiSelect(input) {
     });
     input.insertAdjacentElement('afterend', ol);
 }
-window.addEventListener('load', kvMultiSelect);
+window.addEventListener('load', kvSelect);

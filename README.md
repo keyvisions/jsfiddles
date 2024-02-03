@@ -15,7 +15,7 @@ This code snippet transforms the HTML input into...
 
 [https://jsfiddle.net/gh/get/library/pure/keyvisions/jsfiddles/kvJSONForm](https://jsfiddle.net/gh/get/library/pure/keyvisions/jsfiddles/kvJSONForm)
 
-## kvMultiSelect
-Multiselection widget
+## kvSelect
+<select> rivisited
 
-[https://jsfiddle.net/gh/get/library/pure/keyvisions/jsfiddles/kvMultiSelect](https://jsfiddle.net/gh/get/library/pure/keyvisions/jsfiddles/kvMultiSelect)
+[https://jsfiddle.net/gh/get/library/pure/keyvisions/jsfiddles/kvSelect](https://jsfiddle.net/gh/get/library/pure/keyvisions/jsfiddles/kvSelect)
