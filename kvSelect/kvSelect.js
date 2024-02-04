@@ -1,104 +1,73 @@
 /*
 Author: Giancarlo Trevisan
-Date:   2024/01/30 
+Date:   2024/01/30
 */
-async function kvSelect(input) {
-    if (!(input instanceof Element)) {
-        document.querySelectorAll(".kvSelect").forEach(element => kvSelect(element));
+async function kvSelect(select) {
+    if (!(select instanceof Element)) {
+        document.querySelectorAll("select.kvSelect").forEach(element => kvSelect(element));
         return;
     }
-//    input.style.display = 'none';
 
-    const Key = input.dataset.key || '_id';
-    const Data = JSON.parse(input.value).sort((a, b) => { return (a.name < b.name) ? -1 : 1 });
-    Data.sort((a, b) => {
-        return ((a.selected ? '*' : '') + a.name) < ((b.selected ? '*' : '') + b.name) ? -1 : 1;
+    const wrapper = document.createElement('span');
+    wrapper.classList = select.classList;
+    select.classList = '';
+    wrapper.insertAdjacentHTML('afterbegin', `<input type="search" style="display:block;margin-bottom:1px" placeholder="${select.getAttribute('placeholder')}">`)
+    select.insertAdjacentElement('beforebegin', wrapper);
+    wrapper.insertAdjacentElement('beforeend', select);
+    select.style.width = `${wrapper.firstChild.getBoundingClientRect().width}px`;
+    wrapper.firstChild.addEventListener('input', event => {
+        event.target.nextElementSibling.options[0].removeAttribute('selected');
+        renderOptions(event.target.nextElementSibling);
     });
 
-    const ol = document.createElement('ol');
-    ol.className = 'kvSelect';
-    ol.setAttribute('start', 0);
-    ol.setAttribute('data-search', '');
-    ol.insertAdjacentHTML('beforeend', '<li tabindex="0">*</li>')
-    Data.forEach(datum => {
-        ol.insertAdjacentHTML('beforeend', `<li tabindex="0" data-${Key}="${datum[Key]}" ${datum.selected ? 'selected' : ''}>${datum.name}</li>`)
-    });
+    function renderOptions(select, sort = false) {
+        const search = select.previousElementSibling.value;
 
-    ol.addEventListener('click', event => {
-        const li = event.target.closest('li');
+        let options = [];
+        [...select.options].forEach(option => options.push({ selected: option.hasAttribute('selected') || false, value: option.value, text: option.innerText }));
 
-        if (li.hasAttribute('selected'))
-            li.removeAttribute('selected');
-        else
-            li.setAttribute('selected', '');
+        if (sort)
+            options = options.sort((a, b) => a.text < b.text ? -1 : 1);
 
-        if (li.innerHTML === '*') {
-            const selected = li.hasAttribute('selected');
-            for (let li of event.currentTarget.children)
-                if (li.style.display !== 'none')
-                    if (selected) {
-                        Data.find(datum => datum[Key] === li.dataset[Key]).selected = true;
-                        li.setAttribute('selected', '');
-                    } else {
-                        Data.find(datum => datum[Key] === li.dataset[Key]).selected = false;
-                        li.removeAttribute('selected');
-                    }
-        } else {
-            Data.find(datum => datum[Key] === li.dataset[Key]).selected = li.hasAttribute('selected');
-            event.currentTarget.firstChild.removeAttribute('selected');
-        }
-        
-        const list = [...event.currentTarget.children].sort((a, b) => {
-            return ((a.hasAttribute('selected') ? '*' : '') + a.innerText) < ((b.hasAttribute('selected') ? '*' : '') + b.innerText) ? -1 : 1;
+        const scrollLeft = select.scrollLeft, scrollTop = select.scrollTop;
+        select.innerHTML = '';
+        options.forEach(option => {
+            let display = option.text === '*' || option.selected || search === '' || option.text.toLowerCase().indexOf(search) != -1;
+            select.insertAdjacentHTML('beforeend', `<option value="${option.value || option.text}"${display ? '' : ' style="display:none"'}${option.selected ? ' selected' : ''}>${option.text}</option>`);
         });
-        event.currentTarget.innerHTML = '';
-        list.forEach(li => event.currentTarget.insertAdjacentElement('beforeend', li));
-        li.focus();
+        select.value = '';
+        setTimeout(() => select.scroll(scrollLeft, scrollTop), 0);
+    }
+    renderOptions(select, true);
 
-        input.value = JSON.stringify(Data);
-    });
-    ol.addEventListener('mousemove', event => {
-        event.target.closest('li')?.focus();
-    });
-    ol.addEventListener('keydown', event => {
-        let li = event.target.closest('li');
-        switch (event.key) {
-            case 'ArrowUp':
-                if (li.previousElementSibling) {
-                    for (li = li.previousElementSibling; li.style.display === 'none'; li = li.previousElementSibling);
-                    li.focus();
-                }
-                break;
-            case 'ArrowDown':
-                if (li.nextElementSibling) {
-                    for (li = li.nextElementSibling; li?.style.display === 'none'; li = li.nextElementSibling);
-                    li?.focus();
-                }
-                break;
-            case 'Enter':
-                li.click();
-                break;
-            case 'Tab':
-                break;
-            default: // Search
-                const ol = event.currentTarget;
+    select.addEventListener('click', event => {
+        const option = event.target;
 
-                if (event.key === 'Backspace' || event.key === 'Delete') {
-                    ol.dataset.search = '';
-                    ol.firstChild.removeAttribute('selected');
-                } else if (event.key.length === 1)
-                    ol.dataset.search += event.key.toLowerCase();
+        if (option.hasAttribute('selected'))
+            option.removeAttribute('selected');
+        else
+            option.setAttribute('selected', '');
 
-                for (let li of ol.children) {
-                    let txt = (li.innerText).toLowerCase();
-                    if (txt != '*' && !li.hasAttribute('selected') && txt.indexOf(ol.dataset.search) == -1)
-                        li.style.display = 'none';
+        if (option.innerText === '*') {
+            const selected = option.hasAttribute('selected');
+            for (let option of select.options)
+                if (option.style.display !== 'none')
+                    if (selected)
+                        option.setAttribute('selected', '');
                     else
-                        li.style.display = '';
-                }
-                ol.firstChild.focus();
-        }
+                        option.removeAttribute('selected');
+        } else
+            select.options[0].removeAttribute('selected');
+
+        renderOptions(event.currentTarget);
     });
-    input.insertAdjacentElement('afterend', ol);
+    select.addEventListener('keydown', event => {
+        const select = event.currentTarget;
+        if (event.key === 'Enter')
+            select.options[select.selectedIndex].click();
+        else if (event.key === 'Delete')
+            select.previousElementSibling.value = '';
+    });
+
 }
 window.addEventListener('load', kvSelect);

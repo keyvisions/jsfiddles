@@ -6,7 +6,4 @@ authors:
 resources:
     - https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css
 normalize_css: yes
-panel_html: 0
-panel_css: 0
-panel_js: 0
 ...

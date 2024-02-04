@@ -1,37 +1,20 @@
 :root {
     font-family: sans-serif;
-    --padding: 0.25em;
+    --padding: 0.5em;
 }
 
-.kvSelect {
+.xkvSelect {
     cursor: pointer;
+    min-width: 20em;
+    min-height: 20em;
+    height: 100%;
 }
 
-.kvSelect li {
+.kvSelect option, .kvSelect input {
     padding: var(--padding);
 }
 
-.kvSelect::before {
-    display: block;
-    content: attr(data-search);
-    background-color: black;
-    color: white;
-    padding: var(--padding);
-}
-
-.kvSelect li[selected] {
+.kvSelect [selected] {
     background-color: SelectedItem;
     color: white;
-}
-
-.kvSelect li[selected]::marker {
-    color: SelectedItem;
-}
-
-.kvSelect li::marker {
-    color: white;
-}
-
-.kvSelect :first-child::marker {
-    color: white !important;
 }
