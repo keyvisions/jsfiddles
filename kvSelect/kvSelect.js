@@ -20,14 +20,11 @@ async function kvSelect(select) {
         renderOptions(event.target.nextElementSibling);
     });
 
-    function renderOptions(select, sort = false) {
+    function renderOptions(select) {
         const search = select.previousElementSibling.value;
 
         let options = [];
         [...select.options].forEach(option => options.push({ selected: option.hasAttribute('selected') || false, value: option.value, text: option.innerText }));
-
-        if (sort)
-            options = options.sort((a, b) => a.text < b.text ? -1 : 1);
 
         const scrollLeft = select.scrollLeft, scrollTop = select.scrollTop;
         select.innerHTML = '';
@@ -38,7 +35,7 @@ async function kvSelect(select) {
         select.value = '';
         setTimeout(() => select.scroll(scrollLeft, scrollTop), 0);
     }
-    renderOptions(select, true);
+    renderOptions(select);
 
     select.addEventListener('click', event => {
         const option = event.target;
