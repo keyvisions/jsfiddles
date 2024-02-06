@@ -3,13 +3,6 @@
     --padding: 0.5em;
 }
 
-.xkvSelect {
-    cursor: pointer;
-    min-width: 20em;
-    min-height: 20em;
-    height: 100%;
-}
-
 .kvSelect option, .kvSelect input {
     padding: var(--padding);
 }

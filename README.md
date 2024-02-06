@@ -18,4 +18,4 @@ This code snippet transforms the HTML input into...
 ## kvSelect
 The HTML Select element revisited
 
-[https://jsfiddle.net/gh/get/library/pure/keyvisions/jsfiddles/tree/main/kvSelect/](https://jsfiddle.net/gh/get/library/pure/keyvisions/jsfiddles/tree/main/kvSelect/)
+[https://jsfiddle.net/keyvisions/2xL9pg51/?repo=keyvisions/jsfiddles&jsfiddle=kvSelect](https://jsfiddle.net/keyvisions/2xL9pg51/?repo=keyvisions/jsfiddles&jsfiddle=kvSelect)

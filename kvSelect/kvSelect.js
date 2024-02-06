@@ -23,7 +23,7 @@ async function kvSelect(select) {
     function renderOptions(select) {
         const search = select.previousElementSibling.value;
 
-        let options = [];
+        let options = [{ selected: false, value: null, text: '*' }];
         [...select.options].forEach(option => options.push({ selected: option.hasAttribute('selected') || false, value: option.value, text: option.innerText }));
 
         const scrollLeft = select.scrollLeft, scrollTop = select.scrollTop;
