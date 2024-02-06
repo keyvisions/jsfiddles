@@ -11,6 +11,7 @@ async function kvSelect(select) {
     const wrapper = document.createElement('span');
     wrapper.classList = select.classList;
     select.classList = '';
+    select.insertAdjacentHTML('afterbegin', '<option>*</option>');
     wrapper.insertAdjacentHTML('afterbegin', `<input type="search" style="display:block;margin-bottom:1px" placeholder="${select.getAttribute('placeholder')}">`)
     select.insertAdjacentElement('beforebegin', wrapper);
     wrapper.insertAdjacentElement('beforeend', select);
@@ -22,18 +23,9 @@ async function kvSelect(select) {
 
     function renderOptions(select) {
         const search = select.previousElementSibling.value;
-
-        let options = [{ selected: false, value: null, text: '*' }];
-        [...select.options].forEach(option => options.push({ selected: option.hasAttribute('selected') || false, value: option.value, text: option.innerText }));
-
-        const scrollLeft = select.scrollLeft, scrollTop = select.scrollTop;
-        select.innerHTML = '';
-        options.forEach(option => {
-            let display = option.text === '*' || option.selected || search === '' || option.text.toLowerCase().indexOf(search) != -1;
-            select.insertAdjacentHTML('beforeend', `<option value="${option.value || option.text}"${display ? '' : ' style="display:none"'}${option.selected ? ' selected' : ''}>${option.text}</option>`);
-        });
+        for (const o of select.options)
+            o.style.display = (o.innerText === '*' || o.hasAttribute('selected') || search === '' || o.innerText.toLowerCase().indexOf(search) != -1) ? '' : 'none';
         select.value = '';
-        setTimeout(() => select.scroll(scrollLeft, scrollTop), 0);
     }
     renderOptions(select);
 
