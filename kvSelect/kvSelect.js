@@ -10,8 +10,9 @@ async function kvSelect(select) {
 
     const wrapper = document.createElement('span');
     wrapper.classList = select.classList;
-    select.classList = '';
-    select.insertAdjacentHTML('afterbegin', '<option>*</option>');
+    select.removeAttribute('class');
+    if (select.options.length > 0)
+        select.insertAdjacentHTML('afterbegin', '<option>*</option>');
     wrapper.insertAdjacentHTML('afterbegin', `<input type="search" style="display:block;margin-bottom:1px" placeholder="${select.getAttribute('placeholder')}">`)
     select.insertAdjacentElement('beforebegin', wrapper);
     wrapper.insertAdjacentElement('beforeend', select);
