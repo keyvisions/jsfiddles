@@ -33,6 +33,9 @@ async function kvSelect(select) {
     select.addEventListener('click', event => {
         const option = event.target;
 
+        if (option.tagName === 'SELECT')
+        	return;
+        
         if (option.hasAttribute('selected'))
             option.removeAttribute('selected');
         else
