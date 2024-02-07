@@ -72,7 +72,7 @@ async function kvImportData(input) {
                 toJSON({ currentTarget: table });
             } catch (err) {
                 table.querySelector('tbody').innerHTML = `<tr><td colspan="${cols}"><strong>${err.toString()}</strong></td></tr>`;
-                table.previousElementSibling.value = '[]';                
+                table.previousElementSibling.value = '';                
             }
         }
     });
