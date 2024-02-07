@@ -48,9 +48,10 @@ async function kvImportData(input) {
         }
     });
     table.addEventListener('click', async (event) => {
-        if (event.target.tagName === 'A')
+        if (event.target.tagName === 'A') {
+            const table = event.currentTarget;
+            const cols = Object.keys(table.kvRefCols).length;
             try {
-                const table = event.currentTarget;
                 table.querySelector('tbody')?.remove();
 
                 const text = await navigator.clipboard.readText();
@@ -61,18 +62,19 @@ async function kvImportData(input) {
 
                 table.insertAdjacentHTML('beforeend', `<tbody><tr><td>${data}</tbody>`);
 
-                const cols = Object.keys(table.kvRefCols).length;
                 table.querySelectorAll('tbody>tr').forEach(tr => {
-                    while (tr.children.length > cols)
-                        tr.lastChild.remove();
+                    if (tr.children.length != cols)
+                        throw new RangeError('Invalid data');
                     Object.values(table.kvRefCols).forEach((col, i) => {
                         tr.children[i].innerHTML = `<input form="kvRefTable" placeholder="${col.name}" name="${Object.keys(table.kvRefCols)[i]}" type="${col.type || ''}" value="${setValue(col.type, tr.children[i].innerText.trim())}">`;
                     });
                 });
                 toJSON({ currentTarget: table });
             } catch (err) {
-                console.log(err);
+                table.querySelector('tbody').innerHTML = `<tr><td colspan="${cols}"><strong>${err.toString()}</strong></td></tr>`;
+                table.previousElementSibling.value = '[]';                
             }
+        }
     });
     input.insertAdjacentElement('afterend', table);
 
