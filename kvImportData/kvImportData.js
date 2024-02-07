@@ -10,7 +10,7 @@ async function kvImportData(input) {
 
     const url = document.createElement('a');
     url.href = input.dataset.schema;
-    const res = await fetch(url.href);
+    const res = await fetch(url.href, { mode: 'no-cors' });
     if (res.ok)
         input.dataset.schema = await res.text();
     else
@@ -97,7 +97,7 @@ async function kvImportData(input) {
             MDY: /(?<M>\d{1,2})[-/. ](?<D>\d{1,2})[-/.](?<Y>\d{4})(?:[ T](?<h>\d{2})\:(?<m>\d{2})(?:\:(?<s>\d{2}))?)?/
         }[filteredPartNames.join('')];
     })() || 'YMD';
-    
+
     function setValue(type, value) {
         if (!type || !type.match(/datetime|date|time/))
             return value;
