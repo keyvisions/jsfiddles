@@ -1,13 +1,38 @@
-const repo = 'keyvisions/jsfiddles/',
-    jsfiddle = 'kvSelect';
+const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+const currentTheme = localStorage.getItem('theme');
 
-window.addEventListener('load', async () => {
-    const form = document.createElement('form');
-    form.method = 'post';
-    form.action = 'https://jsfiddle.net/api/post/library/pure/';
-    form.target = 'check';
+function load() {
+    document.querySelectorAll('aside').forEach(aside => {
+        aside.addEventListener('click', toggleAside);
+    });
 
-    let config = await fetch(`https://raw.githubusercontent.com/${repo}/main/${jsfiddle}/jsfiddle.json`);
+    if (currentTheme == 'dark')
+        document.body.classList.toggle('dark-mode');
+    else if (currentTheme == 'light')
+        document.body.classList.toggle('light-mode');
+}
+function toggleAside(event) {
+    event.target.classList.toggle('collapsed');
+}
+
+function toggleColorScheme(event) {
+    const classList = event.target.classList;
+    classList.toggle('fas');
+    classList.toggle('far');
+    document.documentElement.style.colorScheme = classList.contains('far') ? 'light' : 'dark';
+}
+
+function setBackground(svg) {
+    const bodyStyle = document.body.style;
+
+    bodyStyle.backgroundImage = `url("${svg}")`;
+    bodyStyle.backgroundSize = '100px 100px';
+}
+
+async function openJSFiddle(form, repo = 'keyvisions/jsfiddles/') {
+    form.querySelectorAll('input').forEach(input => input.remove());
+
+    let config = await fetch(`https://raw.githubusercontent.com/${repo}/main/${form.children['jsfiddle'].value}/jsfiddle.json`);
     config = await config.json();
     for (let key in config) {
         const input = document.createElement('input');
@@ -21,7 +46,25 @@ window.addEventListener('load', async () => {
 
         form.insertAdjacentElement('beforeend', input);
     }
+    return true;
+}
 
-    form.insertAdjacentHTML('beforeend', '<button type="submit">JSFiddle - Code Playground</button>');
-    document.querySelector('body').insertAdjacentElement('beforeend', form);
-});
+function checkCF(CF) {
+    const c = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+        v = '010005070913151719210100050709131517192102041820110306081214161022252423';
+
+    CF = CF.toUpperCase();
+
+    let sum = 0, i;
+    if (CF.match(/[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]/)) {
+        for (i = 0; i < 14; i += 2) {
+            sum += parseInt(v.substring(2 * c.indexOf(CF[i])).substring(0, 2)) + CF.charCodeAt(i + 1) - 65;
+            if (CF[i].match(/\d/, i + 1, 1))
+                sum += 17;
+        }
+        sum += parseInt(v.substring(2 * c.indexOf(CF[i])).substring(0, 2));
+
+        return (sum % 26 + 65 == CF.charCodeAt(15));
+    }
+    return false;
+}

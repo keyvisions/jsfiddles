@@ -1,6 +1,5 @@
 :root {
-    font-family: sans-serif;
-    --padding: 0.5em;
+    --padding: 0.4em;
 }
 
 .kvSelect option, .kvSelect input {

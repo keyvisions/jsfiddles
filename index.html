@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark light">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+        integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./jsfiddle.css" />
+    <script src="./jsfiddle.js"></script>
+</head>
+
+<body onload="load()">
+    <header>
+        <nav><a href="index.html">Home</a></nav>
+        <form class="search" method="get" action="index.html"><input name="search" type="search"> <button type="submit"
+                style="border:none; background-color: transparent; color:inherit;"><i
+                    class="fas fa-fw fa-search"></i></button></form>
+    </header>
+    <main style="display: grid; grid-template-columns: auto 1fr auto;">
+        <aside class="left">
+            <div>
+                This is the left collapsibble aside
+            </div>
+        </aside>
+        <div>
+            <p>This is he main section</p>
+            <form method="post" action="https://jsfiddle.net/api/post/library/pure/" target="check">
+                <select form="none" name="jsfiddle">
+                    <option value="kvSelect">Select</option>
+                    <option value="kvImportData">Import Data</option>
+                    <option value="kvTags">Tags</option>
+                    <option value="kvJSONForm">JSON Form</option>
+                </select>
+                <button type="submit" onclick="openJSFiddle(this.form, 'keyvisions/jsfiddles/')">Open in
+                    JSFiddle</button>
+            </form>
+        </div>
+        <aside class="right">
+            <div>
+                This is the right collapsible aside
+            </div>
+        </aside>
+    </main>
+    <footer>
+        <div style="padding:0.5em">
+            KeyVisions&trade; &copy;
+            <script>document.write((new Date()).getFullYear())</script> All rights reserved.
+            <select name="background" onchange="setBackground(this.value)" style="padding:0 0.5em; float:right">
+                <option value="">none</option>
+                <option value="./media/butterfly.svg">Butterfly</option>
+                <option value="./media/flower.svg">Flower</option>
+                <option value="./media/marijuana.svg">Marijuana</option>
+            </select>
+            <i class="far fa-fw fa-moon" onclick="toggleColorScheme(event)" style="padding:0 0.5em; float:right"></i>
+        </div>
+    </footer>
+</body>
+
+</html>

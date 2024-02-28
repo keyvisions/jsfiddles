@@ -5,6 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug JSFiddles",
+            "request": "launch",
+            "type": "msedge",
+            "file": "${workspaceFolder}/index.html",
+            "runtimeArgs": [
+                "--disable-web-security" // Allow CORS
+            ]
+        },
+        {
             "name": "Debug kvImportData",
             "request": "launch",
             "type": "msedge",
