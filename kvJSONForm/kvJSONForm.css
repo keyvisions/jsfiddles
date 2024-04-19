@@ -1,6 +1,7 @@
 :root {
     --input_height: 2em;
     --padding: 0.4em;
+    --padding-s: 0.2em;
 }
 
 .kvJSONForm .modified:valid {
@@ -94,8 +95,13 @@
     cursor: grab;
 }
 
+.kvJSONForm table.collapse tbody,
+.kvJSONForm table.collapse tfoot:not(.summaryRow) {
+    display: none;
+}
+
 .kvJSONForm td {
-    padding: var(--padding);
+    padding: var(--padding-s);
     vertical-align: middle;
 }
 
@@ -128,11 +134,11 @@
 
 .kvJSONForm label {
     display: inline-block;
-    padding: var(--padding);
+    padding: var(--padding) 0;
     break-inside: avoid;
-    font-size: smaller;
     line-height: 1em;
 }
+
 .kvJSONForm label:has(textarea),
 .kvJSONForm label:has(input[type="text"]),
 .kvJSONForm label:has(input:not([type])) {
@@ -141,6 +147,7 @@
 
 .kvJSONForm label>span {
     display: block;
+    font-size: smaller;
 }
 
 .kvJSONForm :invalid {
@@ -153,7 +160,7 @@
 
 td.JSONData,
 table.JSONData {
-    background-color: inherit;
+    background-color: transparent;
 }
 
 .kvJSONForm output {
@@ -185,7 +192,6 @@ table.JSONData {
 .kvJSONForm textarea,
 .kvJSONForm div[contenteditable] {
     font-family: inherit;
-    font-size: smaller;
     font-weight: initial;
     padding: var(--padding);
     border: thin solid var(--shade_color, #DDD);
@@ -202,7 +208,7 @@ table.JSONData {
     padding-right: 1.1em;
     display: block;
 }
-  
+
 .kvJSONForm fieldset label>span {
     display: block;
     margin-top: -1.25em;

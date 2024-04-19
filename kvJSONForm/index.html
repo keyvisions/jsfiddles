@@ -12,15 +12,22 @@
     <script src="./kvJSONForm.js"></script>
     <script>
         async function setup() {
-            let response = await fetch('./data.json');
-            document.querySelector('[data-json="schedaTutor"]').value = await response.text();
             kvJSONForm();
         }
+        function complete(tr) {
+            if (tr.querySelector('select[name=stato]').value == 'Non applicabile')
+                tr.style.opacity = 0.25;
+        }
     </script>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
 </head>
 
 <body onload="setup()">
-    <form name="regularTable">
+    <!--form name="regularTable">
         <textarea name="Schema" data-json="Schema"></textarea>
 
         <table class="sortable" form="json" name="campi">
@@ -65,128 +72,278 @@
                 </tr>
             </tfoot>
         </table>
-    </form>
+    </form-->
 
     <form name="fixedTable">
-        <textarea name="fDati" data-json="schedaTutor"></textarea>
+        <textarea name="fDati" data-json="trasferta" style="display:none"></textarea>
 
+        <!--
         <h2>Regular data inputs</h2>
         <label><span>Regular Form data</span> <input name="faa" required></label>
         <hr>
         <label><span>JSON Field data</span> <input form="json" name="foo" required></label>
+-->
+        <div class="module MOM">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Luogo</th>
+                        <th style="width: 100%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input form="json" type="date" name="data" required></td>
+                        <td><select form="json" name="luogo">
+                                <option value="casa">In azienda</option>
+                                <option value="controparte">Dalla controparte</option>
+                                <option value="evento">Fiera/Convegno</option>
+                                <option value="remoto">Da remoto</option>
+                            </select></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <div style="display: flex; flex-wrap: wrap">
+                                <label>Controparte <div><input form="json" name="controparte"
+                                            style="width:fit-content()"></div>
+                                </label>
+                                <label>Partecipanti interni <div form="json" name="interni"
+                                        contenteditable="plaintext-only"></div></label>
+                                <label>Partecipanti esterni <div form="json" name="esterni"
+                                        contenteditable="plaintext-only"></div></label>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table form="json" name="argomenti" class="sortable" data-id="_id">
+                <caption style="text-align:center">Argomenti</caption>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Priorità</th>
+                        <th>Natura</th>
+                        <th>Stato</th>
+                        <th style="white-space: nowrap">Data follow-up</th>
+                        <th style="width:100%">Responsabile follow-up</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="dataRow">
+                    <tr>
+                        <td><i class="fas fa-grip-vertical"></i><input form="json" type="hidden" name="_id"></td>
+                        <td><select form="json" name="priorita">
+                                <option value="bassa">Bassa</option>
+                                <option value="media">Media</option>
+                                <option value="alta">Alta</option>
+                            </select></td>
+                        <td><select form="json" name="natura">
+                                <option value="commerciale">Commerciale</option>
+                                <option value="progettuale">Progettuale</option>
+                                <option value="qualita">Qualitativa</option>
+                            </select></td>
+                        <td><select form="json" name="stato">
+                                <option value="attivo">Attivo</option>
+                                <option value="sospeso">Sospeso</option>
+                                <option value="concluso" selected>Concluso</option>
+                                <option value="inconcluso">Inconcluso</option>
+                            </select></td>
+                        <td><input form="json" type="date" name="followup"></td>
+                        <td><input form="json" type="select" name="followupResponsabile"
+                                style="width: -webkit-fill-available"></td>
+                        <td class="deleteRow"><i class="fas fa-fw fa-trash"></i></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="5">
+                            <div style="display: flex; flex-wrap: wrap">
+                                <label title="L'argomento non è condiviso con la controparte"><input form="json"
+                                        type="checkbox" name="privato" checked> Argomento privato</label>
+                                <label>Note <div form="json" name="note" contenteditable="plaintext-only"></div></label>
+                                <label title="Queste note non sono mai condivise con la controparte">Note interne <div
+                                        form="json" name="noteB" contenteditable="plaintext-only"></div></label>
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="newRow" colspan="8"><i class="fas fa-fw fa-plus"></i> Aggiungi argomento</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <table form="json" class="sortable" name="trasferta" data-id="_id">
+                <caption style="text-align:center">Trasferta</caption>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Data</th>
+                        <th>Partenza</th>
+                        <th>Arrivo</th>
+                        <th>Ore</th>
+                        <th>Km</th>
+                        <th>Veicolo</th>
+                        <th>Vitto</th>
+                        <th>Alloggio</th>
+                        <th style="width: 100%">Note</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="dataRow" data-refine="complete">
+                    <tr>
+                        <td><i class="fas fa-grip-vertical"></i><input form="json" type="hidden" name="_id"></td>
+                        <td><input form="json" type="date" name="data"></td>
+                        <td><input form="json" type="time" name="partenza" step="300"></td>
+                        <td><input form="json" type="time" name="arrivo" step="300"></td>
+                        <td><input form="json" type="time" name="ore" readonly></td>
+                        <td><input form="json" type="number" name="km" min="0" max="1500"></td>
+                        <td>
+                            <select form="json" name="mezzo">
+                                <optgroup label="Auto">
+                                    <option>Aziendale</option>
+                                    <option>Noleggio</option>
+                                    <option>Personale</option>
+                                </optgroup>
+                                <option>Aereo</option>
+                                <option>Treno</option>
+                                <option>Nave</option>
+                            </select>
+                        </td>
+                        <td style="text-align: center">
+                            <input form="json" type="checkbox" name="vitto">
+                        </td>
+                        <td style="text-align: center">
+                            <input form="json" type="checkbox" name="alloggio">
+                        </td>
+                        <td>
+                            <input form="json" name="note" style="width:fit-content()">
+                        </td>
+                        <td class="deleteRow"><i class="fas fa-fw fa-trash"></i></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="newRow" colspan="8"><i class="fas fa-fw fa-plus"></i> Aggiungi tappa</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
 
-        <table form="json" name="tutor_VR" data-key="_id">
-            <caption>SEZIONE DI CONTROLLO STATO ADEMPIMENTI: VR = Documenti di Valutazione Rischi</caption>
-            <thead>
-                <tr><th colspan="6"></th><th colspan="3">Esito della verifica</th></tr>
-                <tr><th></th><th style="width:35%">Adempimento</th><th>Stato</th><th>Data</th><th>Scadenza</th><th style="width:30%">Conclusioni e Note</th><th>NC</th><th>RACC</th><th>SUGG</th></tr>
-            </thead>
-            <tbody class="dataRow">
-                <tr><td><input form="json" type="hidden" name="_id"></td><td form="json" name="adempimento"></td>
-                    <td>
-                        <select form="json" name="stato">
-                            <option></option>
-                            <option>DVR</option>
-                            <option>DVR specifico</option>
-                            <option>Nel DVR generale</option>
-                            <option style="color:red">Necessario ma assente</option>
-                            <option>Non applicabile</option>
-                        </select></td><td><input form="json" type="date" name="data"></td><td><input form="json" type="date" name="scadenza"></td><td>
-                        <div form="json" name="note" contenteditable="plaintext-only"></div>
-                    </td><td><input form="json" type="number" name="NC" style="width:6ex" min="0"></td><td><input form="json" type="number" name="RACC" style="width:6ex" min="0"></td><td><input form="json" type="number" name="SUGG" style="width:6ex" min="0"></td></tr>
-            </tbody>
-            <tbody data-key="1">
-                <tr><td></td><td form="json" name="adempimento">DVR generale</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="2">
-                <tr><td></td><td form="json" name="adempimento">VR ambienti confinati</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="3">
-                <tr><td></td><td form="json" name="adempimento">VR macchine/attrezzature (rischi meccanici)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="4">
-                <tr><td></td><td form="json" name="adempimento">VR elettrico</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="5">
-                <tr><td></td><td form="json" name="adempimento">VR fulminazione</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="6">
-                <tr><td></td><td form="json" name="adempimento">VR incendio</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="7">
-                <tr><td></td><td form="json" name="adempimento">VR esplosione (ATEX)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="8">
-                <tr><td></td><td form="json" name="adempimento">VR agenti chimici</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="9">
-                <tr><td></td><td form="json" name="adempimento">VR agenti cancerogeni</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="10">
-                <tr><td></td><td form="json" name="adempimento">VR biologico</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="11">
-                <tr><td></td><td form="json" name="adempimento">VR amianto</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="12">
-                <tr><td></td><td form="json" name="adempimento">VR rumore</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="13">
-                <tr><td></td><td form="json" name="adempimento">VR vibrazioni meccaniche</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="14">
-                <tr><td></td><td form="json" name="adempimento">VR radiazioni ottiche artificiali (ROA)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="15">
-                <tr><td></td><td form="json" name="adempimento">VR campi elettromagnetici (CEM)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="16">
-                <tr><td></td><td form="json" name="adempimento">VR MMC - Sollevamento e trasporto</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="17">
-                <tr><td></td><td form="json" name="adempimento">VR MMC - Movimenti ripetitivi</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="18">
-                <tr><td></td><td form="json" name="adempimento">VR MMC - Spinta e traino</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="19">
-                <tr><td></td><td form="json" name="adempimento">VR lavoro al videoterminale</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="20">
-                <tr><td></td><td form="json" name="adempimento">VR stress lavoro correlato</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="28">
-                <tr><td></td><td form="json" name="adempimento">VR stress lavoro solitario-isolato</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="21">
-                <tr><td></td><td form="json" name="adempimento">VR lavoratrici madri</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="22">
-                <tr><td></td><td form="json" name="adempimento">VR lavoratori minori</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="23">
-                <tr><td></td><td form="json" name="adempimento">VR lavoro notturno</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="24">
-                <tr><td></td><td form="json" name="adempimento">VR differenze di genere, età, tipologia contrattuale</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="25">
-                <tr><td></td><td form="json" name="adempimento">VR interferenze appalti (DUVRI)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="26">
-                <tr><td></td><td form="json" name="adempimento">Piano sicurezza lavori esterni (POS o simile)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tbody data-key="27">
-                <tr><td></td><td form="json" name="adempimento">VR altri fattori (VEDI NOTE)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-            <tfoot>
-                <tr><th colspan="6" style="text-align: left">Totali</th>
-                    <th><output name="NC_tot" for="NC" data-action="sum"></output></th>
-                    <th><output name="RACC_tot" for="RACC" data-action="sum"></output></th>
-                    <th><output name="SUGG_tot" for="SUGG" data-action="sum"></output></th>
-                </tr>
-            </tfoot>
-        </table>
+        <script>
+            function doit(event) {
+                alert("doing it");
+            }
+        </script>
+
+        <div class="module SER">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div style="display: flex; flex-wrap: wrap">
+                                <label>Tecnici <div form="json" name="interni" contenteditable="plaintext-only"></div>
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table form="json" name="interventi" class="sortable" data-id="_id" onchange="doit(event)">
+                <caption style="text-align:center">Interventi</caption>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Data</th>
+                        <th>Inizio</th>
+                        <th>Fine</th>
+                        <th style="width: 50%">Controparte</th>
+                        <th style="width: 50%">Oggetto</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="dataRow">
+                    <tr>
+                        <td><i class="fas fa-grip-vertical"></i><input form="json" type="hidden" name="_id"></td>
+                        <td><input form="json" type="date" name="data"></td>
+                        <td><input form="json" type="time" name="inizio" step="300"></td>
+                        <td><input form="json" type="time" name="fine" step="300"></td>
+                        <td><input form="json" name="controparte" style="width:fit-content()"></td>
+                        <td><input form="json" name="oggetto" style="width:fit-content()"></td>
+                        <td class="deleteRow"><i class="fas fa-fw fa-trash"></i></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="5">
+                            <label>Attività svolta e materiali impiegati</label>
+                            <div form="json" name="note" contenteditable="plaintext-only"></div>
+                        </td>
+                        <td></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="newRow" colspan="7"><i class="fas fa-fw fa-plus"></i> Aggiungi intervento</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <table form="json" class="sortable" name="trasferta" data-id="_id">
+                <caption style="text-align:center">Trasferta</caption>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Data</th>
+                        <th>Partenza</th>
+                        <th>Arrivo</th>
+                        <th>Km</th>
+                        <th>Veicolo</th>
+                        <th>Vitto</th>
+                        <th>Alloggio</th>
+                        <th style="width: 100%">Note</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="dataRow" data-refine="complete">
+                    <tr>
+                        <td><i class="fas fa-grip-vertical"></i><input form="json" type="hidden" name="_id"></td>
+                        <td><input form="json" type="date" name="data"></td>
+                        <td><input form="json" type="time" name="partenza" step="300"></td>
+                        <td><input form="json" type="time" name="arrivo" step="300"></td>
+                        <td><input form="json" type="number" name="km" min="0" max="1500"></td>
+                        <td>
+                            <select form="json" name="mezzo">
+                                <optgroup label="Auto">
+                                    <option>Aziendale</option>
+                                    <option>Noleggio</option>
+                                    <option>Personale</option>
+                                </optgroup>
+                                <option>Aereo</option>
+                                <option>Treno</option>
+                                <option>Nave</option>
+                            </select>
+                        </td>
+                        <td style="text-align: center">
+                            <input form="json" type="checkbox" name="vitto">
+                        </td>
+                        <td style="text-align: center">
+                            <input form="json" type="checkbox" name="alloggio">
+                        </td>
+                        <td>
+                            <input form="json" name="note" style="width:fit-content()">
+                        </td>
+                        <td class="deleteRow"><i class="fas fa-fw fa-trash"></i></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="newRow" colspan="7"><i class="fas fa-fw fa-plus"></i> Aggiungi tappa</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
 
         <div class="stickyBottom">
             <button type="submit">Salva</button>

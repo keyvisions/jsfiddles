@@ -2,7 +2,7 @@ function kvJSONForm(jsonField, ith) {
     if (!(jsonField instanceof Element)) {
         document.querySelectorAll('[data-json]').forEach((element, i) => {
             if (!document.querySelector(`form[id="json${i}"]`))
-                document.body.insertAdjacentHTML('beforeend', `<form id="json${i}"></form>`);
+                document.body.insertAdjacentHTML('beforeend', `<form id="json${i}" style="display:none"></form>`);
             kvJSONForm(element, i);
         });
         return;
@@ -27,6 +27,15 @@ function kvJSONForm(jsonField, ith) {
         el.setAttribute('form', `json${ith}`);
         el.classList.add('JSONData');
     });
+
+    form.executeFunctionByName = function (functionName, context /*, args */) {
+        var args = Array.prototype.slice.call(arguments, 2);
+        var namespaces = functionName.split(".");
+        var func = namespaces.pop();
+        for (var i = 0; i < namespaces.length; i++)
+            context = context[namespaces[i]] || window;
+        return context[func]?.apply(context, args);
+    }
 
     if (form.hasAttribute('disabled')) {
         form.querySelectorAll('button, input[type="button"], input[type="submit"], input[type="reset"]').forEach(el => {
@@ -97,9 +106,14 @@ function kvJSONForm(jsonField, ith) {
                 data[`${tableName}_summary`] = {};
                 table.querySelectorAll(`tfoot output[for]`).forEach(output => {
                     let sum = 0;
-                    table.querySelectorAll(`tbody input[name=${output.getAttribute('for')}]`).forEach(cell => sum += parseFloat(cell.value) || 0.0);
-                    output.value = sum;
-                    data[`${tableName}_summary`][output.getAttribute('for')] = sum;
+                    table.querySelectorAll(`tbody input[name=${output.getAttribute('for')}]`).forEach(cell => {
+                        if (cell.value.indexOf(':') == -1)
+                            sum += parseFloat(cell.value) || 0.0;
+                        else
+                            sum += cell.value.split(':').reduce(function (seconds, v) { return + v + seconds * 60; }, 0) / 60;
+                    });
+                    output.value = output.hasAttribute('step') ? sum.toFixed(-Math.log10(output.getAttribute('step'))) : sum;
+                    data[`${tableName}_summary`][output.getAttribute('for')] = output.value;
                 });
             }
 
@@ -110,6 +124,7 @@ function kvJSONForm(jsonField, ith) {
             data[el.getAttribute('name')] = form.valueStringify(el);
 
         form.jsonField.value = JSON.stringify(data);
+        form.jsonField.dispatchEvent(new Event('input'));
     }
     form.valueStringify = el => {
         let value;
@@ -142,6 +157,10 @@ function kvJSONForm(jsonField, ith) {
     function sortableBody(tbody) {
         tbody.setAttribute('draggable', true);
         tbody.addEventListener('dragstart', event => {
+            if (document.elementFromPoint(event.pageX, event.pageY).tagName != 'I') {
+                event.preventDefault();
+                return;
+            }
             dragged_tbody = event.target;
             dragged_tbody.style.backgroundColor = '#EEE';
             event.dataTransfer.setDragImage(document.createElement('div'), 0, 0);
@@ -159,7 +178,23 @@ function kvJSONForm(jsonField, ith) {
             form.JSONStringify({ currentTarget: form }, tbody.closest('table'));
         });
     }
-
+    /*
+        function parseXmlToJson(xml) {
+            const json = {};
+            for (const res of xml.matchAll(/(?:<(\w*)(?:\s[^>]*)*>)((?:(?!<\1).)*)(?:<\/\1>)|<(\w*)(?:\s*)*\/>/gm)) {
+                const key = res[1] || res[3];
+                const value = res[2] && parseXmlToJson(res[2]);
+                json[key] = ((value && Object.keys(value).length) ? value : res[2]) || null;
+            }
+            return json;
+        }
+        function parseJsonToXml(json, path = 'root') {
+            let xml = '';
+            for (let v of json)
+    
+            return `<${path}>${xml}</${path}>`;
+        }
+    */
     form.JSONParse = event => {
         let form = event.target.closest('form');
         let data;
@@ -209,9 +244,10 @@ function kvJSONForm(jsonField, ith) {
                                 sortableBody(tbody);
                             _tbody.innerHTML = el.querySelector('tbody.dataRow').innerHTML;
 
+                            const td = tbody.querySelectorAll('td');
                             _tbody.querySelectorAll('td').forEach((_td, col) => {
                                 if (_td.innerHTML != '')
-                                    tbody.querySelector(`td:nth-child(${col + 1})`).innerHTML = (col == 0 ? `${row + 1}.` : '') + _td.innerHTML;
+                                    td[col].innerHTML = (col == 0 ? `${row + 1}.` : '') + _td.innerHTML;
                             });
 
                             Object.keys(subdatum).forEach(datum => {
@@ -219,6 +255,11 @@ function kvJSONForm(jsonField, ith) {
                                 if (subelement)
                                     form.parseValue(subelement, subdatum[datum]);
                             });
+
+                            // Remove
+                            // if (el.querySelector('tbody.dataRow').dataset.refine)
+                            //    form.executeFunctionByName(el.querySelector('tbody.dataRow').dataset.refine, window, tbody.firstElementChild);
+                            tbody.dispatchEvent(new Event('change', { bubbles: true, cancelable: false}));
                         });
 
                     } else {
@@ -244,7 +285,12 @@ function kvJSONForm(jsonField, ith) {
                                 fld.value = Object.keys(subdatum).name || 'U' + Math.floor(performance.now() * 10000000000000); // Assign unique name;
                             }
 
+                            // Remove
+                            // if (el.querySelector('tbody.dataRow').dataset.refine)
+                            // form.executeFunctionByName(el.querySelector('tbody.dataRow').dataset.refine, window, tbody.firstElementChild);
+
                             el.querySelector('tfoot').insertAdjacentElement('beforebegin', tbody);
+                            tbody.dispatchEvent(new Event('change', { bubbles: true, cancelable: false}));
                         });
                     }
 
@@ -363,7 +409,7 @@ function kvJSONForm(jsonField, ith) {
                 sortableBody(table.querySelector('tfoot').previousElementSibling);
             event.stopPropagation();
         }
-        else if (action.contains('deleteRow') && confirm('Sicuri di voler eliminare la riga?')) {
+        else if (action.contains('deleteRow') && (event.ctrlKey || confirm('Sicuri di voler eliminare la riga?'))) {
             event.target.closest('tbody').remove();
             if (table.querySelector('tbody.dataRow').onchange)
                 table.querySelector('tbody.dataRow').onchange(table);
@@ -374,7 +420,7 @@ function kvJSONForm(jsonField, ith) {
             form.newColumn(table);
             event.stopPropagation();
         }
-        else if (action.contains('deleteColumn') && confirm('Sicuri di voler eliminare la colonna?')) {
+        else if (action.contains('deleteColumn') && (event.ctrlKey || confirm('Sicuri di voler eliminare la colonna?'))) {
             let rows = table.querySelectorAll('thead>tr, tbody>tr'),
                 col = event.target.closest('th').cellIndex;
 
@@ -387,7 +433,8 @@ function kvJSONForm(jsonField, ith) {
             let data = JSON.parse(form.jsonField.value || '{}');
             if (data[table.getAttribute('name')]) {
                 data[table.getAttribute('name')].splice(col - 1, 1);
-                form.jsonField.value = JSON.stringify(data)
+                form.jsonField.value = JSON.stringify(data);
+                form.jsonField.dispatchEvent(new Event('input'));
             }
             form.JSONStringify(event);
             event.stopPropagation();

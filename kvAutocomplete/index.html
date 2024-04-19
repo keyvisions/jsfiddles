@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autocomplete</title>
+    <style>
+    </style>
+    <script>
+        window.addEventListener('load', () => {
+            document.querySelectorAll('input[list]').forEach(element => {
+                element.datalist = [];
+                document.querySelectorAll(`#${element.getAttribute('list')} option`).forEach(option => element.datalist.push(option.value || option.innerText));
+                //element.removeAttribute('list');
+                element.setAttribute('autocomplete', 'off');
+            });
+        });
+
+        function foo(event) {
+            let target = event.currentTarget;
+            log(similarTokens(target.datalist, currentToken(target.value, target.selectionStart)));
+        }
+        function foo()
+
+        function currentToken(tokens, selectionStart, separator = ';') {
+            tokens = tokens.split(separator), tokenStart = 0;
+            for (let i = 0; i < tokens.length; ++i) {
+                tokenStart += tokens[i].length + 1;
+                if (tokenStart > selectionStart)
+                    return tokens[i].trim();
+            }
+            return null;
+        }
+        function similarTokens(tokens, txt) {
+            let similar = [];
+            tokens.forEach(token => {
+                if (token.indexOf(txt) != -1)
+                    similar.push(token);
+            });
+            return similar;
+        }
+
+        function log(txt) {
+            document.getElementById('log').innerHTML = typeof txt === "object" ? JSON.stringify(txt) : txt;
+        }
+    </script>
+</head>
+
+<body>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum euismod, massa vitae consequat tristique,
+        nulla ex interdum magna, quis lacinia orci massa eu sem. Praesent condimentum ultrices nibh at mattis. Nunc
+        venenatis eros sit amet purus fermentum scelerisque. Pellentesque vel augue lorem. In condimentum facilisis est,
+        sed ultricies libero. Proin metus elit, sollicitudin sed mollis vitae, iaculis vel ex. Morbi efficitur mi vel
+        velit commodo, quis tempus mauris iaculis.</p>
+
+    <p>Sed a nisl id nulla fermentum ultricies. Fusce nec sagittis nisi. Nunc commodo gravida nibh, rhoncus semper dui
+        sollicitudin sed. Donec lacinia laoreet finibus. Nulla ut libero libero. Proin venenatis libero a ex luctus, sit
+        amet varius nisi vehicula. Phasellus ac mauris ac tortor tristique consectetur quis sed ex. Nam neque ex,
+        facilisis vitae porttitor vel, commodo ac dolor. Vestibulum ac lobortis elit. Curabitur aliquam justo vitae ante
+        interdum interdum.</p>
+
+    <p>Aenean volutpat eget dui a condimentum. Nam eu diam sagittis, tristique risus ac, facilisis nulla. Praesent
+        mattis, ligula eu auctor aliquet, arcu neque commodo mi, blandit ornare libero lectus lobortis enim. Aliquam vel
+        hendrerit turpis. Quisque cursus justo ut velit scelerisque rhoncus. Integer lacinia purus justo, eget lacinia
+        ex blandit in. Integer ornare efficitur ipsum ac bibendum. Fusce et magna vitae sapien scelerisque ultricies.
+        Sed nec rhoncus magna, gravida porttitor erat. Ut tempor mollis lobortis. Vestibulum et ligula nec felis
+        porttitor pretium quis sed felis.</p>
+    <input name="emails" readonly>
+    <input name="email" list="emails" onkeyup="foo(event)" onchange="fee(event)">
+    <datalist id="emails">
+        <option value="info@acme.com">info@acme.com</option>
+        <option value="sales@acme.com">sales@acme.com</option>
+        <option value="admin@acme.com">admin@acme.com</option>
+        <option value="service@acme.com">service@acme.com</option>
+    </datalist>
+    <div id="log"></div>
+
+    <p>Nunc hendrerit tristique enim, ut euismod justo maximus vel. Vivamus tempus purus eu purus auctor, at pharetra
+        erat pretium. Ut sed tincidunt felis, a elementum est. Pellentesque augue turpis, fringilla a arcu non,
+        pellentesque consequat velit. Praesent ultricies massa lectus, id fringilla nisl consequat quis. Nam ullamcorper
+        imperdiet tempor. In suscipit euismod posuere. Cras tincidunt ut augue sollicitudin rhoncus. Fusce auctor
+        vulputate enim, at ultrices est consectetur a. Duis vel neque quis elit pharetra bibendum hendrerit vitae lacus.
+        Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nulla efficitur sit amet
+        turpis sit amet fringilla. Duis lacinia sapien quam, a aliquet sapien tempus ut. Donec nec aliquam turpis.
+        Nullam finibus pharetra urna, porta facilisis mauris vulputate id.</p>
+
+    <p>Mauris viverra justo quis magna pretium, sit amet finibus diam tristique. Morbi eu dolor erat. Nam hendrerit
+        felis et finibus interdum. Nunc venenatis pulvinar pretium. Curabitur accumsan dolor lacus, ac posuere enim
+        porttitor eget. Aenean ultrices lectus ac tortor porta bibendum. Duis eu feugiat purus. Vivamus in felis metus.
+        Duis lectus turpis, fringilla eu posuere ut, viverra non ex.</p>
+</body>
+
+</html>
