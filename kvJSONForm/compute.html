@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        window.addEventListener("load", () => {
+            window.sum = array => {
+                let sum = 0.0;
+                for (value of array)
+                    if (!isNaN(value) && value !== null) sum += value;
+                return sum;
+            };
+
+            window.avg = array => {
+                let i = 0, sum = 0.0;
+                for (value of array)
+                    if (!isNaN(value) && value !== null) sum += value, ++i;
+                return i ? sum / i : null;
+            };
+
+            window.count = array => {
+                let i = 0;
+                for (value of array)
+                    if (!isNaN(value) && value !== null) ++i;
+                return i;
+            };
+            window.setValidity = output => {
+                if ((output.hasAttribute("min") && parseFloat(output.value) < parseFloat(output.getAttribute("min"))) ||
+                    (output.hasAttribute("max") && parseFloat(output.value) > parseFloat(output.getAttribute("max"))))
+                    output.classList.add("invalid");
+                else
+                    output.classList.remove("invalid");
+            };
+
+            document.querySelectorAll("form[data-field]").forEach(form => {
+                form.jsonform = form[form.dataset.field].dataset.form;
+                form.jsondata = JSON.parse(form[form.dataset.field].value);
+
+                // Load data in form
+                for (let fld of form.querySelectorAll(`[form="${form.jsonform}"]`)) {
+                    const value = form.jsondata[fld.getAttribute("name")];
+                    if (value && fld.tagName !== "OUTPUT")
+                        if (fld.tagName === "DIV")
+                            fld.textContent = value;
+                        else
+                            fld.value = value;
+                }
+
+                // Convert formula to function
+                let fn = `const target=event.target, form=event.currentTarget, data=form.jsondata; let o; data[target.getAttribute("name")]=isNaN(target.value) ? target.value || target.textContent : parseFloat(target.value); form[form.dataset.field].value=JSON.stringify(data);`;
+                form.querySelectorAll("output[data-formula]").forEach(output => {
+                    fn += output.dataset.formula.replaceAll(/"[^"]*"|'[^']*'|\b\w+\b(?![.(])/g, match =>
+                        isNaN(match) && match[0] !== '"' && match[0] !== "'" ? `data.${match}` : match
+                    ).replace('=', `o=form.querySelector("[name=${output.name}]");o.value=`) + `;setValidity(o);`;
+                });
+
+                const calculate = Function("event", fn);
+                calculate({
+                    currentTarget: form,
+                    target: form.querySelector(`[form="${form.jsonform}"]`)
+                });
+                form.addEventListener("input", calculate);
+            });
+        });
+    </script>
+    <style>
+        [contenteditable] {
+            border: thin solid;
+            padding: 0.25em;
+        }
+
+        input:invalid,
+        output.invalid {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <form data-field="data">
+        <textarea name="data" data-form="json"
+            style="display: none;">{"v1":2,"v2":7,"v10":[1,2,3], "v3": "Fufi"}</textarea>
+
+
+        <label>v1</label><input form="json" name="v1" type="number"><br>
+        <label>v2</label><input form="json" name="v2" type="number"><br>
+        <div form="json" name="v3" contenteditable="true"></div>
+
+        <br>
+        <output form="json" name="c" data-formula="=2*v1+v2" min="5" max="10"></output><br>
+        <output form="json" name="d" data-formula="=sum([v1, v2, 23, 1])"></output><br>
+        <output form="json" name="e" data-formula="=avg([v1, v2])"></output><br>
+        <output form="json" name="f" data-formula="=2.0*Math.log10(v1)"></output><br>
+        <output form="json" name="h" data-formula="='Gentile '+(v3 || '')"></output><br>
+    </form>
+</body>
+
+</html>

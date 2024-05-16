@@ -1,4 +1,4 @@
-function kvTags(input) {
+async function kvTags(input) {
 	if (!(input instanceof Element)) {
 		document.querySelectorAll("input[type=tags]").forEach(element => kvTags(element));
 		return;
@@ -11,23 +11,31 @@ function kvTags(input) {
 	wrapper.appendChild(input);
 
 	input.setAttribute("type", "hidden");
-	input.predefinedTags = input.getAttribute("accept").toLowerCase().split(",");
-	input.removeAttribute("accept");
+	try {
+		const url = new URL(input.getAttribute("accept"));
+		const response = await fetch(url);
+		const accept = await response.text();
+		input.predefinedTags = accept.split(",");
+	} catch {
+		input.predefinedTags = input.getAttribute("accept").split(",");
+		input.removeAttribute("accept");
+	}
 
 	let tag = document.createElement("input");
 	tag.setAttribute("autocomplete", "off");
 	tag.addEventListener("change", event => {
-		let tag = event.target.value.replace(/([^àèéìùòça-z0-9-]+)/gi, "").toLowerCase(),
-			ref = event.currentTarget.parentElement.tags;
+		let tag = event.target.value.replace(/([^àèéìùòça-z0-9-.]+)/gi, ""),
+			ref = event.currentTarget.parentElement.parentElement.tags;
 
 		if (tag) {
 			if (!ref.predefinedTags.includes(tag)) {
+				if (!event.target.parentElement.previousElementSibling.hasAttribute("contenteditable"))
+					return;
 				ref.predefinedTags.push(tag);
-				document.getElementById(ref.name).innerHTML += `<option value="${tag}" new>${tag}</option>`;
-			} else {
-				ref.predefinedTags.splice(ref.predefinedTags.indexOf(tag), 1);
-				document.getElementById(ref.name).querySelector(`[value="${tag}"]`).remove();
-			}
+				document.getElementById(ref.name).innerHTML += `<option value="${tag}" disabled>${tag}</option>`;
+			} else
+				document.getElementById(ref.name).querySelector(`[value="${tag}"]`).disabled = true;
+
 			let tags_items = document.getElementById(`${ref.name}_items`);
 			if (tags_items.innerHTML.indexOf(`<li tabindex="0">${tag}</li>`) == -1) {
 				ref.value += (!ref.value ? "" : ",") + tag;
@@ -37,10 +45,8 @@ function kvTags(input) {
 		}
 	});
 	tag.setAttribute("list", wrapper.tags.name);
-	wrapper.appendChild(tag);
-
-	wrapper.appendChild(document.createElement("span"));
-	wrapper.lastElementChild.appendChild(document.createTextNode(" \u271A"));
+	wrapper.insertAdjacentHTML('beforeend', `<span style="white-space:nowrap"> \u271A</span>`);
+	wrapper.lastElementChild.insertAdjacentElement('afterbegin', tag);
 
 	let datalist = document.createElement("datalist");
 	datalist.id = wrapper.tags.name;
@@ -70,7 +76,7 @@ function kvTags(input) {
 				tag = event.target.innerText;
 			input.value = input.value.replace(new RegExp(`(^${tag},|,${tag}(?=,)|,${tag}$|^${tag}$)`, "gi"), "");
 			event.target.remove();
-			event.currentTarget.previousElementSibling.insertAdjacentHTML("beforeend", `<option value="${tag}">${tag}</option>`);
+			event.currentTarget.previousElementSibling.querySelector(`[value="${tag}"]`).disabled = false;
 		} else
 			event.target.focus({
 				focusVisible: true

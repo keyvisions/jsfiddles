@@ -75,7 +75,7 @@
     </form-->
 
     <form name="fixedTable">
-        <textarea name="fDati" data-json="trasferta" style="display:none"></textarea>
+        <textarea name="fDati" data-json="trasferta" style="display:block">{"interventi":[{"_id":"","data":"2024-04-13","inizio":"10:29","fine":"","controparte":"qweqweqe","oggetto":"qweqweqweqwe","note":"qweqwqweqweqew"}],"interventi_summary":{"data":"1","inizio":"10","fine":"NaN"}}</textarea>
 
         <!--
         <h2>Regular data inputs</h2>
@@ -234,7 +234,7 @@
 
         <script>
             function doit(event) {
-                alert("doing it");
+                console.log('Doing it...');
             }
         </script>
 
@@ -286,6 +286,17 @@
                 <tfoot>
                     <tr>
                         <td class="newRow" colspan="7"><i class="fas fa-fw fa-plus"></i> Aggiungi intervento</td>
+                    </tr>
+                </tfoot>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td><output name="data_count" for="data" data-action="count"></output></td>
+                        <td><output name="data_inizio" for="inizio" data-action="sum" step="2"></output></td>
+                        <td><output name="data_fine" for="fine" data-action="avg" step="2"></output></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                 </tfoot>
             </table>

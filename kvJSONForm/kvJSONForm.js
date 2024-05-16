@@ -105,14 +105,21 @@ function kvJSONForm(jsonField, ith) {
                 // Summary functions
                 data[`${tableName}_summary`] = {};
                 table.querySelectorAll(`tfoot output[for]`).forEach(output => {
-                    let sum = 0;
+                    let sum = 0, count = 0;
                     table.querySelectorAll(`tbody input[name=${output.getAttribute('for')}]`).forEach(cell => {
+                        count += cell.value ? 1 : 0;
                         if (cell.value.indexOf(':') == -1)
                             sum += parseFloat(cell.value) || 0.0;
                         else
                             sum += cell.value.split(':').reduce(function (seconds, v) { return + v + seconds * 60; }, 0) / 60;
                     });
-                    output.value = output.hasAttribute('step') ? sum.toFixed(-Math.log10(output.getAttribute('step'))) : sum;
+                    switch (output.dataset.action) {
+                        case 'count': output.value = count; break;
+                        case 'sum': output.value = output.hasAttribute('step') ? sum.toFixed(-Math.log10(output.getAttribute('step'))) : sum; break;
+                        case 'avg': output.value = (output.hasAttribute('step') ? (sum / count).toFixed(-Math.log10(output.getAttribute('step'))) : sum / count); break;
+                    }
+                    if (isNaN(output.value))
+                        output.value = '';
                     data[`${tableName}_summary`][output.getAttribute('for')] = output.value;
                 });
             }
@@ -259,7 +266,7 @@ function kvJSONForm(jsonField, ith) {
                             // Remove
                             // if (el.querySelector('tbody.dataRow').dataset.refine)
                             //    form.executeFunctionByName(el.querySelector('tbody.dataRow').dataset.refine, window, tbody.firstElementChild);
-                            tbody.dispatchEvent(new Event('change', { bubbles: true, cancelable: false}));
+                            tbody.dispatchEvent(new Event('change', { bubbles: true, cancelable: false }));
                         });
 
                     } else {
@@ -290,15 +297,22 @@ function kvJSONForm(jsonField, ith) {
                             // form.executeFunctionByName(el.querySelector('tbody.dataRow').dataset.refine, window, tbody.firstElementChild);
 
                             el.querySelector('tfoot').insertAdjacentElement('beforebegin', tbody);
-                            tbody.dispatchEvent(new Event('change', { bubbles: true, cancelable: false}));
+                            tbody.dispatchEvent(new Event('change', { bubbles: true, cancelable: false }));
                         });
                     }
 
                     // Summary functions
                     el.querySelectorAll(`tfoot output[for]`).forEach(output => {
-                        let sum = 0;
-                        el.querySelectorAll(`tbody input[name=${output.getAttribute('for')}]`).forEach(cell => sum += parseFloat(cell.value) || 0.0);
-                        output.value = sum;
+                        let count = 0, sum = 0;
+                        el.querySelectorAll(`tbody input[name=${output.getAttribute('for')}]`).forEach(cell => {
+                            count += cell.value ? 1 : 0;
+                            sum += parseFloat(cell.value) || 0.0;
+                        });
+                        switch (output.dataset.action) {
+                            case 'count': output.value = count; break;
+                            case 'sum': output.value = sum; break;
+                            case 'avg': output.value = sum / count; break;
+                        }
                     });
                 }
             } else
@@ -409,7 +423,8 @@ function kvJSONForm(jsonField, ith) {
                 sortableBody(table.querySelector('tfoot').previousElementSibling);
             event.stopPropagation();
         }
-        else if (action.contains('deleteRow') && (event.ctrlKey || confirm('Sicuri di voler eliminare la riga?'))) {
+        else if (action.contains('deleteRow') && (event.ctrlKey || 
+                confirm((window.navigator.userLanguage || window.navigator.language) === 'it' ? 'Sicuri di voler eliminare la riga?' : 'Are you sure you want to delete the row?'))) {
             event.target.closest('tbody').remove();
             if (table.querySelector('tbody.dataRow').onchange)
                 table.querySelector('tbody.dataRow').onchange(table);
@@ -420,7 +435,8 @@ function kvJSONForm(jsonField, ith) {
             form.newColumn(table);
             event.stopPropagation();
         }
-        else if (action.contains('deleteColumn') && (event.ctrlKey || confirm('Sicuri di voler eliminare la colonna?'))) {
+        else if (action.contains('deleteColumn') && (event.ctrlKey || 
+                confirm((window.navigator.userLanguage || window.navigator.language) === 'it' ? 'Sicuri di voler eliminare la colonna?' : 'Are you sure you want to delete the column?'))) {
             let rows = table.querySelectorAll('thead>tr, tbody>tr'),
                 col = event.target.closest('th').cellIndex;
 

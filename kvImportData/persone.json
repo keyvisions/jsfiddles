@@ -23,5 +23,9 @@
     },
     "fSesso": {
         "name": "Sesso"
+    },
+    "fSede": {
+        "name": "Sede",
+        "type": "number"
     }
 }
