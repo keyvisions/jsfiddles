@@ -52,9 +52,10 @@
                 // Convert formula to function
                 let fn = `const target=event.target, form=event.currentTarget, data=form.jsondata; let o; data[target.getAttribute("name")]=isNaN(target.value) ? target.value || target.textContent : parseFloat(target.value); form[form.dataset.field].value=JSON.stringify(data);`;
                 form.querySelectorAll("output[data-formula]").forEach(output => {
+                    const decimals = -Math.log10(parseFloat(output.attributes.step?.value));
                     fn += output.dataset.formula.replaceAll(/"[^"]*"|'[^']*'|\b\w+\b(?![.(])/g, match =>
                         isNaN(match) && match[0] !== '"' && match[0] !== "'" ? `data.${match}` : match
-                    ).replace('=', `o=form.querySelector("[name=${output.name}]");o.value=`) + `;setValidity(o);`;
+                    ).replace('=', `o=form.querySelector("[name=${output.name}]");o.value=(`) + `)${decimals ? `.toFixed(${decimals})` : ''};setValidity(o);`;
                 });
 
                 const calculate = Function("event", fn);
@@ -93,7 +94,7 @@
         <output form="json" name="c" data-formula="=2*v1+v2" min="5" max="10"></output><br>
         <output form="json" name="d" data-formula="=sum([v1, v2, 23, 1])"></output><br>
         <output form="json" name="e" data-formula="=avg([v1, v2])"></output><br>
-        <output form="json" name="f" data-formula="=2.0*Math.log10(v1)"></output><br>
+        <output form="json" name="f" data-formula="=2.0*Math.log10(v1)" step="0.01"></output><br>
         <output form="json" name="h" data-formula="='Gentile '+(v3 || '')"></output><br>
     </form>
 </body>

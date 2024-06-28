@@ -116,7 +116,7 @@
 .kvJSONForm th {
     vertical-align: middle;
     font-size: smaller;
-    background-color: var(--special_color, #000);
+    background-color: var(--dark_color, #000);
     color: var(--base_color, #FFF);
     padding: var(--padding);
 }
@@ -133,7 +133,7 @@
 }
 
 .kvJSONForm label {
-    display: inline-block;
+    display: inline-block !important;
     padding: var(--padding) 0;
     break-inside: avoid;
     line-height: 1em;

@@ -10,6 +10,9 @@
         integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="./kvJSONForm.js"></script>
+
+    <link rel="stylesheet" href="../stwTags/stwTags.css">
+    <script src="../stwTags/stwTags.js" defer></script>
     <script>
         async function setup() {
             kvJSONForm();
@@ -27,97 +30,26 @@
 </head>
 
 <body onload="setup()">
-    <!--form name="regularTable">
-        <textarea name="Schema" data-json="Schema"></textarea>
-
-        <table class="sortable" form="json" name="campi">
-            <thead>
-                <tr>
-                    <th style="width:1em"></th>
-                    <th>Tipo</th>
-                    <th style="width:100%">Etichetta</th>
-                    <th>Valore predefinito</th>
-                    <th>Privacy</th>
-                    <th style="width:1em"><i class="fas fa-exclamation" title="Obbligatorio"></i></th>
-                    <th style="width:1em"></th>
-            </thead>
-            <tbody class="dataRow">
-                <tr>
-                    <td><i class="fas fa-grip-vertical"></i></td>
-                    <td><select form="json" name="tipo">
-                            <option value="number">Numero</option>
-                            <option value="text">Testo</option>
-                            <option value="date">Data</option>
-                            <option value="select">Selezione</option>
-                            <option value="textarea">Note</option>
-                            <option value="section">Intestazione</option>
-                        </select></td>
-                    <td><input type="text" form="json" name="etichetta" required></td>
-                    <td><input type="text" form="json" name="valore"></td>
-                    <td><select form="json" name="classe">
-                            <option value="1">-</option>
-                            <option value="2">Identificativo</option>
-                            <option value="4">Giudiziario</option>
-                            <option value="8">Sensibile</option>
-                            <option value="16">Sensibilissimo</option>
-                            <option value="0">Obsoleto</option>
-                        </select></td>
-                    <td><input form="json" type="checkbox" name="obbligatorio"></td>
-                    <td class="deleteRow"><i class="fas fa-fw fa-trash"></i></td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td class="newRow" colspan="7"><i class="fas fa-fw fa-plus"></i> Aggiungi campo</td>
-                </tr>
-            </tfoot>
-        </table>
-    </form-->
-
     <form name="fixedTable">
-        <textarea name="fDati" data-json="trasferta" style="display:block">{"interventi":[{"_id":"","data":"2024-04-13","inizio":"10:29","fine":"","controparte":"qweqweqe","oggetto":"qweqweqweqwe","note":"qweqwqweqweqew"}],"interventi_summary":{"data":"1","inizio":"10","fine":"NaN"}}</textarea>
+        <textarea name="fDati" data-json="trasferta"
+            style="display:block; height: 10em;">{"data":"","luogo":"controparte","controparte":"La controparte","interni":"michele,giancarlo.t","esterni":"Il mondo","argomenti":[{"_id":"","priorita":"media","natura":"qualita","stato":"concluso","followup":"2024-06-26","followupResponsabile":"francesca.m,fufi","privato":true,"note":"Le note","noteB":"Note interne"},{"_id":"","priorita":"alta","natura":"commerciale","stato":"attivo","followup":"","followupResponsabile":"fufi","privato":false,"note":"Vai","noteB":"Nessuna"}],"argomenti_summary":{},"trasferta":[{"_id":"","data":"","partenza":"","arrivo":"","ore":"","km":"10","mezzo":"Aziendale","vitto":true,"alloggio":false,"note":"Voilà"},{"_id":"","data":"","partenza":"","arrivo":"","ore":"","km":"","mezzo":"Aziendale","vitto":false,"alloggio":true,"note":""}],"trasferta_summary":{}}</textarea>
 
-        <!--
-        <h2>Regular data inputs</h2>
-        <label><span>Regular Form data</span> <input name="faa" required></label>
-        <hr>
-        <label><span>JSON Field data</span> <input form="json" name="foo" required></label>
--->
         <div class="module MOM">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Luogo</th>
-                        <th style="width: 100%"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input form="json" type="date" name="data" required></td>
-                        <td><select form="json" name="luogo">
-                                <option value="casa">In azienda</option>
-                                <option value="controparte">Dalla controparte</option>
-                                <option value="evento">Fiera/Convegno</option>
-                                <option value="remoto">Da remoto</option>
-                            </select></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <div style="display: flex; flex-wrap: wrap">
-                                <label>Controparte <div><input form="json" name="controparte"
-                                            style="width:fit-content()"></div>
-                                </label>
-                                <label>Partecipanti interni <div form="json" name="interni"
-                                        contenteditable="plaintext-only"></div></label>
-                                <label>Partecipanti esterni <div form="json" name="esterni"
-                                        contenteditable="plaintext-only"></div></label>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <label><span>Data</span> <input form="json" type="date" name="data" required></label>
+            <label><span>Luogo</span> <select form="json" name="luogo">
+                    <option value="casa">In azienda</option>
+                    <option value="controparte">Dalla controparte</option>
+                    <option value="evento">Fiera/Convegno</option>
+                    <option value="remoto">Da remoto</option>
+                </select></label>
+            <div style="display: flex; flex-wrap: wrap">
+                <label><span>Controparte</span> <div form="json" name="controparte" contenteditable="plaintext-only"></div></label>
+                <label><span>Partecipanti interni</span> <stw-tags form="json" name="interni" list="users"
+                        options="https://services.vmcitaly.com?*r=5108&txt=@value"></stw-tags></label>
+                <label><span>Partecipanti esterni</span>
+                    <div form="json" name="esterni" contenteditable="plaintext-only"></div>
+                </label>
+            </div>
             <table form="json" name="argomenti" class="sortable" data-id="_id">
                 <caption style="text-align:center">Argomenti</caption>
                 <thead>
@@ -131,7 +63,7 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody class="dataRow">
+                <template class="dataRow">
                     <tr>
                         <td><i class="fas fa-grip-vertical"></i><input form="json" type="hidden" name="_id"></td>
                         <td><select form="json" name="priorita">
@@ -151,8 +83,7 @@
                                 <option value="inconcluso">Inconcluso</option>
                             </select></td>
                         <td><input form="json" type="date" name="followup"></td>
-                        <td><input form="json" type="select" name="followupResponsabile"
-                                style="width: -webkit-fill-available"></td>
+                        <td><stw-tags form="json" name="followupResponsabile" list="users"></stw-tags></td>
                         <td class="deleteRow"><i class="fas fa-fw fa-trash"></i></td>
                     </tr>
                     <tr>
@@ -161,22 +92,24 @@
                             <div style="display: flex; flex-wrap: wrap">
                                 <label title="L'argomento non è condiviso con la controparte"><input form="json"
                                         type="checkbox" name="privato" checked> Argomento privato</label>
-                                <label>Note <div form="json" name="note" contenteditable="plaintext-only"></div></label>
-                                <label title="Queste note non sono mai condivise con la controparte">Note interne <div
-                                        form="json" name="noteB" contenteditable="plaintext-only"></div></label>
+                                <label>Note <div form="json" name="note" contenteditable="plaintext-only"></div>
+                                </label>
+                                <label title="Queste note non sono mai condivise con la controparte">Note interne
+                                    <div form="json" name="noteB" contenteditable="plaintext-only"></div>
+                                </label>
                             </div>
                         </td>
                         <td></td>
                     </tr>
-                </tbody>
+                </template>
                 <tfoot>
                     <tr>
                         <td class="newRow" colspan="8"><i class="fas fa-fw fa-plus"></i> Aggiungi argomento</td>
                     </tr>
                 </tfoot>
             </table>
-            <table form="json" class="sortable" name="trasferta" data-id="_id">
-                <caption style="text-align:center">Trasferta</caption>
+            <table form="json" name="trasferta" class="sortable" data-id="_id">
+                <caption>Trasferta</caption>
                 <thead>
                     <tr>
                         <th></th>
@@ -192,7 +125,7 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody class="dataRow" data-refine="complete">
+                <template class="dataRow" xonchange="complete(event)">
                     <tr>
                         <td><i class="fas fa-grip-vertical"></i><input form="json" type="hidden" name="_id"></td>
                         <td><input form="json" type="date" name="data"></td>
@@ -223,137 +156,13 @@
                         </td>
                         <td class="deleteRow"><i class="fas fa-fw fa-trash"></i></td>
                     </tr>
-                </tbody>
+                </template>
                 <tfoot>
                     <tr>
                         <td class="newRow" colspan="8"><i class="fas fa-fw fa-plus"></i> Aggiungi tappa</td>
                     </tr>
                 </tfoot>
             </table>
-        </div>
-
-        <script>
-            function doit(event) {
-                console.log('Doing it...');
-            }
-        </script>
-
-        <div class="module SER">
-            <table>
-                <tbody>
-                    <tr>
-                        <td>
-                            <div style="display: flex; flex-wrap: wrap">
-                                <label>Tecnici <div form="json" name="interni" contenteditable="plaintext-only"></div>
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <table form="json" name="interventi" class="sortable" data-id="_id" onchange="doit(event)">
-                <caption style="text-align:center">Interventi</caption>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Data</th>
-                        <th>Inizio</th>
-                        <th>Fine</th>
-                        <th style="width: 50%">Controparte</th>
-                        <th style="width: 50%">Oggetto</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody class="dataRow">
-                    <tr>
-                        <td><i class="fas fa-grip-vertical"></i><input form="json" type="hidden" name="_id"></td>
-                        <td><input form="json" type="date" name="data"></td>
-                        <td><input form="json" type="time" name="inizio" step="300"></td>
-                        <td><input form="json" type="time" name="fine" step="300"></td>
-                        <td><input form="json" name="controparte" style="width:fit-content()"></td>
-                        <td><input form="json" name="oggetto" style="width:fit-content()"></td>
-                        <td class="deleteRow"><i class="fas fa-fw fa-trash"></i></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td colspan="5">
-                            <label>Attività svolta e materiali impiegati</label>
-                            <div form="json" name="note" contenteditable="plaintext-only"></div>
-                        </td>
-                        <td></td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td class="newRow" colspan="7"><i class="fas fa-fw fa-plus"></i> Aggiungi intervento</td>
-                    </tr>
-                </tfoot>
-                <tfoot>
-                    <tr>
-                        <td></td>
-                        <td><output name="data_count" for="data" data-action="count"></output></td>
-                        <td><output name="data_inizio" for="inizio" data-action="sum" step="2"></output></td>
-                        <td><output name="data_fine" for="fine" data-action="avg" step="2"></output></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tfoot>
-            </table>
-            <table form="json" class="sortable" name="trasferta" data-id="_id">
-                <caption style="text-align:center">Trasferta</caption>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Data</th>
-                        <th>Partenza</th>
-                        <th>Arrivo</th>
-                        <th>Km</th>
-                        <th>Veicolo</th>
-                        <th>Vitto</th>
-                        <th>Alloggio</th>
-                        <th style="width: 100%">Note</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody class="dataRow" data-refine="complete">
-                    <tr>
-                        <td><i class="fas fa-grip-vertical"></i><input form="json" type="hidden" name="_id"></td>
-                        <td><input form="json" type="date" name="data"></td>
-                        <td><input form="json" type="time" name="partenza" step="300"></td>
-                        <td><input form="json" type="time" name="arrivo" step="300"></td>
-                        <td><input form="json" type="number" name="km" min="0" max="1500"></td>
-                        <td>
-                            <select form="json" name="mezzo">
-                                <optgroup label="Auto">
-                                    <option>Aziendale</option>
-                                    <option>Noleggio</option>
-                                    <option>Personale</option>
-                                </optgroup>
-                                <option>Aereo</option>
-                                <option>Treno</option>
-                                <option>Nave</option>
-                            </select>
-                        </td>
-                        <td style="text-align: center">
-                            <input form="json" type="checkbox" name="vitto">
-                        </td>
-                        <td style="text-align: center">
-                            <input form="json" type="checkbox" name="alloggio">
-                        </td>
-                        <td>
-                            <input form="json" name="note" style="width:fit-content()">
-                        </td>
-                        <td class="deleteRow"><i class="fas fa-fw fa-trash"></i></td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td class="newRow" colspan="7"><i class="fas fa-fw fa-plus"></i> Aggiungi tappa</td>
-                    </tr>
-                </tfoot>
-            </table>
-
         </div>
 
         <div class="stickyBottom">

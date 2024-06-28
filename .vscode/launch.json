@@ -4,7 +4,15 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
+        {
+            "name": "Debug stwTags",
+            "request": "launch",
+            "type": "msedge",
+            "file": "${workspaceFolder}/stwTags/index.html",
+            "runtimeArgs": [
+                "--disable-web-security" // Allow CORS
+            ]
+        },
         {
             "name": "Debug kvTags",
             "request": "launch",
@@ -50,5 +58,14 @@
                 "--disable-web-security" // Allow CORS
             ]
         },
+        {
+            "name": "Debug kvSelections",
+            "request": "launch",
+            "type": "msedge",
+            "file": "${workspaceFolder}/kvSelections/index.html",
+            "runtimeArgs": [
+                "--disable-web-security" // Allow CORS
+            ]
+        },        
     ]
 }

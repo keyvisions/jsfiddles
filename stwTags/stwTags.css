@@ -1,0 +1,19 @@
+.stwTags li {
+	font-size: smaller;
+	display: inline-block;
+	background-color: var(--shade_color, grey);
+	color: var(--base_color, white);
+	padding: 0.5em 1em 0.5em 1.75em;
+    border: thin solid var(--shade_color, grey);
+	margin: 1px 0.5em 1px 0;
+	cursor: default;
+}
+
+.stwTags li::before {
+	content: "\002A09";
+	position: relative;
+	left: -1em;
+}
+.stwTags li:first-child {
+	background-color: var(--special_color, black);
+}

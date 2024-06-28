@@ -7,11 +7,19 @@
 	<title>Tags</title>
 	<link href="./kvTags.css" type="text/css" rel="stylesheet">
 	<script src="./kvTags.js"></script>
+	<style>
+		:root {
+			color-scheme: light dark;
+		}
+	</style>
 </head>
 
 <body>
 	<p>
-		<label>Utenti:</label> <input type="tags" name="utenti" accept="https://services.vmcitaly.com/?*r=5108">
+		<label>To:</label> <input type="tags" name="to" list="users" accept="https://services.vmcitaly.com/?*r=5108">
+	</p>
+	<p>
+		<label>CC:</label> <input type="tags" name="cc" list="users" accept="https://services.vmcitaly.com/?*r=5108">
 	</p>
 	<p>
 		<label>Animals:</label> <input type="tags" name="animals" accept="brownbear,bear,dingo,emu,tiger,horse" contenteditable>
