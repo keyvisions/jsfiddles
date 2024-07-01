@@ -162,7 +162,8 @@ function kvJSONForm(jsonField, ith) {
 	function sortableBody(tbody) {
 		tbody.setAttribute('draggable', true);
 		tbody.addEventListener('dragstart', event => {
-			if (document.elementFromPoint(event.pageX, event.pageY).tagName != 'I') {
+			if (!document.elementFromPoint(event.clientX, event.clientY).classList.contains('fa-grip-vertical')) {
+				event.stopPropagation();
 				event.preventDefault();
 				return;
 			}
@@ -172,13 +173,19 @@ function kvJSONForm(jsonField, ith) {
 		});
 		tbody.addEventListener('dragover', event => {
 			event.preventDefault();
-			event.dataTransfer.dropEffect = 'move';
+			if (dragged_tbody.closest('table').getAttribute('name') == event.target.closest('table').getAttribute('name')) {
+				event.dataTransfer.dropEffect = 'move';
+			} else {
+				event.dataTransfer.dropEffect = 'none';
+				event.stopPropagation();
+				return;
+			}
 			if (event.currentTarget == dragged_tbody.previousElementSibling || event.currentTarget.previousElementSibling.tagName == 'THEAD')
 				event.currentTarget.insertAdjacentElement('beforeBegin', dragged_tbody);
 			else
 				event.currentTarget.insertAdjacentElement('afterEnd', dragged_tbody);
 		});
-		tbody.addEventListener('drop', () => {
+		tbody.addEventListener('drop', event => {
 			dragged_tbody.style.backgroundColor = null;
 			form.JSONStringify({ currentTarget: form }, tbody.closest('table'));
 		});

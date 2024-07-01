@@ -15,5 +15,6 @@
 	left: -1em;
 }
 .stwTags li:first-child {
-	background-color: var(--special_color, black);
+	background-color: var(--base_color, white);
+	color: inherit;
 }

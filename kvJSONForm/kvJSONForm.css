@@ -13,7 +13,6 @@
     background-color: var(--faint_color, #EEE) !important;
 }
 
-.kvJSONForm .dataRow,
 .kvJSONForm[disabled] .newRow,
 .kvJSONForm[disabled] .deleteRow,
 .kvJSONForm[disabled] .newColumn,

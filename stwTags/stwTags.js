@@ -63,7 +63,7 @@ class stwTags extends HTMLElement {
 			let datalist = document.createElement('datalist');
 			datalist.id = list;
 			datalist.innerHTML = options;
-			wrapper.appendChild(datalist);
+			tag.appendChild(datalist);
 		}
 
 		this.insertAdjacentElement('afterend', wrapper);
@@ -89,12 +89,20 @@ class stwTags extends HTMLElement {
 
 	// Event handlers
 	static fetchItems(event) {
-		if (event.target.value)
-			fetch(stwTags.lists[event.target.list.id].replace('@value', event.target.value))
+		if (event.target.value) {
+			const list = event.target.getAttribute('list');
+			if (!document.getElementById(list)) {
+				let datalist = document.createElement('datalist');
+				datalist.id = list;
+				event.target.parentElement.appendChild(datalist);
+			}
+
+			fetch(stwTags.lists[list].replace('@value', event.target.value))
 				.then(res => res.text())
 				.then(csv =>
-					document.getElementById(event.target.list.id).innerHTML = csv.split(',').reduce((a, b) => a + '<option value="' + b + '">' + b + '</option>', '')
+					document.getElementById(list).innerHTML = csv.split(',').reduce((a, b) => a + '<option value="' + b + '">' + b + '</option>', '')
 				);
+		}
 	}
 	static changeItem(event) {
 		let tag = event.target.value.replace(/([^àèéìùòça-z0-9-.]+)/gi, ''),
@@ -116,22 +124,27 @@ class stwTags extends HTMLElement {
 		});
 	}
 	static manageItem(event) {
-		if (event.type === 'focusin' && !event.ctrlKey) {
-			event.target.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true, key: 'Tab' }));
+		if ((event.type === 'keyup' && event.target.tagName === 'LI' && event.ctrlKey && event.key === 'Enter') ||
+			(event.type === 'click' && event.target.tagName === 'LI' && event.ctrlKey)) {
+			event.target.closest('ul').insertAdjacentElement('afterBegin', event.target);
+			event.target.focus();
 
-		} else if (event.type === 'click' && event.target.tagName === 'LI' &&
-			(event.offsetX < 2 * parseInt(getComputedStyle(event.target).fontSize) ||
-				['Backspace', 'Delete'].includes(event.key))) {
+/* 		} else if (event.type === 'focusin' && !event.ctrlKey) {
+			event.target.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true, key: 'Tab' }));
+ */
+		} else if ((event.type === 'click' && event.target.tagName === 'LI' &&
+			(event.offsetX < 2 * parseInt(getComputedStyle(event.target).fontSize))) ||
+			(event.target.tagName === 'LI' && ['Backspace', 'Delete'].includes(event.key))) {
 			let input = event.currentTarget.parentElement.firstElementChild,
 				tag = event.target.innerText;
 			input.value = input.value.replace(new RegExp(`(^${tag},|,${tag}(?=,)|,${tag}$|^${tag}$)`, 'gi'), '');
 			input.dispatchEvent(new Event('input', { bubbles: true }));
 			event.target.remove();
 
-		} else if (event.type === 'keyup' && event.key !== 'Tab')
+		} /* else if (event.type === 'keyup' && event.key !== 'Tab')
 			event.currentTarget.closest('span').querySelector('input[list]').focus({
 				focusVisible: true
-			});
+			}); */
 	}
 }
 
