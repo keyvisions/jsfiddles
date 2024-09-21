@@ -1,8 +1,8 @@
 // Created: 2024/06/12
 // Creator: g.trevisan@keyvisions.it
 // Description: Spin the Web Web Component 
-// Usage: <stw-tags name="users" [list="users"] options="{csv || url}"></stw-tags>
-class stwTags extends HTMLElement {
+// Usage: <kv-tags name="users" [list="users"] options="{csv || url}"></kv-tags>
+class kvTags extends HTMLElement {
 	static lists = {};
 
 	constructor() {
@@ -13,7 +13,7 @@ class stwTags extends HTMLElement {
 		const list = this.getAttribute('list') || (this.getAttribute('name') + '_list'),
 			options = this.getAttribute('options') || '';
 
-		stwTags.lists[list] = stwTags.lists[list] || options;
+		kvTags.lists[list] = kvTags.lists[list] || options;
 		try {
 			fetch(new URL(options))
 				.then(res => res.text())
@@ -25,7 +25,7 @@ class stwTags extends HTMLElement {
 
 	render(list, predefinedTags = []) {
 		const wrapper = document.createElement('span');
-		wrapper.classList.add('stwTags');
+		wrapper.classList.add('kv-tags');
 
 		const input = document.createElement('input');
 		input.type = 'hidden';
@@ -37,10 +37,10 @@ class stwTags extends HTMLElement {
 		tag.style.width = 'inherit';
 
 		// Add keyup event only if options includes @value
-		if (stwTags.lists[list].indexOf('@value') !== -1)
-			tag.setAttribute('onkeyup', 'stwTags.fetchItems(event)');
+		if (kvTags.lists[list].indexOf('@value') !== -1)
+			tag.setAttribute('onkeyup', 'kvTags.fetchItems(event)');
 
-		tag.setAttribute('onchange', 'stwTags.changeItem(event)');
+		tag.setAttribute('onchange', 'kvTags.changeItem(event)');
 		wrapper.insertAdjacentHTML('beforeend', `<span style="white-space:nowrap"> \u271A </span>`);
 		wrapper.lastElementChild.insertAdjacentElement('afterbegin', tag);
 
@@ -50,9 +50,10 @@ class stwTags extends HTMLElement {
 		ul.style.display = 'inline';
 		wrapper.appendChild(ul);
 
-		ul.setAttribute('onclick', 'stwTags.manageItem(event)');
-		ul.setAttribute('onkeyup', 'stwTags.manageItem(event)');
-		ul.setAttribute('onfocusin', 'stwTags.manageItem(event)');
+		ul.setAttribute('ondblclick', 'kvTags.manageItem(event)');
+		ul.setAttribute('onclick', 'kvTags.manageItem(event)');
+		ul.setAttribute('onkeyup', 'kvTags.manageItem(event)');
+		ul.setAttribute('onfocusin', 'kvTags.manageItem(event)');
 
 		// datalist
 		let options = '';
@@ -67,7 +68,7 @@ class stwTags extends HTMLElement {
 		}
 
 		this.insertAdjacentElement('afterend', wrapper);
-		this.remove(); // Remove stw-tags element
+		this.remove(); // Remove kv-tags element
 
 		// Clean-up
 		input.removeAttribute('list');
@@ -97,7 +98,7 @@ class stwTags extends HTMLElement {
 				event.target.parentElement.appendChild(datalist);
 			}
 
-			fetch(stwTags.lists[list].replace('@value', event.target.value))
+			fetch(kvTags.lists[list].replace('@value', event.target.value))
 				.then(res => res.text())
 				.then(csv =>
 					document.getElementById(list).innerHTML = csv.split(',').reduce((a, b) => a + '<option value="' + b + '">' + b + '</option>', '')
@@ -115,7 +116,7 @@ class stwTags extends HTMLElement {
 				tags_items.innerHTML += `<li tabindex="0">${tag}</li>`;
 			}
 			event.target.value = '';
-			if (stwTags.lists[event.target.list.id].indexOf('@value') !== -1)
+			if (kvTags.lists[event.target.list.id].indexOf('@value') !== -1)
 				document.getElementById(event.target.list.id).innerHTML = '';
 		}
 		ref.dispatchEvent(new Event('input', { bubbles: true }));
@@ -125,7 +126,8 @@ class stwTags extends HTMLElement {
 	}
 	static manageItem(event) {
 		if ((event.type === 'keyup' && event.target.tagName === 'LI' && event.ctrlKey && event.key === 'Enter') ||
-			(event.type === 'click' && event.target.tagName === 'LI' && event.ctrlKey)) {
+			(event.type === 'click' && event.target.tagName === 'LI' && event.ctrlKey) ||
+			(event.type === 'dblclick' && event.target.tagName === 'LI')) {
 			event.target.closest('ul').insertAdjacentElement('afterBegin', event.target);
 			event.target.focus();
 
@@ -149,4 +151,4 @@ class stwTags extends HTMLElement {
 }
 
 // Register web component
-customElements.define('stw-tags', stwTags);
+customElements.define('kv-tags', kvTags);

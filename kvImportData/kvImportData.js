@@ -113,7 +113,9 @@ async function kvImportData(input) {
             let date = new Date(parts.Y, parts.M - 1, parts.D, parts.h || null, parts.m || null, parts.s || null);
 
             switch (type) {
-                case 'date': return date.toJSON().substring(0, 10);
+                case 'date':
+                    date.setHours(12); 
+                    return date.toJSON().substring(0, 10);
                 case 'time': return date.toJSON().substring(12, 16);
                 case 'datetime': return date.toJSON().substring(0, 16);
             }

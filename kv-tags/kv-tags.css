@@ -1,4 +1,4 @@
-.stwTags li {
+.kv-tags li {
 	font-size: smaller;
 	display: inline-block;
 	background-color: var(--shade_color, grey);
@@ -9,12 +9,12 @@
 	cursor: default;
 }
 
-.stwTags li::before {
+.kv-tags li::before {
 	content: "\002A09";
 	position: relative;
 	left: -1em;
 }
-.stwTags li:first-child {
+.kv-tags li:first-child {
 	background-color: var(--base_color, white);
 	color: inherit;
 }

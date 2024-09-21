@@ -16,6 +16,10 @@
     <script>
         async function setup() {
             kvJSONForm();
+            let timeOffset = (new Date()).getTimezoneOffset() * 60000;
+            document.querySelectorAll('[Type="datetime-local"]').forEach(el => 
+                el.value = (new Date((el.value ? new Date(el.value) : new Date()) - timeOffset)).toISOString().substring(0, 16)
+            );
         }
         function complete(tr) {
             console.log("changed!");
@@ -34,7 +38,7 @@
             style="display:block; height: 10em;">{"data":"","luogo":"controparte","controparte":"La controparte","interni":"michele,giancarlo.t","esterni":"Il mondo","argomenti":[{"_id":"","priorita":"media","natura":"qualita","stato":"concluso","followup":"2024-06-26","followupResponsabile":"francesca.m,fufi","privato":true,"note":"Le note","noteB":"Note interne"},{"_id":"","priorita":"alta","natura":"commerciale","stato":"attivo","followup":"","followupResponsabile":"fufi","privato":false,"note":"Vai","noteB":"Nessuna"}],"argomenti_summary":{},"trasferta":[{"_id":"","data":"","partenza":"","arrivo":"","ore":"","km":"10","mezzo":"Aziendale","vitto":true,"alloggio":false,"note":"Voilà"},{"_id":"","data":"","partenza":"","arrivo":"","ore":"","km":"","mezzo":"Aziendale","vitto":false,"alloggio":true,"note":""}],"trasferta_summary":{}}</textarea>
 
         <div class="module MOM">
-            <label><span>Data</span> <input form="json" type="date" name="data" required></label>
+            <label><span>Data</span> <input form="json" type="datetime-local" name="data" required></label>
             <label><span>Luogo</span> <select form="json" name="luogo">
                     <option value="casa">In azienda</option>
                     <option value="controparte">Dalla controparte</option>

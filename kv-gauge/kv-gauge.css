@@ -1,0 +1,9 @@
+kv-gauge .hand {
+    fill: #444;
+}
+
+kv-gauge text {
+    font-family: sans-serif;
+    font-weight: normal;
+    text-anchor: middle;
+}

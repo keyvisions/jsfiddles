@@ -5,10 +5,28 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug stwTags",
+            "name": "Debug kv-budget",
             "request": "launch",
             "type": "msedge",
-            "file": "${workspaceFolder}/stwTags/index.html",
+            "file": "${workspaceFolder}/kv-budget/index.html",
+            "runtimeArgs": [
+                "--disable-web-security" // Allow CORS
+            ]
+        },
+        {
+            "name": "Debug kv-gauge",
+            "request": "launch",
+            "type": "msedge",
+            "file": "${workspaceFolder}/kv-gauge/index.html",
+            "runtimeArgs": [
+                "--disable-web-security" // Allow CORS
+            ]
+        },
+        {
+            "name": "Debug kv-tags",
+            "request": "launch",
+            "type": "msedge",
+            "file": "${workspaceFolder}/kv-tags/index.html",
             "runtimeArgs": [
                 "--disable-web-security" // Allow CORS
             ]

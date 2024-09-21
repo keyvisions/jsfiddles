@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kv-tags</title>
+    <link href="./kv-tags.css" type="text/css" rel="stylesheet">
+    <script src="./kv-tags.js" defer></script>
+</head>
+
+<body>
+    <form>
+        <label><span>From</span> <kv-tags name="from" list="users" options="https://services.vmcitaly.com?*r=5108&txt=@value" /></label><br>
+        <label><span>To</span> <kv-tags name="to" list="users" preferred /></label><br>
+        <label><span>CC</span> <kv-tags name="cc" list="users" /></label><br>
+        <label><span>BCC</span> <kv-tags name="bcc" list="users" /></label><br>
+
+        <label><span>Colors</span> <kv-tags name="colors" options="red,white,blue" value="blue,red" /></label><br>
+    </form>
+</body>
+
+</html>
+

@@ -307,6 +307,9 @@ function kvJSONForm(jsonField, ith) {
 						}
 					});
 				}
+				if (el.querySelector(".dataRow")?.hasAttribute('onload'))
+					eval(el.querySelector(".dataRow").getAttribute('onload'));
+
 			} else
 				form.parseValue(el, data[datum]);
 		});
@@ -408,16 +411,18 @@ function kvJSONForm(jsonField, ith) {
 
 			let newRow = document.createElement('tbody');
 			newRow.innerHTML = table.querySelector('.dataRow').innerHTML;
+			newRow.querySelectorAll('[form=json]').forEach(el => {
+				el.setAttribute('form', table.getAttribute('form'));
+				el.classList.add('JSONData');
+			});
 
 			table.querySelector('tfoot').insertAdjacentElement('beforeBegin', newRow);
 			if (table.classList.contains('sortable'))
 				sortableBody(table.querySelector('tfoot').previousElementSibling);
 			event.stopPropagation();
 
-			if (newRow.hasAttribute('onload')) {
-				eval(newRow.getAttribute('onload'));
-				// newRow.removeAttribute('onload');
-			}
+			if (table.querySelector(".dataRow").hasAttribute('onload'))
+				eval(table.querySelector(".dataRow").getAttribute('onload'));
 		}
 		else if (action.contains('deleteRow') && (event.ctrlKey ||
 			confirm((window.navigator.userLanguage || window.navigator.language) === 'it' ? 'Sicuri di voler eliminare la riga?' : 'Are you sure you want to delete the row?'))) {

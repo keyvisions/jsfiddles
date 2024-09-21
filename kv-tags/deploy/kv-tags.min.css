@@ -1,0 +1,1 @@
+.kv-tags li{font-size:smaller;display:inline-block;background-color:var(--shade_color,grey);color:var(--base_color,#fff);padding:.5em 1em .5em 1.75em;border:thin solid var(--shade_color,grey);margin:1px .5em 1px 0;cursor:default}.kv-tags li::before{content:"\002A09";position:relative;left:-1em}.kv-tags li:first-child{background-color:var(--base_color,#fff);color:inherit}
