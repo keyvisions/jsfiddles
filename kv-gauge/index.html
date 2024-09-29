@@ -15,24 +15,22 @@
             document.getElementById('backlog').setAttribute('value', value)
         }
         function setValues(value) {
-            document.getElementById('andamento').setAttribute('value', value)
+            document.getElementById('andamento').setAttribute('values', value)
         }
     </script>
 </head>
 
 <body>
-    <!--kv-gauge id="fatturato" value="0.5" title="Fatturato"></kv-gauge>
-    <kv-gauge id="ordinato" value="0.1" title="Ordinato"></kv-gauge-->
-    <kv-gauge id="backlog" title="Backlog"></kv-gauge>
-    <kv-gauge id="backlog" value="1.33" title="Backlog"></kv-gauge>
-    <kv-gauge id="backlog" value="13333.5" title="Backlog"></kv-gauge>
+    <kv-gauge id="fatturato" value="0.5" title="Fatturato"></kv-gauge>
+    <kv-gauge id="ordinato" value="0.1" title="Ordinato"></kv-gauge>
+    <kv-gauge id="backlog" value="1" title="Backlog"></kv-gauge>
 
-    <kv-gauge type="linear" id="andamento" values="727738.98;36468.57;68458.39;717070;20000" title="Andamento 2024"></kv-gauge>
+    <kv-gauge type="linear" id="andamento" values="726822.19;550.00;75980.96;717070;100000"></kv-gauge>
     <br>
 
     <label>Title <input onchange="setTitle(this.value)"></label>
     <label>Value <input type="number" min="0" max="5" step="0.1" onchange="setValue(this.value)"></label>
-    <label>Values <input onchange="setValues(this.value)" value="727738.98;36468.57;68458.39;717070"></label>
+    <label>Values <input onchange="setValues(this.value)" value="726822.19;550.00;75980.96;717070;100000"></label>
 </body>
 
 </html>

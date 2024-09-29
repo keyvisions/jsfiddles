@@ -50,7 +50,7 @@
                 <label><span>Partecipanti interni</span> <stw-tags form="json" name="interni" list="users"
                         options="https://services.vmcitaly.com?*r=5108&txt=@value"></stw-tags></label>
                 <label><span>Partecipanti esterni</span>
-                    <div form="json" name="esterni" contenteditable="plaintext-only"></div>
+                    <div form="json" name="esterni" contenteditable="plaintext-only" x-webkit-speech></div>
                 </label>
             </div>
             <table form="json" name="argomenti" class="sortable" data-id="_id">
@@ -172,6 +172,8 @@
             <button type="submit">Salva</button>
         </div>
     </form>
+    <input  x-webkit-speech><br>
+    <textarea  x-webkit-speech></textarea>
 </body>
 
 </html>
