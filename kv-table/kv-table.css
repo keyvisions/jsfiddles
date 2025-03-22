@@ -1,0 +1,27 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    border: thin solid lightgray;
+    min-width: 8rem;
+}
+
+th,
+col.headers {
+    background-color: pink;
+}
+
+body {
+    overflow: hidden;
+}
+
+.selected {
+    border: thin solid black !important;
+}
+
+xtbody tr::before {
+    counter-increment: rowNumber;
+    content: counter(rowNumber) ".";
+}

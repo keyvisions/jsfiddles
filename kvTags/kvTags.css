@@ -7,7 +7,7 @@
 }
 
 .kvTags input {
-	padding: 0.25em;
+	padding: 0.25rem;
 }
 
 .kvTags ul {
@@ -21,13 +21,13 @@
 	display: inline-block;
 	background-color: var(--special_color, grey);
 	color: var(--base_color, white);
-	padding: 0.5em 1em 0.5em 1.75em;
-	margin: 0.5em 0.5em 0.5em 0;
+	padding: 0.5rem 1rem 0.5rem 1.75rem;
+	margin: 0.5rem 0.5rem 0.5rem 0;
 }
 
 .kvTags li::before {
 	content: "\2716";
 	position: relative;
-	left: -1em;
+	left: -1rem;
 	cursor: pointer;
 }

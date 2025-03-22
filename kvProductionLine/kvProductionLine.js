@@ -9,7 +9,7 @@ window.addEventListener('load', event => {
       <caption>Linee di Produzione</caption>
       <thead><tr><th>Reparto</th><th>Codice linea</th><th>Descrizione</th><th>UDC</th><!--th></th--></tr></thead>
       <tbody></tbody>
-      <tfoot style="display:none"><tr class="dataRow"><td><input name="department"></td><td><input name="code"></td><td style="width:100%"><input name="description" style="width:100%"></td><td><input type="number" name="udc" min="1" max="20"></td><!--td style="width:1em"><i class="fas fa-fw fa-trash" style="cursor:pointer"></i></td--></tr></tfoot>
+      <tfoot style="display:none"><tr class="dataRow"><td><input name="department"></td><td><input name="code"></td><td style="width:100%"><input name="description" style="width:100%"></td><td><input type="number" name="udc" min="1" max="20"></td><!--td style="width:1rem"><i class="fas fa-fw fa-trash" style="cursor:pointer"></i></td--></tr></tfoot>
       <tfoot>
         <!--tr class="newRow" style="cursor:pointer"><td colspan="5"><i class="fas fa-fw fa-plus"></i> Nuova linea</td></tr-->
         <tr class="LDP hidden"><td colspan="5"><label><span>Lista di prelievo<span> <select name="LDP"></select> <button type="button" name="loadLDP">Assegna a linea di produzione</button></label><ul></ul></td></tr>

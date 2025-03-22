@@ -57,16 +57,16 @@ class kvGauge extends HTMLElement {
 
             this.innerHTML = `
                 <div style="display:flex">
-                    <div style="width:${values[3] / values[5] * 100}%; border-left: thin solid black; padding-left:0.25em">${this.getAttribute('title') || 'Budget'}<span style="float:right; width:${values[4] / values[5] * 100}%; background:linear-gradient(to right,lightblue,blue); border-left:thin solid lightblue">&nbsp;</span><span style="float:right; padding-right:0.25em">Target</span></div>
-                  <div style="width:${(1.0 - values[3] / values[5]) * 100}%; text-align:right; border-right: thin solid black; padding-right: 0.25em;">&nbsp;</div>
+                    <div style="width:${values[3] / values[5] * 100}%; border-left: thin solid black; padding-left:0.25rem">${this.getAttribute('title') || 'Budget'}<span style="float:right; width:${values[4] / values[5] * 100}%; background:linear-gradient(to right,lightblue,blue); border-left:thin solid lightblue">&nbsp;</span><span style="float:right; padding-right:0.25rem">Target</span></div>
+                  <div style="width:${(1.0 - values[3] / values[5]) * 100}%; text-align:right; border-right: thin solid black; padding-right: 0.25rem;">&nbsp;</div>
                 </div>
                 <div style="display:flex; border-left: thin solid black; border-bottom:thin solid black; padding-bottom: 2px; border-right: thin solid black;">
                     <div style="width:${values[0] / values[5] * 100}%; background-color:green" title="Fatturato ad oggi € ${values[0].toLocaleString()}">&nbsp;</div>
                     <div style="width:${values[1] / values[5] * 100}%; background-color:lightgreen" title="DDT del mese € ${values[1].toLocaleString()}">&nbsp;</div>&nbsp;<i class="fas fa-truck-monster"></i>
                 </div>
-                    <div style="display:flex; margin-bottom: 1.5em; padding-top: 2px">
+                    <div style="display:flex; margin-bottom: 1.5rem; padding-top: 2px">
                     <div style="width:${(values[0] + values[1]) / values[5] * 100}%">&nbsp;</div>
-                    <div style="width:${values[2] / values[5] * 100}%; height: 0.5em; background-color:yellow" title="Backlog € ${values[2].toLocaleString()}"></div>
+                    <div style="width:${values[2] / values[5] * 100}%; height: 0.5rem; background-color:yellow" title="Backlog € ${values[2].toLocaleString()}"></div>
                 </div>`;
         } else {
             this.innerHTML = '';

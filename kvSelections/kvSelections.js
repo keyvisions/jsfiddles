@@ -16,7 +16,7 @@ window.addEventListener('load', () => {
 		});
 		input.setAttribute('list', `kvSelections${i}`);
 		input.insertAdjacentHTML('afterend', `
-			<div style="position:absolute;top:2px;left:0.25em;padding:${window.getComputedStyle(input).getPropertyValue('padding')};white-space:nowrap;font:${window.getComputedStyle(input).getPropertyValue('font')}"></div>
+			<div style="position:absolute;top:2px;left:0.25rem;padding:${window.getComputedStyle(input).getPropertyValue('padding')};white-space:nowrap;font:${window.getComputedStyle(input).getPropertyValue('font')}"></div>
 			<datalist id="kvSelections${i}">${options}</datalist>
 		`);
 

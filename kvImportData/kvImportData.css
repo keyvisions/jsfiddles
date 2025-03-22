@@ -7,7 +7,7 @@
 .kvImportData caption {
     font-size: larger;
     cursor: pointer;
-    margin: 0.25em;
+    margin: 0.25rem;
     border-bottom: thin solid SelectedItem;
 }
 

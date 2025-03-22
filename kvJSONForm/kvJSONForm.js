@@ -27,10 +27,10 @@ function kvJSONForm(jsonField, ith) {
 	});
 
 	form.executeFunctionByName = function (functionName, context /*, args */) {
-		var args = Array.prototype.slice.call(arguments, 2);
-		var namespaces = functionName.split(".");
-		var func = namespaces.pop();
-		for (var i = 0; i < namespaces.length; i++)
+		let args = Array.prototype.slice.call(arguments, 2);
+		let namespaces = functionName.split(".");
+		let func = namespaces.pop();
+		for (let i = 0; i < namespaces.length; i++)
 			context = context[namespaces[i]] || window;
 		return context[func]?.apply(context, args);
 	}

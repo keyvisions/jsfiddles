@@ -1,1 +1,1 @@
-:root{--padding:0.4em}.kvSelect input,.kvSelect option{padding:var(--padding)}.kvSelect [selected]{background-color:SelectedItem;color:#fff}
+:root{--padding:0.4rem}.kvSelect input,.kvSelect option{padding:var(--padding)}.kvSelect [selected]{background-color:SelectedItem;color:#fff}

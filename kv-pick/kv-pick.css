@@ -1,0 +1,43 @@
+:root {
+    --special-background: 12, 146, 121;
+    --special-color: 255, 255, 255;
+    --border-color: gray;
+    --error-color: red;
+
+    font-family: sans-serif;
+    font-size: 12pt;
+
+    color-scheme: light dark;
+}
+
+kv-pick input[type=number] {
+    width: 4rem;
+    text-align: right;
+    margin: 0;
+}
+
+kv-pick table {
+    border-collapse: collapse;
+}
+
+kv-pick tr.selected {
+    background-color: rgb(var(--special-background));
+    color: rgb(var(--special-color));
+}
+
+kv-pick td {
+    border-bottom: thin solid var(--border-color);
+    padding: 0.25rem 0.5rem;
+}
+
+kv-pick th {
+    font-size: smaller;
+    border-bottom: medium solid var(--border-color);
+    padding: 0.25rem 0.5rem;
+    line-height: 1.5rem;
+}
+
+kv-pick .invalid,
+kv-pick input:invalid {
+    color: var(--error-color);
+}

@@ -5,6 +5,42 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug kv-params",
+            "request": "launch",
+            "type": "msedge",
+            "file": "${workspaceFolder}/kv-params/index.html",
+            "runtimeArgs": [
+                "--disable-web-security" // Allow CORS
+            ]
+        },
+        {
+            "name": "Debug kv-timeline",
+            "request": "launch",
+            "type": "msedge",
+            "file": "${workspaceFolder}/kv-timeline/index.html",
+            "runtimeArgs": [
+                "--disable-web-security" // Allow CORS
+            ]
+        },
+        {
+            "name": "Debug kv-table",
+            "request": "launch",
+            "type": "msedge",
+            "file": "${workspaceFolder}/kv-table/index.html",
+            "runtimeArgs": [
+                "--disable-web-security" // Allow CORS
+            ]
+        },
+        {
+            "name": "Debug kv-pick",
+            "request": "launch",
+            "type": "msedge",
+            "file": "${workspaceFolder}/kv-pick/index.html",
+            "runtimeArgs": [
+                "--disable-web-security" // Allow CORS
+            ]
+        },
+        {
             "name": "Debug kv-budget",
             "request": "launch",
             "type": "msedge",
@@ -84,6 +120,6 @@
             "runtimeArgs": [
                 "--disable-web-security" // Allow CORS
             ]
-        },        
+        }
     ]
 }

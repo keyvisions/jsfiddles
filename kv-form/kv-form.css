@@ -1,0 +1,11 @@
+.invalid {
+    color: red;
+}
+
+output.invalid:before {
+    content: "*";
+}
+
+textarea {
+    width: -webkt-fill-content;
+}

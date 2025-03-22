@@ -21,7 +21,6 @@
             let target = event.currentTarget;
             log(similarTokens(target.datalist, currentToken(target.value, target.selectionStart)));
         }
-        function foo()
 
         function currentToken(tokens, selectionStart, separator = ';') {
             tokens = tokens.split(separator), tokenStart = 0;

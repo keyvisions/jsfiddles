@@ -1,0 +1,13 @@
+[
+    {
+        "name": "Project",
+        "start": "2024-10-17",
+        "end": "2024-12-31",
+        "tasks": [
+            { "name": "A", "duration": 1, "start": null, "end": null, "notes": null,  "attachments": [], "workers": [] },
+            { "name": "B", "duration": 2, "start": null, "end": null, "notes": null,  "attachments": [], "workers": [] },
+            { "name": "C", "duration": 1, "start": null, "end": null, "notes": null,  "attachments": [], "workers": [] },
+            { "name": "D", "duration": 3, "start": null, "end": null, "notes": null,  "attachments": [], "workers": [] }
+        ]
+    }
+]

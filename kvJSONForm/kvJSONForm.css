@@ -1,7 +1,7 @@
 :root {
-    --input_height: 2em;
-    --padding: 0.4em;
-    --padding-s: 0.2em;
+    --input_height: 2rem;
+    --padding: 0.4rem;
+    --padding-s: 0.2rem;
 }
 
 .kvJSONForm .modified:valid {
@@ -33,7 +33,7 @@
 .kvJSONForm .zoom textarea,
 .kvJSONForm .zoom [contenteditable] {
     margin: 2px 2px 2px 0;
-    height: calc(100% - 5em);
+    height: calc(100% - 5rem);
 }
 
 .kvJSONForm .newRow,
@@ -50,18 +50,18 @@
 }
 
 .columnar th:first-child {
-    width: 1em;
+    width: 1rem;
     white-space: nowrap;
     text-align: left;
-    padding: 0 0.5em;
+    padding: 0 0.5rem;
 }
 
 .kvJSONForm .newRow {
-    padding-bottom: 1em;
+    padding-bottom: 1rem;
 }
 
 .kvJSONForm .deleteRow {
-    width: 1em;
+    width: 1rem;
 }
 
 .kvJSONForm {
@@ -108,7 +108,7 @@
     text-align: left;
     font-weight: bolder;
     border-bottom: thin solid var(--special_color, #000);
-    padding-top: 0.5em;
+    padding-top: 0.5rem;
     color: var(--special_color, #000);
 }
 
@@ -124,7 +124,7 @@
     display: block;
     font-size: smaller;
     font-weight: bolder;
-    line-height: 1em;
+    line-height: 1rem;
 }
 
 .kvJSONForm option:not([selected])[disabled] {
@@ -135,7 +135,7 @@
     display: inline-block !important;
     padding: var(--padding) 0;
     break-inside: avoid;
-    line-height: 1em;
+    line-height: 1rem;
 }
 
 .kvJSONForm label:has(textarea),
@@ -204,14 +204,14 @@ table.JSONData {
 
 .kvJSONForm fieldset label {
     font-weight: normal !important;
-    padding-right: 1.1em;
+    padding-right: 1.1rem;
     display: block;
 }
 
 .kvJSONForm fieldset label>span {
     display: block;
-    margin-top: -1.25em;
-    margin-left: 1.75em;
+    margin-top: -1.25rem;
+    margin-left: 1.75rem;
 }
 
 .kvJSONForm .stickyBottom {

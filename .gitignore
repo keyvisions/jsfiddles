@@ -6,3 +6,4 @@ gulpfile.js
 .vscode/*
 !.vscode/launch.json
 kv-budget/
+kvSTW/
