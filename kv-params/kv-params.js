@@ -5,8 +5,7 @@
 ** Usage: <kv-params name="parameters"></kv-params>
 */
 class kvParams extends HTMLElement {
-	static observedAttributes = ['schema', 'lang', 'mode', 'um', 'sheet', 'src']; // mode = [ *show | edit | manage ] um = [ *msu | isu ]
-
+	static observedAttributes = ['schema', 'data', 'mode', 'um', 'sheet', 'lang']; // mode = [ *show | edit | range | manage ] um = [ *msu | isu ]
 	static #Texts = {
 		'type': { en: 'Type', it: 'Tipo' },
 		'label': { en: 'Label', it: 'Etichetta' },
@@ -20,28 +19,35 @@ class kvParams extends HTMLElement {
 		'textarea': { en: 'Notes', it: 'Note' },
 		'group': { en: 'Group', it: 'Gruppo' },
 		'separator': { en: 'Line', 'it': 'Linea' },
-		'delete': { en: 'You sure you want to delete the paramter?', it: 'Sicuri di voler eliminare il parametro?' },
-		'optionless': { en: 'This parameter has not options', it: 'Questo parametro non prevede opzioni' },
-		'norange': { en: 'There are no parameters that require a range', it: 'Non ci sono parametri che richiedono un intervallo' }
+		'delete': { en: 'You sure you want to delete the parameter?', it: 'Sicuri di voler eliminare il parametro?' },
+		'optionless': { en: 'Options are not applicabile to $1 parameters.', it: 'Le opzioni non sono applicabili ai parametri $1.' },
+		'samples': { en: 'Samples', it: 'Misurazioni' },
+		'sampleRemove': { en: 'Sure you want to delete the sample?', it: 'Sicuri di voler eliminare la misurazione?' },
+		'na': { en: 'Allow Not Applicable (NA)', it: 'Consenti Non Applicabile (NA)' },
+		'decimals': { en: 'Decimals', it: 'Decimali' },
+		'save': { en: 'Save', it: 'Salva' },
+		'pair': { en: 'Pair', it: 'Accoppia' }
 	};
 	static #Flags = [
-		{ en: 'Described', it: 'Descrittivo', icon: 'fas fa-fw fa-font' },
-		{ en: 'Searched', it: 'Ricercabile', icon: 'fas fa-fw fa-search' },
-		{ en: 'Sampled', it: 'Campionato', icon: 'fas fa-fw fa-code-branch' },
-		{ en: 'Imported', it: 'Importato', icon: 'fas fa-fw fa-file-download' },
-		{ en: 'Technical sheet', it: 'Dati tecnici', icon: 'fas fa-fw fa-drafting-compass' },
-		{ en: 'Sales sheet', it: 'Dati commerciali', icon: 'fas fa-fw fa-book-open' },
-		{ en: 'Production sheet', it: 'Dati produttivi', icon: 'fas fa-fw fa-tools' },
-		{ en: 'Test sheet', it: 'Dati collaudo', icon: 'fas fa-fw fa-tachometer-alt' },
-		{ en: 'Logistics sheet', it: 'Dati logistici', icon: 'fas fa-fw fa-truck-loading' },
-		{ en: 'Plate', it: 'Dati Targa', icon: 'fas fa-fw fa-qrcode' },
-		{ en: 'Required', it: 'Obbligatorio', icon: 'fas fa-fw fa-exclamation' },
+		{ en: 'Described', it: 'Descrittivo', icon: 'fas fa-font' },
+		{ en: 'Searched', it: 'Ricercabile', icon: 'fas fa-search' },
+		{ en: '', it: '', icon: '' }, // Available
+		{ en: 'Imported', it: 'Importato', icon: 'fas fa-wifi' },
+		{ en: 'Technical sheet', it: 'Dati tecnici', icon: 'fas fa-drafting-compass' },
+		{ en: 'Sales sheet', it: 'Dati commerciali', icon: 'fas fa-handshake' },
+		{ en: 'Production sheet', it: 'Dati produttivi', icon: 'fas fa-tools' },
+		{ en: 'Test sheet', it: 'Dati collaudo', icon: 'fas fa-tachometer-alt' },
+		{ en: 'Logistics sheet', it: 'Dati logistici', icon: 'fas fa-truck-loading' },
+		{ en: 'Plate', it: 'Dati Targa', icon: 'fas fa-qrcode' },
+		{ en: 'Required', it: 'Obbligatorio', icon: 'fas fa-exclamation' }
 	];
-
-	Lang = 'en';
-	UM = 'msu';
 	Schema = [];
 	Data = {};
+	UM = 'msu';
+	Sheet = 4;
+	Lang = 'en';
+
+	static findId(array, id) { return array.find(el => el.id == id) }
 
 	constructor() {
 		super();
@@ -52,30 +58,105 @@ class kvParams extends HTMLElement {
 			const target = event.target;
 
 			target.closest('tbody')?.querySelector('.selected')?.classList.remove('selected');
-			target.closest('tr')?.classList.add('selected');
+			if (target.closest('tbody'))
+				target.closest('tr')?.classList.add('selected');
 
-			if (target.classList.contains('add')) {
+			if (target.classList.contains('samples')) {
+				const colspan = this.querySelectorAll('tfoot th').length + 1;
+				this.querySelector('thead [colspan]').setAttribute('colspan', colspan);
+
+				this.querySelectorAll('tbody tr').forEach(row => {
+					if (row.firstElementChild.hasAttribute('colspan'))
+						row.firstElementChild.setAttribute('colspan', colspan)
+					else {
+						const node = row.lastElementChild.cloneNode(true);
+						node.firstElementChild.value = '';
+						node.firstElementChild.checked = false;
+						row.lastElementChild.insertAdjacentElement('afterend', node);
+					}
+				});
+				if (colspan > 2) {
+					this.querySelector('tfoot tr').lastElementChild.innerText = '';
+					this.querySelector('tfoot tr').lastElementChild.insertAdjacentHTML('afterend', '<th><i class="far fa-trash-alt sampleRemove"></i></th>');
+				}
+			} else if (target.classList.contains('sampleRemove')) {
+				if (!confirm(kvParams.#Texts.sampleRemove[this.Lang]))
+					return;
+
+				const colspan = this.querySelectorAll('tfoot th').length - 1;
+				this.querySelector('thead [colspan]').setAttribute('colspan', colspan);
+
+				this.querySelectorAll('tbody tr').forEach(row => {
+					if (row.firstElementChild.hasAttribute('colspan'))
+						row.firstElementChild.setAttribute('colspan', colspan)
+					else
+						row.lastElementChild.remove();
+				});
+				if (colspan == 2)
+					this.querySelector('tfoot tr').lastElementChild.remove();
+				else
+					this.querySelector('tfoot tr').lastElementChild.previousElementSibling.remove();
+			} else if (target.classList.contains('add')) {
 				const row = this.#newRow(target.closest('tr'));
 				row.scrollIntoView({ block: 'nearest' });
 			} else if (target.classList.contains('remove') && target.closest('tbody')?.children.length != 1 && (event.ctrlKey || confirm(kvParams.#Texts.delete[this.Lang]))) {
 				target.closest('tr').remove();
+			} else if (target.classList.contains('manageOptions')) {
+				this.#manageOptions(event);
 			} else if (target.getAttribute('name') == 'flags') {
 				target.classList.toggle('deselected');
 				const flags = parseInt(target.closest('td').firstElementChild.value);
 				target.closest('td').firstElementChild.value = target.classList.contains('deselected') ? flags & ~(1 << target.getAttribute('value')) : flags | (1 << target.getAttribute('value'));
-			} else if (target.name == 'manageOptions') {
-				this.#manageParamsOptions(event);
 			} else if (target.classList.contains('range')) {
-				const options = '[' +
-					(target.form.min.value || 'null') + ',' +
-					(target.form.max.value || 'null') + ',' +
-					(target.form.decimals.value || 'null') + ',' +
-					target.form.NA.checked +
-					']';
-				target.options.value = options;
+				const range = [parseInt(target.form.min.value) || null, parseInt(target.form.max.value) || null, parseInt(target.form.decimals.value) || null, target.form.flag.checked];
+				if (target.options.hasAttribute('range')) {
+					target.options.setAttribute('range', JSON.stringify(range));
+					target.options.setAttribute('min', range[0]);
+					target.options.setAttribute('max', range[1]);
+					target.options.setAttribute('step', range[2] == null ? 'any' : Math.pow(10, -range[2]));
+				} else
+					target.options.value = JSON.stringify(range);
+
 				target.closest('dialog').remove();
 			} else if (target.classList.contains('options')) {
+				target.options.value = target.form.options.value;
 				target.closest('dialog').remove();
+			} else if (target.dataset.flag) {
+				if (!target.classList.contains('selected')) {
+					this.querySelectorAll('th i.selected').forEach(el => el.classList.remove('selected'));
+					target.classList.toggle('selected');
+					this.querySelectorAll('tbody input[name=flags]').forEach(el => {
+						el.closest('tr').style.display = (parseInt(el.value) & (1 << parseInt(target.dataset.flag))) && target.classList.contains('selected') ? '' : 'none';
+					});
+				} else {
+					target.classList.remove('selected');
+					this.querySelectorAll('tbody tr').forEach(el => el.style.display = '');
+				}
+			}
+		});
+		this.addEventListener('focusin', event => {
+			const target = event.target;
+			this?.querySelector('tbody tr.selected')?.classList.remove('selected');
+			if (target.closest('tbody'))
+				target.closest('tr')?.classList.add('selected');
+		});
+		this.addEventListener('focusout', this.querySelector('tbody tr.selected')?.classList.remove('selected'));
+		document.addEventListener('keyup', event => {
+			if (event.key == 'Enter' && event.target.classList.contains('manageOptions'))
+				this.#manageOptions(event);
+			else if (this.getAttribute('mode') == 'manage' && event.altKey && (event.key == 'ArrowUp' || event.key == 'ArrowDown')) {
+				const row = this.querySelector('tbody tr.selected');
+				if (event.key == 'ArrowUp' && row.previousElementSibling) {
+					let prevRow = row.previousElementSibling
+					while (prevRow?.style.display == 'none')
+						prevRow = prevRow.previousElementSibling;
+					row.parentNode.insertBefore(row, prevRow);
+				} else if (row.nextElementSibling) {
+					let nextRow = row.nextElementSibling;
+					while (nextRow?.style.display == 'none')
+						nextRow = nextRow.nextElementSibling;
+					row.parentNode.insertBefore(nextRow || row.parentNode.firstElementChild, row);
+				}
 			}
 		});
 
@@ -88,54 +169,49 @@ class kvParams extends HTMLElement {
 		}
 		this.Lang = kvParams.#Flags[0][el.lang] ? el.lang.substring(0, 2) : 'en';
 	}
-
-	async #fetchData(src) {
-		if (this.Schema.length == 0)
-			await fetch(src).then(res => res.json()).then(data => this.Schema = data || []).catch(() => this.Schema = []);
+	async #fetchData(name, json) {
+		if (name == 'schema' && this.Schema.length == 0)
+			await fetch(json).then(res => res.json()).then(data => this.Schema = data || []).catch(() => this.Schema = []);
+		else if (name == 'data')
+			await fetch(json).then(res => res.json()).then(data => this.Data = data || {}).catch(() => this.Data = {});
 	}
-
 	async attributeChangedCallback(name, oldValue, newValue) {
-		if (oldValue == newValue)
-			return;
-
-		//await this.#fetchData('UM', './um.json');
+		if (oldValue)
+			this.save();
 
 		switch (name) {
+			case 'sheet': this.Sheet = parseInt(newValue); break;
 			case 'lang': this.Lang = newValue; break;
 			case 'um': this.UM = newValue; break;
-			case 'schema': kvParams.Parameters = []; await this.#fetchData(newValue); break;
+			case 'schema': await this.#fetchData(name, newValue); break;
+			case 'data': await this.#fetchData(name, newValue); break;
 		}
 		if (name != 'mode')
 			name = 'mode', newValue = this.getAttribute('mode');
 
 		this.innerHTML = '';
-		switch (newValue) {
-			case 'manage': this.#loadSchema(); break;
-			case 'edit': this.#showParams(true); break;
-			default: this.#showParams(false);
-		}
+		if (newValue == 'manage')
+			this.#manageSchema();
+		else
+			this.#manageSheet(newValue);
 	}
-
-	#loadSchema() {
+	#manageSchema() {
 		const html =
 			`<input type="hidden" name="${this.getAttribute('name')}">` +
-			`<table id="kv-params">` +
+			`<table class="schema">` +
 			`<thead>` +
 			`<tr>` +
-			`<th></th>` +
 			`<th>${kvParams.#Texts.type[this.Lang]}</th>` +
 			`<th style="width:100%">${kvParams.#Texts.label[this.Lang]}</th>` +
 			`<th>${kvParams.#Texts.um[this.Lang]}</th>` +
 			`<th></th>` +
-			`<th style="white-space:nowrap">${kvParams.#Flags.map(el => `<i class="${el.icon}" title="${el[this.Lang]}"></i>`).join(' ')}</th>` +
+			`<th style="white-space:nowrap">${kvParams.#Flags.map((el, i) => `<i class="${el.icon}" title="${el[this.Lang]}" data-flag="${i}"></i>`).join(' ')}</th>` +
 			`<th></th>` +
 			`</tr>` +
 			'</thead>' +
 			`<tbody>` +
 			`<tr>` +
-			`<td style="white-space:nowrap"><input form="kv-params" type="hidden" name="id"><i class="fas fa-grip-vertical"></i></td>` +
-			`<td>` +
-			`<select form="kv-params" title="Type" name="type">` +
+			`<td><input form="kv-params" type="hidden" name="id"><select form="kv-params" title="Type" name="type">` +
 			`<option value="number">${kvParams.#Texts.number[this.Lang]}</option>` +
 			`<option value="text">${kvParams.#Texts.text[this.Lang]}</option>` +
 			`<option value="date">${kvParams.#Texts.date[this.Lang]}</option>` +
@@ -153,23 +229,26 @@ class kvParams extends HTMLElement {
 			UMS.map(um => `<option value="${um.id}">${um.msu} ${um.isu?.replace(/(.*)/, ' [$1]') || ''}</option>`).join('') +
 			`</select>` +
 			`</td>` +
-			`<td><input form="kv-params" type="hidden" name="options"><button name="manageOptions">...</button></td>` +
+			`<td><input form="kv-params" type="hidden" name="options"><i class="fas fa-sliders-h manageOptions" ref="options" tabindex="0"></i></td>` +
 			`<td style="white-space:nowrap">` +
 			`<input form="kv-params" type="hidden" name="flags">` +
-			kvParams.#Flags.map((flag, i) => `<i class="${flag.icon}" name="flags" value="${i}" title="${flag[this.Lang]}"></i>`).join(' ') +
+			kvParams.#Flags.map((flag, i) => `<i class="${flag.icon}" name="flags" value="${i}" title="${flag[this.Lang]}" tabindex="0"></i>`).join(' ') +
 			`</td>` +
-			`<td style="white-space:nowrap"><i class="far fa-trash-alt remove"></i> <i class="fas fa-plus add"></i></td>` +
+			`<td style="white-space:nowrap"><i class="far fa-trash-alt remove" tabindex="0"></i> <i class="fas fa-plus add" tabindex="0"></i></td>` +
 			`</tr>` +
 			`</body>` +
 			`</table>`;
 		this.insertAdjacentHTML('afterbegin', html);
 
+		this.querySelector(`i[data-flag="${this.Sheet}"]`)?.classList.toggle('selected');
 		this.Schema.forEach(param => {
 			const row = this.#newRow(this.querySelector('tbody tr:last-child'));
+			row.style.display = (param.flags & (1 << this.Sheet)) ? '' : 'none';
+
 			row.querySelectorAll("input,select").forEach(el => {
 				if (el.name == 'label') {
-					el.dataset.value = JSON.stringify(param.label);
-					el.value = param.label[this.Lang];
+					el.dataset.value = JSON.stringify(param.label); // Save dual language
+					el.value = param.label[this.Lang]; // Show current language
 				} else if (el.name == 'flags') {
 					el.value = param.flags;
 					for (let i = 0; i < kvParams.#Flags.length; ++i) {
@@ -178,6 +257,8 @@ class kvParams extends HTMLElement {
 						else
 							row.querySelector(`i[name="flags"][value="${i}"]`).classList.add('deselected');
 					}
+				} else if (el.name == 'options') {
+					el.value = JSON.stringify(param[el.name]);
 				} else if (el.type == 'checkbox')
 					el.checked = (param[el.name] & (1 << parseInt(el.value))) == 0 ? false : true;
 				else
@@ -195,30 +276,44 @@ class kvParams extends HTMLElement {
 		sibling.insertAdjacentElement('afterend', row);
 		return row;
 	}
-	#manageParamsOptions(event) {
+	#manageOptions(event) {
 		const row = event.target.closest('tr');
-		const um = this.#findId(UMS, row.querySelector('[name=um]').value);
+		const um = kvParams.findId(UMS, row.querySelector('[name=um]')?.value || event.target.getAttribute('um'));
 
 		row.closest('tbody').querySelector('.selected')?.classList.remove('selected');
 		row.closest('tbody').classList.add('selected');
 		row.classList.add('selected');
 
-		let html = '', options;
-		switch (row.querySelector('[name=type]').value) {
+		let html = '', options, param;
+		switch (row.querySelector('[name=type]')?.value || 'number') {
 			case 'number':
-				try {
-					options = JSON.parse(row.querySelector('[name=options]').value || '[null,null,null,false]');
-				} catch {
-					options = [null, null, null, false];
+				if (event.target.getAttribute('ref') == 'options')
+					options = JSON.parse(row.querySelector('[name="options"]')?.value || '[null, null, null, false]');
+				else {
+					param = kvParams.findId(this.Schema, event.target.getAttribute('ref').substring(1));
+					try {
+						options = JSON.parse(row.querySelector(`[name=${event.target.getAttribute('ref')}]`)?.getAttribute('range')) || param?.options;
+					} catch {
+						options = param?.options;
+					}
 				}
+				options[0] = parseInt(options[0]) || null;
+				options[1] = parseInt(options[1]) || null;
+				options[2] = parseInt(options[2]) || null;
+				options[3] = options[3] || false;
 				html =
 					`<dialog id="kv-params-dialog" onkeydown="if (event.key=='Escape') this.close()" onclose="this.remove()">` +
-					`<header onclick="this.closest('dialog').close()">${row.querySelector('[name=label]').value} (${um.msu})</header><form>` +
+					`<header onclick="this.closest('dialog').close()">`;
+				if (row.querySelector('[name=label]'))
+					html += `${row.querySelector('[name=label]').value} +  [${um?.msu}]`
+				else
+					html += row.firstElementChild.innerText;
+				html += `</header><form>` +
 					`<label><span>Min</span> <input type="number" name="min" step="any" value="${options[0]}"></label>` +
 					`<label><span>Max</span> <input type="number" name="max" step="any" value="${options[1]}"></label>` +
-					`<label><span>Decimals</span> <input type="number" name="decimals" min="0" max="5" step="1" value="${options[2]}"></label>` +
-					`<p style="margin:0.5rem 0"><label><input type="checkbox" name="flag" ${options[3] ? 'checked' : ''}> Allow Not applicable (NA)</label></p>` +
-					`<button type="button" class="range" id="kv-params-options" style="float:right">Save</button>` +
+					`<label><span>${kvParams.#Texts.decimals[this.Lang]}</span> <input type="number" name="decimals" min="0" max="5" step="1" value="${options[2]}"></label>` +
+					`<p style="margin:0.5rem 0"><label><input type="checkbox" name="flag" ${options[3] ? 'checked' : ''}> ${kvParams.#Texts.na[this.Lang]}</label></p>` +
+					`<button type="button" class="range" ref="${event.target.getAttribute('ref')}" id="kv-params-options" style="float:right">${kvParams.#Texts.save[this.Lang]}</button>` +
 					`</form></dialog>`;
 				break;
 
@@ -231,84 +326,115 @@ class kvParams extends HTMLElement {
 				html =
 					`<dialog id="kv-params-dialog" onkeydown="if (event.key=='Escape') this.close()" onclose="this.remove()">` +
 					`<header onclick="this.closest('dialog').close()">${row.querySelector('[name=label]').value}</header><form>` +
-					`<div style="display:flex; gap:1em;">` +
-					`<label><span>${um?.msu || 'en'}</span> <textarea name="options" rows="10">${options[0].replaceAll(',', '\n')}</textarea></label>` +
-					`<label class="IT${options[2] ? '' : ' hide'}"><span>${um?.isu || 'it'}</span> <textarea name="options" rows="10">${options[1].replaceAll(',', '\n')}</textarea></label>` +
-					`</div>` +
-					(um != undefined ? '' : `<p style="margin:0.5rem 0"><label><input type="checkbox" name="flag" ${options[2] ? 'checked' : ''} onclick="this.closest('dialog').querySelector('.IT').classList.toggle('hide')"> Multilingual</label></p>`) +
-					`<button type="button" class="options" id="kv-params-options" style="float:right">Save</button>` +
+					`<kv-pair name="options" src="${row.querySelector('[name=options]').value.replaceAll('"', '&quot;')}"></kv-pair>` +
+					`<input type="checkbox" onchange="this.previousElementSibling.setAttribute('pair', this.checked)"><label> Pair</label><br>` +
+					`<button type="button" ref="${event.target.getAttribute('ref')}" class="options" id="kv-params-options" style="float:right">${kvParams.#Texts.save[this.Lang]}</button>` +
 					`</form></dialog>`;
 				break;
 
 			default:
-				alert(kvParams.#Texts.optionless[this.Lang]);
+				alert(kvParams.#Texts.optionless[this.Lang].replace('$1', row.querySelector('[name=type]').value));
 				return;
 		}
 
 		if (html) {
 			this.insertAdjacentHTML('beforeend', html);
-			document.getElementById('kv-params-options').options = row.querySelector('[name=options]');
+			document.getElementById('kv-params-options').options = row.querySelector('[name=options]') || event.target.previousElementSibling;
 			document.getElementById('kv-params-dialog').showModal();
 		}
 	}
-	#showParams(editable = false) {
+	#manageSheet(mode) {
 		const sheet = parseInt(this.getAttribute('sheet')) || 5;
-		let html = `<h2><i class="${kvParams.#Flags[sheet].icon}"></i> ${kvParams.#Flags[sheet][this.Lang]}</h2><div>`, group = false;
+		let cols = 1, html = '';
 
 		this.Schema.forEach(param => {
-			const ums = this.#findId(UMS, param.um);
-			const um = param.um ? '[' + (ums[editable ? 'msu' : this.UM] || ums.msu) + ']' : '';
+			if (param.flags & (1 << sheet) && (mode != 'range' || (mode == 'range' && param.type == 'number'))) {
+				const ums = kvParams.findId(UMS, param.um);
+				const um = param.um ? '[' + (ums[mode == 'edit' ? 'msu' : this.UM] || ums.msu) + ']' : '';
 
-			const value = (this.UM != 'msu' ? ums.convert(this.Data[`P${param.id}`]) : this.Data[`P${param.id}`]) || '';
+				cols = Math.max(cols, this.Data[`P${param.id}`]?.length || 1);
+				let options, i;
+				switch (param.type) {
+					case 'number':
+						options = this.Data[`PR${param.id}`] || param.options || [];
+						html += `<tr><td title="@${param.id}">${param.label[this.Lang]} ${um}</td>`;
+						(this.Data[`P${param.id}`] || [null]).forEach(value => {
+							value = (mode == 'view' && this.UM != 'msu' && typeof ums?.convert == 'function' ? ums.convert(value) : value) || '';
+							html += `<td><input type="${mode == 'range' ? 'hidden' : 'number'}" ${attributes(param)} value="${value}" range="${JSON.stringify(options).replaceAll('"', '&quot;')}">`;
+							if (mode == 'range')
+								html += `<i class="fas fa-sliders-h manageOptions" ref="P${param.id}" um="${param.um}" tabindex="0"></i>`;
+							html += '</td>';
+						});
+						html += '</tr>';
+						break;
 
-			if (param.flags & (1 << sheet)) {
-				if (!editable || Object.keys(this.Data).length)
-					switch (param.type) {
-						case 'number':
-							html += `<label><span>${param.label[this.Lang]} ${um}</span><input type="number" ${attributes(param)} value="${value}"></label>`;
-							break;
-						case 'date':
-							html += `<label><span>${param.label[this.Lang]}</span><input type="date" ${attributes(param)} value="${value}"></label>`;
-							break;
-						case 'checkbox':
-							html += `<label><input type="checkbox" ${attributes(param)} ${value ? 'checked' : ''}"> ${param.label[this.Lang]}</label>`;
-							break;
-						case 'select':
-							html += `<label><span>${param.label[this.Lang]} ${um}</span><select ${attributes(param)} value="${value}">${param.options.split(',').map(option => `<option>${option}</option>`)}</select></label>`;
-							break;
-						case 'textarea':
-							html += `<label class="full-width"><span>${param.label[this.Lang]} ${param.um ? `[${param.um}]` : ''}</span><textarea ${attributes(param)}>${value}</textarea></label>`;
-							break;
-						case 'separator':
-							html += '<hr class="full-width">';
-							break;
-						case 'group':
-							if (param.label[this.Lang] != '')
-								html += `${group ? '</fieldset>' : ''}<fieldset class="full-width"><legend>${param.label[this.Lang]}</legend>`, group = true;
-							else
-								html += '<hr class="full-width">';
-							break;
-						default:
-							html += `<label><span>${param.label[this.Lang]} ${um}</span><input type="${param.type}" ${attributes(param)} value="${value}"></label>`;
-					}
-				else if (param.type == 'number' && um)
-					html += `<label><span>${param.label[this.Lang]} [${this.#findId(UMS, param.um).msu}]</span>[<input type="number" name="Pm${param.id}" step="any" placeholder="min">, <input type="number" name="PM${param.id}" step="any" placeholder="max">]</label>`;
+					case 'date':
+						html += `<tr><td title="@${param.id}">${param.label[this.Lang]}</td>`;
+						(this.Data[`P${param.id}`] || [null]).forEach(value => {
+							html += `<td><input type="date" ${attributes(param)} value="${value}"></td>`;
+						});
+						html += '</tr>';
+						break;
+
+					case 'checkbox':
+						html += `<tr><td title="@${param.id}">${param.label[this.Lang]}</td>`;
+						(this.Data[`P${param.id}`] || [null]).forEach(value => {
+							html += `<td><input type="checkbox" ${attributes(param)} ${value ? 'checked' : ''}></td>`
+						});
+						html += '</tr>';
+						break;
+
+					case 'select':
+						if (mode == 'edit')
+							i = this.UM || this.Lang == 'en' ? 0 : 1;
+						else
+							i = (this.Lang != 'en' || this.UM == 'isu') && param.options[1] ? 1 : 0;
+						html += `<tr><td title="@${param.id}">${param.label[this.Lang]} ${um}</td>`;
+						(this.Data[`P${param.id}`] || [null]).forEach(value => {
+							const k = param.options[0]?.split(',').findIndex(option => option == value);
+							html += `<td><select ${attributes(param)}>${param.options[i]?.split(',').map((option, j) => `<option${k == j ? ' selected' : ''}>${option}</option>`).join('')}</select></td>`
+						});
+						html += '</tr>';
+						break;
+
+					case 'textarea':
+						html += `<tr><td colspan="*" title="@${param.id}"><label><span>${param.label[this.Lang]}${param.um ? ` [${param.um}]` : ''}</span><textarea ${attributes(param)}>${value}</textarea></label></td></tr>`;
+						break;
+
+					case 'separator':
+						html += '<tr class="colspan"><td colspan="*"><hr></td></tr>';
+						break;
+
+					case 'group':
+						html += `<tr class="colspan"><td colspan="*">${param.label[this.Lang]}<hr></td></tr>`;
+						break;
+				}
 			}
 		});
-		html += (group ? '</fieldset>' : '') + '</div>';
-		this.insertAdjacentHTML('afterbegin', html);
+		html += `</tbody><tfoot><tr>${'<th></th>'.repeat(cols)}<th>${cols == 1 ? '' : '<i class="far fa-trash-alt sampleRemove"></i>'}</th></tr></tfoot>`;
+		this.insertAdjacentHTML('afterbegin',
+			`<div><table class="test"><thead><tr><th style="width:100%;text-align:left"><i class="${kvParams.#Flags[sheet].icon}"></i> ${kvParams.#Flags[sheet][this.Lang]}</th><th${sheet == 7 ? ` class="samples" colspan="${cols}">${kvParams.#Texts.samples[this.Lang]} <i class="fas fa-plus samples"></i>` : '>'}</th></tr></thead><tbody>` +
+			html.replaceAll('colspan="*"', `colspan="${cols + 1}"`) +
+			'</table></div>');
 
-		if (!editable)
-			this.querySelectorAll('input, select, textarea').forEach(el => el.setAttribute('disabled', ''));
+		if (mode == 'show')
+			this.querySelectorAll('input, textarea, select').forEach(el => el.setAttribute('disabled', ''));
 
 		function attributes(param) {
-			return `name="P${param.id}" ${(param.flags & (1 << 10)) == 0 ? '' : 'required'}`;
+			const options = param.options;
+			let range = '';
+			if (param.type == 'number')
+				range = `${options[0] ? ` min="${options[0]}"` : ''}${options[1] ? ` max="${options[1]}"` : ''}${options[2] ? ` step="${Math.pow(10, -options[2])}"` : ' step="any"'}`;
+			return `name="P${param.id}" ${(param.flags & (1 << 10)) == 0 ? '' : 'required'}${range} form="kvParams" tabindex="0"`;
 		}
+		/*
+		function range(options) {
+			return `${options[0] ? `[${parseFloat(options[0]).toFixed(options[2])}, ` : '(-∞,'} ${options[1] ? `${parseFloat(options[1]).toFixed(options[2])}]` : '+∞)'}`;
+		}
+		*/
 	}
-	#findId(array, id) { return array.find(el => el.id == id) }
-
 	save() {
-		if (this.querySelector('tbody')) {
+		if (this.querySelector('.schema') != null) {
 			this.Schema = [];
 			this.querySelectorAll('tbody tr').forEach(tr => {
 				const param = {};
@@ -320,29 +446,41 @@ class kvParams extends HTMLElement {
 					else if (el.hasAttribute('data-value')) {
 						param[el.name] = JSON.parse(el.dataset.value || '{"en":null,"it":null}');
 						param[el.name][this.Lang] = el.value;
-					} else
+					} else if (el.name == 'options')
+						param.options = JSON.parse(el.value) || [];
+					else if (el.name == 'flags')
+						param.flags = parseInt(el.value);
+					else
 						param[el.name] = el.value;
 				});
 				this.Schema.push(param);
 			});
 			this.firstElementChild.value = JSON.stringify(this.Schema);
-	
+
 			return this.firstElementChild.value;
 		} else {
-			this.querySelectorAll('input, select, textarea').forEach(el => {
+			const samples = this.querySelectorAll('tfoot th').length - 1;
+			this.querySelectorAll('input, select, textarea').forEach((el, i) => {
+				const s = i % samples;
+				if (!s) {
+					this.Data[el.name] = new Array(samples);
+					if (el.type == 'number' || el.type == 'hidden')
+						this.Data[el.name.replace('P', 'PR')] = [];
+				}
+
 				if (el.type == 'checkbox')
-					this.Data[el.name] |= el.checked ? (1 << parseInt(el.value)) : 0;
-				else if (el.type == 'number')
-					this.Data[el.name] = parseFloat(el.value);
-				else if (el.hasAttribute('data-value')) {
-					this.Data[el.name] = JSON.parse(el.dataset.value || '{"en":null,"it":null}');
-					this.Data[el.name][this.Lang] = el.value;
+					this.Data[el.name][s] = el.checked ? (1 << parseInt(el.value)) : 0;
+				else if (el.type == 'number' || el.type == 'hidden') {
+					this.Data[el.name][s] = parseFloat(el.value) || null;
+					this.Data[el.name.replace('P', 'PR')].push(JSON.parse(el.getAttribute('range'))[0]);
+				} else if (el.hasAttribute('data-value')) {
+					this.Data[el.name][s] = JSON.parse(el.dataset.value || '{"en":null,"it":null}');
+					this.Data[el.name][s][this.Lang] = el.value;
 				} else
-					this.Data[el.name] = el.value;
+					this.Data[el.name][s] = el.value;
 			});
 			return JSON.stringify(this.Data);
 		}
 	}
-	search() { }
 }
 customElements.define('kv-params', kvParams);
