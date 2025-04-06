@@ -5,11 +5,14 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>kv-params</title>
+	<link href="../kv-style.css" type="text/css" rel="stylesheet">
+	<link href="../kv-pair/kv-pair.css" type="text/css" rel="stylesheet">
 	<link href="./kv-params.css" type="text/css" rel="stylesheet">
-	<link href="./kv-pair.min.css" type="text/css" rel="stylesheet">
-	<script src="./kv-pair.min.js" defer></script>
-	<script src="./ums.js" defer></script>
+
+	<script src="../kv-pair/kv-pair.js" defer></script>
+	<script src="./UMS.js" defer></script>
 	<script src="./kv-params.js" defer></script>
+
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
 		integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=="
 		crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -27,13 +30,6 @@
 
 <body>
 	<p>
-		<select name="mode" title="Set the mode"
-			onchange="document.querySelector('kv-params[name=parameters]').setAttribute('mode', this.value)">
-			<option value="manage">Manage</option>
-			<option value="range">Edit range</option>
-			<option value="edit">Edit</option>
-			<option value="show" selected>Show</option>
-		</select>
 		<select name="flag" title="Sheet"
 			onchange="document.querySelector('kv-params[name=parameters]').setAttribute('sheet', this.value)">
 			<option value="4" selected>Technical</option>
@@ -52,6 +48,13 @@
 			onchange="document.querySelector('kv-params[name=parameters]').setAttribute('lang', this.value)">
 			<option value="en">en</option>
 			<option value="it">it</option>
+		</select>
+		<select name="mode" title="Set the mode"
+			onchange="document.querySelector('kv-params[name=parameters]').setAttribute('mode', this.value)">
+			<option value="manage">Manage</option>
+			<option value="range">Edit range</option>
+			<option value="edit">Edit</option>
+			<option value="show" selected>Show</option>
 		</select>
 		<button type="button" onclick=" navigator.clipboard.writeText(document.querySelector('kv-params').save())">Save</button>
 	</p>

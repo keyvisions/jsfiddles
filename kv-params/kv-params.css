@@ -1,17 +1,3 @@
-:root {
-	--special-background: 12, 146, 121;
-	--special-color: 255, 255, 255;
-	--border-color: gray;
-	--error-color: red;
-	--padding: 0.25rem;
-	--margin: 0.25rem;
-
-	font-family: sans-serif;
-	font-size: 12pt;
-
-	color-scheme: light dark;
-}
-
 kv-params * {
 	box-sizing: border-box;
 }
@@ -74,8 +60,13 @@ kv-params tbody tr>td:first-child:not([colspan])::before {
 kv-params td {
 	padding: var(--padding);
 }
+kv-params td>span {
+	float: right;
+	padding-right: 1rem;
+	font-size: smaller;
+}
 
-kv-params i.selected {
+kv-params i.set {
 	color: Highlight;
 }
 
