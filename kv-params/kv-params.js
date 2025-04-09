@@ -52,7 +52,7 @@ class kvParams extends HTMLElement {
 	static sizeArray(arr = [], size = 1) {
 		if (size <= arr.length)
 			return arr.slice(0, size);
-		return arr.concat(new Array(size - arr.length).fill());
+		return arr.concat(new Array(size - arr.length).fill(null));
 	}
 
 	constructor() {
@@ -77,13 +77,13 @@ class kvParams extends HTMLElement {
 
 				const count = this.querySelectorAll('tbody tr').length;
 				this.querySelectorAll('tbody tr').forEach(row => {
-					if (row.firstElementChild.hasAttribute('colspan'))
-						row.firstElementChild.setAttribute('colspan', colspan)
+					if (row.children[0].hasAttribute('colspan'))
+						row.children[0].setAttribute('colspan', colspan)
 					else {
 						const node = row.lastElementChild.cloneNode(true);
-						node.firstElementChild.value = '';
-						node.firstElementChild.checked = false;
-						node.firstElementChild.setAttribute('tabindex', count + parseInt(node.firstElementChild.getAttribute('tabindex')));
+						node.children[0].value = '';
+						node.children[0].checked = false;
+						node.children[0].setAttribute('tabindex', count + parseInt(node.children[0].getAttribute('tabindex')));
 						row.lastElementChild.insertAdjacentElement('afterend', node);
 					}
 				});
@@ -99,8 +99,8 @@ class kvParams extends HTMLElement {
 				this.querySelector('thead [colspan]').setAttribute('colspan', colspan);
 
 				this.querySelectorAll('tbody tr').forEach(row => {
-					if (row.firstElementChild.hasAttribute('colspan'))
-						row.firstElementChild.setAttribute('colspan', colspan)
+					if (row.children[0].hasAttribute('colspan'))
+						row.children[0].setAttribute('colspan', colspan)
 					else
 						row.lastElementChild.remove();
 				});
@@ -117,10 +117,15 @@ class kvParams extends HTMLElement {
 				this.#manageOptions(event);
 			} else if (target.getAttribute('name') == 'flags') {
 				target.classList.toggle('deselected');
-				const flags = parseInt(target.closest('td').firstElementChild.value);
-				target.closest('td').firstElementChild.value = target.classList.contains('deselected') ? flags & ~(1 << target.getAttribute('value')) : flags | (1 << target.getAttribute('value'));
+				const flags = parseInt(target.closest('td').children[0].value);
+				target.closest('td').children[0].value = target.classList.contains('deselected') ? flags & ~(1 << target.getAttribute('value')) : flags | (1 << target.getAttribute('value'));
 			} else if (target.classList.contains('range')) {
-				const range = [parseInt(target.form.min.value) || null, parseInt(target.form.max.value) || null, parseInt(target.form.decimals.value) || null, target.form.flag.checked];
+				const range = [
+					isNaN(parseFloat(target.form.min.value)) ? null : parseFloat(target.form.min.value),
+					isNaN(parseFloat(target.form.max.value)) ? null : parseFloat(target.form.max.value),
+					isNaN(parseInt(target.form.decimals.value)) ? null : parseInt(target.form.decimals.value),
+					target.form.flag.checked
+				];
 				if (target.options.hasAttribute('range')) {
 					target.options.setAttribute('range', JSON.stringify(range));
 					target.options.setAttribute('min', range[0]);
@@ -128,6 +133,11 @@ class kvParams extends HTMLElement {
 					target.options.setAttribute('step', range[2] == null ? 'any' : Math.pow(10, -range[2]));
 				} else
 					target.options.value = JSON.stringify(range);
+
+				const options = range || kvParams.findId(this.Schema, target.getAttribute('ref').replace('P', '')).options;
+				const span = this.querySelector(`[title="${target.getAttribute('ref').replace('P', '@')}"] span`);
+				if (span)
+					span.innerHTML = this.#range(options);
 
 				target.closest('dialog').remove();
 			} else if (target.classList.contains('options')) {
@@ -167,7 +177,7 @@ class kvParams extends HTMLElement {
 					let nextRow = row.nextElementSibling;
 					while (nextRow?.style.display == 'none')
 						nextRow = nextRow.nextElementSibling;
-					row.parentNode.insertBefore(nextRow || row.parentNode.firstElementChild, row);
+					row.parentNode.insertBefore(nextRow || row.parentNode.children[0], row);
 				}
 			}
 		});
@@ -188,7 +198,7 @@ class kvParams extends HTMLElement {
 			await fetch(json).then(res => res.json()).then(data => this.Data = data || {}).catch(() => this.Data = {});
 	}
 	async attributeChangedCallback(name, oldValue, newValue) {
-		if (oldValue)
+		if (oldValue && this.getAttribute('mode') != 'show')
 			this.save();
 
 		switch (name) {
@@ -283,7 +293,7 @@ class kvParams extends HTMLElement {
 		});
 		if (this.Schema.length > 0)
 			this.querySelector('tbody tr').remove();
-		this.firstElementChild.value = JSON.stringify(this.Schema);
+		this.children[0].value = JSON.stringify(this.Schema);
 		this.scrollIntoView({ block: 'nearest' });
 	}
 	#newRow(sibling) {
@@ -310,7 +320,7 @@ class kvParams extends HTMLElement {
 		switch (row.querySelector('[name=type]')?.value || 'number') {
 			case 'number':
 				if (event.target.getAttribute('ref') == 'options')
-					options = JSON.parse(row.querySelector('[name="options"]')?.value || '[null, null, null, false]');
+					options = JSON.parse(row.querySelector('[name="options"]')?.value || '[null, null, null, null]');
 				else {
 					param = kvParams.findId(this.Schema, event.target.getAttribute('ref').substring(1));
 					try {
@@ -319,9 +329,9 @@ class kvParams extends HTMLElement {
 						options = param?.options;
 					}
 				}
-				options[0] = parseInt(options[0]) || '';
-				options[1] = parseInt(options[1]) || '';
-				options[2] = parseInt(options[2]) || '';
+				options[0] = isNaN(parseFloat(options[0])) ? '' : parseFloat(options[0]);
+				options[1] = isNaN(parseFloat(options[1])) ? '' : parseFloat(options[1]);
+				options[2] = isNaN(parseInt(options[2])) ? '' : parseInt(options[2]);
 				options[3] = options[3] || '';
 				html =
 					`<dialog id="kv-params-dialog" onkeydown="if (event.key=='Escape') this.close()" onclose="this.remove()">` +
@@ -329,7 +339,7 @@ class kvParams extends HTMLElement {
 				if (row.querySelector('[name=label]'))
 					html += `${row.querySelector('[name=label]').value} +  [${um?.msu}]`
 				else
-					html += row.firstElementChild.innerText;
+					html += row.children[0].innerText;
 				html += `</header><form>` +
 					`<label><span>Min</span> <input type="number" name="min" step="any" value="${options[0]}"></label>` +
 					`<label><span>Max</span> <input type="number" name="max" step="any" value="${options[1]}"></label>` +
@@ -384,11 +394,11 @@ class kvParams extends HTMLElement {
 				let options, i;
 				switch (param.type) {
 					case 'number':
-						options = this.Data[`PR${param.id}`] || param.options || [];
-						html += `<tr><td title="@${param.id}">${param.label[this.Lang]} ${um}<span>${range(options)}</span></td>`;
+						options = this.Data[`PR${param.id}`] || [param.options] || [[null, null, null, null]];
+						html += `<tr><td title="@${param.id}">${param.label[this.Lang]} ${um}<span>${this.#range(options[0])}</span></td>`;
 						kvParams.sizeArray(this.Data[`P${param.id}`], cols).forEach((value, k) => {
-							value = (mode == 'view' && this.UM != 'msu' && typeof ums?.convert == 'function' ? ums.convert(value) : value) || '';
-							html += `<td><input type="${mode == 'range' ? 'hidden' : 'number'}" ${attributes(param)} value="${value}" range="${JSON.stringify(options).replaceAll('"', '&quot;')}" tabindex="${k * count + j}">`;
+							value = (mode == 'show' && this.UM != 'msu' && typeof ums?.convert == 'function' ? ums.convert(value).toFixed(options[3]) : value) || '';
+							html += `<td><input type="${mode == 'range' ? 'hidden' : 'number'}" ${attributes(param)} value="${value}" range="${JSON.stringify(options[k]).replaceAll('"', '&quot;')}" tabindex="${k * count + j}">`;
 							if (mode == 'range')
 								html += `<i class="fas fa-sliders-h manageOptions" ref="P${param.id}" um="${param.um}" tabindex="${k * count + j}"></i>`;
 							html += '</td>';
@@ -426,7 +436,7 @@ class kvParams extends HTMLElement {
 								i = this.Lang != 'en' && param.options[1] ? 1 : 0;
 								break;
 							default:
-								i = (this.um == 'isu' || this.Lang != 'en') && param.options[1] ? 1 : 0;
+								i = (this.UM == 'isu' || this.Lang != 'en') && param.options[1] ? 1 : 0;
 						}
 						html += `<tr><td title="@${param.id}">${param.label[this.Lang]} ${um}</td>`;
 						kvParams.sizeArray(this.Data[`P${param.id}`], cols).forEach((value, k) => {
@@ -463,12 +473,12 @@ class kvParams extends HTMLElement {
 			const options = param.options;
 			let range = '';
 			if (param.type == 'number')
-				range = `${options[0] ? ` min="${options[0]}"` : ''}${options[1] ? ` max="${options[1]}"` : ''}${options[2] ? ` step="${Math.pow(10, -options[2])}"` : ' step="any"'}`;
-			return `name="P${param.id}" ${(param.flags & (1 << 10)) == 0 ? '' : 'required'}${range} form="kvParams"`;
+				range = `${isNaN(parseFloat(options[0])) ? '' : ` min="${options[0]}"`}${isNaN(parseFloat(options[1])) ? '' : ` max="${options[1]}"`}${isNaN(parseInt(options[2])) ? ' step="any"' : ` step="${Math.pow(10, -parseInt(options[2]))}"`}`;
+			return `name="P${param.id}"${(param.flags & (1 << 10)) == 0 ? '' : ' required'}${(param.flags & (1 << 3)) == 0 ? '' : ' disabled'} ${range} form="kvParams"`;
 		}
-		function range(options) {
-			return `${options[0] ? `[${parseFloat(options[0]).toFixed(options[2])}, ` : '(-∞,'} ${options[1] ? `${parseFloat(options[1]).toFixed(options[2])}]` : '+∞)'}`;
-		}
+	}
+	#range(options) {
+		return `${isNaN(parseFloat(options[0])) ? '(-∞,' : `[${parseFloat(options[0]).toFixed(parseInt(options[2]))}, `} ${isNaN(parseFloat(options[1])) ? '+∞)' : `${parseFloat(options[1]).toFixed(parseInt(options[2]))}]`}${isNaN(parseInt(options[2])) ? '' : ` ±${Math.pow(10, -parseInt(options[2]))}` }`;
 	}
 	save() {
 		if (this.querySelector('.schema') != null) {
@@ -492,9 +502,9 @@ class kvParams extends HTMLElement {
 				});
 				this.Schema.push(param);
 			});
-			this.firstElementChild.value = JSON.stringify(this.Schema);
+			this.children[0].value = JSON.stringify(this.Schema);
 
-			return this.firstElementChild.value;
+			return this.children[0].value;
 		} else {
 			const samples = this.querySelectorAll('tfoot th').length - 1;
 			this.querySelectorAll('input, select, textarea').forEach((el, i) => {
@@ -509,7 +519,7 @@ class kvParams extends HTMLElement {
 					this.Data[el.name][s] = el.checked ? (1 << parseInt(el.value)) : 0;
 				else if (el.type == 'number' || el.type == 'hidden') {
 					this.Data[el.name][s] = parseFloat(el.value) || null;
-					this.Data[el.name.replace('P', 'PR')][s] = JSON.parse(el.getAttribute('range'))[0];
+					this.Data[el.name.replace('P', 'PR')][s] = kvParams.sizeArray(JSON.parse(el.getAttribute('range')), 4);
 				} else if (el.hasAttribute('data-value')) {
 					this.Data[el.name][s] = JSON.parse(el.dataset.value || '{"en":null,"it":null}');
 					this.Data[el.name][s][this.Lang] = el.value;

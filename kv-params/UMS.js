@@ -35,7 +35,7 @@ const UMS =
 		it: "Pressione",
 		msu: "bar",
 		isu: "psi",
-		convert: x => 14.5038 * x
+		convert: x => 14.50377 * x
 	},
 	{
 		id: 5,
