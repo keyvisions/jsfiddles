@@ -198,7 +198,7 @@ class kvParams extends HTMLElement {
 			await fetch(json).then(res => res.json()).then(data => this.Data = data || {}).catch(() => this.Data = {});
 	}
 	async attributeChangedCallback(name, oldValue, newValue) {
-		if (oldValue && this.getAttribute('mode') != 'show')
+		if (oldValue != 'show' && this.getAttribute('mode') != 'show')
 			this.save();
 
 		switch (name) {
@@ -436,12 +436,13 @@ class kvParams extends HTMLElement {
 								i = this.Lang != 'en' && param.options[1] ? 1 : 0;
 								break;
 							default:
-								i = (this.UM == 'isu' || this.Lang != 'en') && param.options[1] ? 1 : 0;
+								i = param.options[1] && (param.um && this.UM == 'isu' || !param.um && this.Lang != 'en') ? 1 : 0;
 						}
 						html += `<tr><td title="@${param.id}">${param.label[this.Lang]} ${um}</td>`;
 						kvParams.sizeArray(this.Data[`P${param.id}`], cols).forEach((value, k) => {
-							const l = param.options[0]?.split(',').findIndex(option => option == value);
-							html += `<td><select ${attributes(param)} tabindex="${k * count + j}"><option></option>${param.options[i]?.split(',').map((option, j) => `<option${l == j ? ' selected' : ''}>${option}</option>`).join('')}</select></td>`
+							const ref = param.options[0]?.split(',');
+							const l = ref?.findIndex(option => option == value);
+							html += `<td><select ${attributes(param)} tabindex="${k * count + j}"><option></option>${param.options[i]?.split(',').map((option, j) => `<option value="${ref[j]}" ${l == j ? ' selected' : ''}>${option}</option>`).join('')}</select></td>`
 						});
 						html += '</tr>';
 						break;
