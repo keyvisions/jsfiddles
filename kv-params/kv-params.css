@@ -14,7 +14,9 @@ kv-params label>span {
 }
 
 kv-params input,
-kv-params select {
+kv-params select,
+kv-params textarea {
+	border: thin solid;
 	padding: var(--padding);
 }
 
@@ -25,9 +27,6 @@ kv-params input[type="number"] {
 kv-params table {
 	width: 100%;
 	border-collapse: collapse;
-	border-left: thin solid var(--border-color);
-	border-right: thin solid var(--border-color);
-	border-bottom: thin solid var(--border-color);
 }
 
 kv-params thead {
@@ -35,10 +34,12 @@ kv-params thead {
 	top: 0;
 }
 
+kv-params thead tr {
+	background-color: Canvas;
+}
+
 kv-params th {
 	padding: var(--padding);
-	color: Field;
-	background-color: FieldText;
 }
 
 kv-params tbody {
@@ -59,21 +60,35 @@ kv-params tbody tr>td:first-child:not([colspan])::before {
 
 kv-params td {
 	padding: var(--padding);
+	vertical-align: middle;
 }
+
 kv-params td>span {
 	float: right;
 	padding-right: 1rem;
 	font-size: smaller;
 }
 
+kv-params thead i:not(.set) {
+	color: CanvasText;
+}
+
 kv-params tr:not(.selected) i.set {
 	color: Highlight;
+}
+
+kv-params tbody tr:not(.colspan) {
+	border-bottom: thin solid GrayText;
 }
 
 kv-params tbody tr:hover:not(.colspan) {
 	background-color: ButtonFace;
 	color: ButtonText;
 }
+
+kv-params tr:not(.colspan).selected input,
+kv-params tr:not(.colspan).selected select,
+kv-params tr:not(.colspan).selected textarea,
 kv-params tr:not(.colspan).selected {
 	background-color: Highlight !important;
 	color: HighlightText !important;
@@ -150,6 +165,6 @@ kv-params .hide {
 	display: none;
 }
 
-kv-params [disabled] {
+xkv-params [disabled] {
 	color: FieldText;
 }

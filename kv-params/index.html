@@ -17,13 +17,9 @@
 		integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=="
 		crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<style>
-		select, button {
+		select,
+		button {
 			padding: 0.25rem;
-		}
-		.xparams {
-			height: 25rem;
-			overflow-y: auto;
-			overflow-x: hidden;
 		}
 	</style>
 </head>
@@ -56,11 +52,13 @@
 			<option value="edit">Edit</option>
 			<option value="show" selected>Show</option>
 		</select>
-		<button type="button" onclick=" navigator.clipboard.writeText(document.querySelector('kv-params').save())">Save</button>
+		<button type="button"
+			onclick=" navigator.clipboard.writeText(document.querySelector('kv-params').save())">Save</button>
 	</p>
-	<div class="params">
-		<kv-params name="parameters" schema="./compressor.json" data="./data.json" mode="show" um="msu" sheet="4"></kv-params>
-	</div>
+	<form>
+		<input name="parameters">
+		<kv-params name="parameters" schema="./compressor.json" data="./data.json"></kv-params>
+	</form>
 </body>
 
 </html>

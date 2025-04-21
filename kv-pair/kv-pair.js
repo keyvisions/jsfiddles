@@ -16,8 +16,8 @@ class kvPair extends HTMLElement {
 		this.addEventListener('focusin', this.#sync);
 
 		this.innerHTML =
-			'<menu role="list" data-bit="0"></menu>' +
-			'<menu role="list" data-bit="1"></menu>' +
+			'<menu role="list" data-bit="0"><label></label></menu>' +
+			'<menu role="list" data-bit="1"><label></label></menu>' +
 			`<input type="hidden" name="${this.getAttribute('name') || 'kv-pair'}">`;
 		this.removeAttribute('name');
 		this.children[0].addEventListener('scroll', this.#sync);
@@ -33,13 +33,18 @@ class kvPair extends HTMLElement {
 			.catch(() => ["", ""]);
 	}
 
-	async attributeChangedCallback(_name, oldValue, newValue) {
+	async attributeChangedCallback(name, oldValue, newValue) {
 		if (oldValue == newValue)
 			return;
 
-		if (_name == 'pair') {
+		if (name == 'pair') {
 			this.setAttribute('pair', newValue == 'true' ? 'true' : 'false');
 			this.children[1].style.display = newValue == 'true' ? '' : 'none';
+			return;
+		}
+		if (name == 'labels') {
+			this.children[0].querySelector('label').innerText = newValue.split(',')[0];
+			this.children[1].querySelector('label').innerText = newValue.split(',')[1];
 			return;
 		}
 
@@ -52,8 +57,9 @@ class kvPair extends HTMLElement {
 		while (b.length < maxLength)
 			b.push('');
 
-		this.children[0].innerHTML = a.map(value => `<div role="listitem" contenteditable>${value}</div>`).join('');
-		this.children[1].innerHTML = b.map(value => `<div role="listitem" contenteditable>${value}</div>`).join('');
+		const labels = this.getAttribute('labels')?.split(',') || ["", ""];
+		this.children[0].innerHTML = `<label>${labels[0] ? labels[0] : ''}</label>` + a.map(value => `<div role="listitem" contenteditable>${value}</div>`).join('');
+		this.children[1].innerHTML = `<label>${labels[1] ? labels[1] : ''}</label>` + b.map(value => `<div role="listitem" contenteditable>${value}</div>`).join('');
 
 		if (!options[1])
 			this.children[1].style.display = 'none';
@@ -94,9 +100,9 @@ class kvPair extends HTMLElement {
 		switch (event.key) {
 			// deno-lint-ignore no-fallthrough
 			case 'ArrowDown':
-				i = i < menu.children.length - 1 ? i + 2 : 1;
+				i = i < menu.children.length - 1 ? i + 2 : 2;
 			case 'ArrowUp':
-				i = i > 0 ? i - 1 : menu.children.length - 1;
+				i = i > 1 ? i - 1 : menu.children.length - 1;
 				this.#select(menu.children[i]);
 				pairedMenu.children[i].className = 'selected';
 				break;
@@ -114,7 +120,7 @@ class kvPair extends HTMLElement {
 				pairedMenu.children[i].className = 'selected';
 				break;
 			default:
-				if (i < pairedMenu.children.length)
+				if (i && i < pairedMenu.children.length)
 					pairedMenu.children[i].className = 'selected';
 		}
 		this.#save();
@@ -131,8 +137,8 @@ class kvPair extends HTMLElement {
 
 	#save() {
 		this.children[2].value = JSON.stringify([
-			[...this.children[0].querySelectorAll('div')].map(div => div.innerText.replaceAll('\n', '')).join(',').replace(/,+$/g, ''),
-			[...this.children[1].querySelectorAll('div')].map(div => div.innerText.replaceAll('\n', '')).join(',').replace(/,+$/g, '')
+			[...this.children[0].querySelectorAll('[role="listitem"]')].map(div => div.innerText.replaceAll('\n', '')).join(',').replace(/,+$/g, ''),
+			[...this.children[1].querySelectorAll('[role="listitem"]')].map(div => div.innerText.replaceAll('\n', '')).join(',').replace(/,+$/g, '')
 		]);
 	}
 }

@@ -1,13 +1,17 @@
-[
-    {
-        "name": "Project",
-        "start": "2024-10-17",
-        "end": "2024-12-31",
-        "tasks": [
-            { "name": "A", "duration": 1, "start": null, "end": null, "notes": null,  "attachments": [], "workers": [] },
-            { "name": "B", "duration": 2, "start": null, "end": null, "notes": null,  "attachments": [], "workers": [] },
-            { "name": "C", "duration": 1, "start": null, "end": null, "notes": null,  "attachments": [], "workers": [] },
-            { "name": "D", "duration": 3, "start": null, "end": null, "notes": null,  "attachments": [], "workers": [] }
-        ]
-    }
-]
+{
+    "name": "Officina",
+    "date": "2024-10-17",
+    "resources": [
+        { "id": "A", "type": "machine", "name": "Resource A", "work": 12 },
+        { "id": "B", "type": "machine", "name": "Resource B", "work": 12 },
+        { "id": "C", "type": "machine", "name": "Resource C", "work": 8 },
+        { "id": "D", "type": "machine", "name": "Resource D", "work": 8 },
+        { "id": "E", "type": "machine", "name": "Resource E", "work": 8 },
+        { "id": "F", "type": "machine", "name": "Resource F", "work": 8 }
+    ],
+    "operators": [
+        { "id": "1", "type": "operator", "name": "Tizio", "work": 8 },
+        { "id": "2", "type": "operator", "name": "Caio", "work": 8 },
+        { "id": "3", "type": "operator", "name": "Sampronio", "work": 8 }
+    ]
+}

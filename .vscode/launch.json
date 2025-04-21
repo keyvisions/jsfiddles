@@ -5,6 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug kv-gantt",
+            "request": "launch",
+            "type": "msedge",
+            "file": "${workspaceFolder}/kv-gantt/index.html",
+            "runtimeArgs": [
+                "--disable-web-security" // Allow CORS
+            ]
+        },
+        {
             "args": [
             ],
             "name": "Gulp task",
