@@ -1,21 +1,32 @@
 {
-    "name": "Officina",
+    "name": "BIASI SRL",
     "date": "2024-10-17",
     "resources": [
-        { "id": "A", "type": "machine", "name": "Resource A", "work": 12 },
-        { "id": "B", "type": "machine", "name": "Resource B", "work": 12 },
-        { "id": "C", "type": "machine", "name": "Resource C", "work": 8 },
-        { "id": "D", "type": "machine", "name": "Resource D", "work": 8 },
-        { "id": "E", "type": "machine", "name": "Resource E", "work": 8 },
-        { "id": "F", "type": "machine", "name": "Resource F", "work": 8 },
-        { "id": "G", "type": "machine", "name": "Resource F", "work": 8 }
+        { "id": "A", "department": "A", "name": "Resource A", "work": 12 },
+        { "id": "B", "department": "A", "name": "Resource B", "work": 12 },
+        { "id": "C", "department": "A", "name": "Resource C", "work": 8 },
+        { "id": "D", "department": "B", "name": "Resource D", "work": 8 },
+        { "id": "E", "department": "B", "name": "Resource E", "work": 8 },
+        { "id": "F", "department": "C", "name": "Resource F", "work": 8 },
+        { "id": "G", "department": "D", "name": "Resource F", "work": 8 }
     ],
     "operators": [
-        { "id": "1", "type": "operator", "name": "Tizio", "work": 8 },
-        { "id": "2", "type": "operator", "name": "Caio", "work": 8 },
-        { "id": "3", "type": "operator", "name": "Sampronio", "work": 8 },
-        { "id": "4", "type": "operator", "name": "Pippo", "work": 8 },
-        { "id": "5", "type": "operator", "name": "Pertica", "work": 8 },
-        { "id": "6", "type": "operator", "name": "Palla", "work": 8 }
-    ]
+        { "id": "1", "name": "Tizio", "work": 8, "workshift": { "start": 8, "end": 16 } },
+        { "id": "2", "name": "Caio", "work": 8, "workshift": { "start": 9, "end": 17 } },
+        { "id": "3", "name": "Sampronio", "work": 8, "workshift": { "start": 7, "end": 15 } },
+        { "id": "4", "name": "Pippo", "work": 8, "workshift": { "start": 10, "end": 18 } },
+        { "id": "5", "name": "Pertica", "work": 8, "workshift": { "start": 6, "end": 14 } },
+        { "id": "6", "name": "Palla", "work": 4, "workshift": { "start": 12, "end": 16 } },
+        { "id": "7", "name": "John", "work": 8, "workshift": { "start": 8, "end": 16 } },
+        { "id": "8", "name": "Fred", "work": 8, "workshift": { "start": 9, "end": 17 } },
+        { "id": "9", "name": "Matt", "work": 8, "workshift": { "start": 7, "end": 15 } },
+        { "id": "10", "name": "Chris", "work": 8, "workshift": { "start": 10, "end": 18 } },
+        { "id": "11", "name": "Al", "work": 8, "workshift": { "start": 6, "end": 14 } },
+        { "id": "12", "name": "Chris", "work": 8, "workshift": { "start": 8, "end": 16 } },
+        { "id": "13", "name": "Jim", "work": 8, "workshift": { "start": 9, "end": 17 } },
+        { "id": "14", "name": "Joyce", "work": 8, "workshift": { "start": 7, "end": 15 } },
+        { "id": "15", "name": "Rick", "work": 8, "workshift": { "start": 10, "end": 18 } },
+        { "id": "16", "name": "Nick", "work": 8, "workshift": { "start": 6, "end": 14 } }
+    ],
+    "tasks": []
 }

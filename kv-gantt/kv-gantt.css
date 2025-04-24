@@ -19,7 +19,14 @@ kv-gantt td {
 	padding: var(--padding);
 }
 
-kv-gantt tbody tr:hover {
+kv-gantt .department {
+	background-color: ButtonFace;
+	color: ButtonText;
+	line-height: 2rem;
+	font-weight: bolder;
+}
+
+kv-gantt tbody tr:not(.department):not(.selected):hover {
 	background-color: ButtonFace;
 	color: ButtonText;
 	cursor: pointer;
@@ -46,11 +53,29 @@ kv-gantt .task {
 	overflow: hidden;
 	height: calc(var(--gantt-line) - 0.5rem);
 	margin: 0.0625rem 0;
+	color: black;
 }
 
 kv-gantt .load {
-	width: 3rem;
-	text-align: right;
+	position: relative;
+	width: 2.3rem;
+	font-size: smaller;
+	text-align: center;
+	color: var(--text-color, black); /* Default text color */
+	overflow: hidden;
+}
+
+kv-gantt .load span {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 1;
+	white-space: nowrap;
+	background: linear-gradient(to right, black 0%, black var(--histogram-width, 0%), var(--text-color, white) var(--histogram-width, 0%), var(--text-color, white) 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	pointer-events: none;
 }
 
 kv-gantt .load:after {
@@ -61,18 +86,31 @@ kv-gantt .load.zero {
 	color: transparent;
 }
 
-kv-gantt .hour {
+kv-gantt .hour, kv-gantt .bar {
 	display: inline-block;
-	width: 4%;
+	width: 4.166%;
 	font-size: x-small;
 	border-right: thin solid var(--border-color);
 }
 
 kv-gantt .operator {
 	writing-mode: sideways-lr;
+	color: black;
 }
 
 kv-gantt .selected {
 	color: HighLightText;
 	background-color: HighLight;
+}
+
+@media (prefers-color-scheme: light) {
+	:root {
+		--text-color: black;
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--text-color: white;
+	}
 }

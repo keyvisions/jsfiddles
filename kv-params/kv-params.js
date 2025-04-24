@@ -5,7 +5,7 @@
 ** Usage: <kv-params name="parameters"></kv-params>
 */
 class kvParams extends HTMLElement {
-	static observedAttributes = ['schema', 'data', 'mode', 'um', 'sheet', 'lang']; // mode = [ *show | edit | range | manage ] um = [ *msu | isu ]
+	static observedAttributes = ['schema', 'data', 'mode', 'um', 'sheet', 'lang', 'columns']; // mode = [ *show | edit | range | manage ] um = [ *msu | isu ]
 	static #Texts = {
 		'type': { en: 'Type', it: 'Tipo' },
 		'label': { en: 'Label', it: 'Etichetta' },
@@ -46,6 +46,7 @@ class kvParams extends HTMLElement {
 	Data = {};
 	Mode = 'show';
 	Sheet = 4;
+	Columns = 1;
 	UM = 'msu';
 	Lang = 'en';
 
@@ -200,6 +201,7 @@ class kvParams extends HTMLElement {
 			case 'schema': await this.#fetchData(name, newValue); break;
 			case 'data': await this.#fetchData(name, newValue); break;
 			case 'mode': this.Mode = newValue; break;
+			case 'columns': this.Columns = newValue || 1; break;
 		}
 		if (name != 'mode')
 			name = 'mode', newValue = this.Mode || 'show';
@@ -452,14 +454,14 @@ class kvParams extends HTMLElement {
 						break;
 
 					case 'group':
-						html += `<tr class="colspan"><td colspan="*">${param.label[this.Lang]}<hr></td></tr>`;
+						html += `<tr class="colspan"><td colspan="*">${param.label[this.Lang]}</td></tr>`;
 						break;
 				}
 			}
 		});
 		html += `</tbody><tfoot><tr>${'<th></th>'.repeat(cols)}<th>${(sheet == 7 && mode == 'edit' && cols > 1) ? '<i class="far fa-trash-alt testRemove"></i>' : ''}</th></tr></tfoot>`;
 		this.insertAdjacentHTML('afterbegin',
-			`<div><table class="test"><thead><tr><th style="width:100%;text-align:left" title="${kvParams.#Flags[sheet][this.Lang]}"></th><th${(sheet == 7 && (mode == 'edit' || mode == 'range')) ? ` class="tests" colspan="${cols}">${kvParams.#Texts.tests[this.Lang]} <i class="fas fa-plus tests"></i>` : ` colspan="${cols}">`}</th></tr></thead><tbody>` +
+			`<div style="columns:${this.Columns};"><table class="test"><thead class="sheet${sheet}"><tr><th style="width:100%;text-align:left" title="${kvParams.#Flags[sheet][this.Lang]}"></th><th${(sheet == 7 && (mode == 'edit' || mode == 'range')) ? ` class="tests" colspan="${cols}">${kvParams.#Texts.tests[this.Lang]} <i class="fas fa-plus tests"></i>` : ` colspan="${cols}">`}</th></tr></thead><tbody>` +
 			html.replaceAll('colspan="*"', `colspan="${cols + 1}"`) +
 			'</table></div>');
 

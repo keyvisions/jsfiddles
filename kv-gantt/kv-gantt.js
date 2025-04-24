@@ -5,9 +5,18 @@
 ** Usage: <kv-gantt src="gantt.json"></kv-gantt>
 */
 class kvGantt extends HTMLElement {
-	static observedAttributes = ['schema', 'tasks'];
+	static observedAttributes = ['src', 'lang'];
 
-	Data;
+	static #Texts = {
+		'resource': { en: 'Resource', it: 'Risorsa' },
+		'operator': { en: 'Operator', it: 'Operatore' },
+		'task': { en: 'Task', it: 'Attività' },
+		'load': { en: 'Load', it: 'Carico' },
+		'department': { en: 'Department', it: 'Reparto' }
+	};
+
+	Data = { name: null, date: new Date(), resources: [], operators: [], tasks: [] };
+	Lang = 'en';
 
 	constructor() {
 		super();
@@ -15,9 +24,9 @@ class kvGantt extends HTMLElement {
 		this.innerHTML =
 			`<input type="hidden" name="${this.getAttribute("name")}">` +
 			`<table>` +
-			`<thead><tr><th rowspan="2">Resources</th><th rowspan="2">Load</th><th class="day">Day</th></tr><tr><th class="tasks"></th></tr></thead>` +
+			`<thead><tr><th rowspan="2"></th><th rowspan="2">Load</th><th class="day"></th></tr><tr><th class="tasks"></th></tr></thead>` +
 			`<tbody></tbody>` +
-			`<tfoot><tr><td>Loads</td><td class="load"></td><td class="tasks"></td></tfoot>` +
+			`<tfoot><tr><td></td><td class="load"></td><td class="tasks"></td></tfoot>` +
 			`</table>`;
 
 		this.addEventListener('click', event => {
@@ -25,7 +34,7 @@ class kvGantt extends HTMLElement {
 
 			if (target.classList.contains('task'))
 				alert(event.target.innerText);
-			else if (target.closest('tr').hasAttribute('data-id')) {
+			else if (target.closest('tr[data-id')) {
 				this.querySelector('tr.selected')?.classList.remove('selected');
 				target.closest('tr').classList.add('selected');
 			}
@@ -41,24 +50,23 @@ class kvGantt extends HTMLElement {
 
 	async attributeChangedCallback(name, _oldValue, newValue) {
 		switch (name) {
-			case 'schema':
-				this.Data = await this.#fetchData(newValue) || { name: null, date: new Date(), resources: [], operators: [] };
-				this.Data.tasks = this.Data.tasks || [];
+			case 'src':
+				this.Data = await this.#fetchData(newValue) || { name: null, date: new Date(), resources: [], operators: [], tasks: [] };
 
-				// Create random tasks: { "id": "", "name": "", "resource": "", "operator": "", "start": null, "duration": null, "progress": 0 }
-				for (let i = 0; i < 6; ++i) {
-					const resource = Math.floor(this.Data.resources.length * Math.random());
-					const operator = Math.floor(this.Data.operators.length * Math.random());
-					this.Data.tasks.push({ id: i, name: 'task', resource: this.Data.resources[resource].id, operator: this.Data.operators[operator].id, start: Math.random() * 23, duration: Math.random() * 4 + 1, progress: Math.random() * 100 });
-				}
-				this.renderGantt(this.Data.resources, this.Data.operators, this.Data.tasks);
+				// Create random tasks: { "id": null, "name": null, "resource": null, "operator": null, "start": null, "duration": null, "progress": 0 }
+				if (!this.Data.tasks.length)
+					for (let i = 0; i < 20; ++i) {
+						const resource = Math.floor(this.Data.resources.length * Math.random());
+						const operator = Math.floor(this.Data.operators.length * Math.random());
+						this.Data.tasks.push({ id: i, name: kvGantt.#Texts.task[this.Lang], resource: this.Data.resources[resource].id, operator: this.Data.operators[operator].id, start: Math.random() * 23, duration: Math.random() * 4 + 1, progress: Math.random() * 100 });
+					}
 				break;
 
-			case 'tasks':
-				this.Data.tasks = await this.#fetchData(newValue) || [];
-				this.renderGantt(this.Data.resources, this.Data.operators, this.Data.tasks);
+			case 'lang':
+				this.Lang = newValue;
 				break;
 		}
+		this.renderGantt(this.Data.resources, this.Data.operators, this.Data.tasks);
 	}
 
 	renderGantt(resources = [], operators = [], tasks = []) {
@@ -68,12 +76,26 @@ class kvGantt extends HTMLElement {
 			operatorColors[operator.id] = this.#generateColor(index); // Generate or assign a color
 		});
 
-		this.querySelector('.day').innerText = new Date(this.Data.date).toLocaleDateString();
+		this.querySelector('thead th:nth-child(2)').innerText = kvGantt.#Texts.load[this.Lang];
+		this.querySelector('tfoot td:nth-child(1)').innerText = kvGantt.#Texts.load[this.Lang];
+
+		this.querySelector('.day').innerText = new Date(this.Data.date).toLocaleDateString(undefined, {
+			weekday: 'long', // Full name of the day (e.g., "Monday")
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric'
+		});
 		this.querySelector('tbody').innerHTML = ''; // Clear GANTT
 
+		let department = '';
 		resources.forEach((resource, i) => {
+			if (department != resource.department) {
+				department = resource.department;
+				this.querySelector('tbody').insertAdjacentHTML('beforeend', `<tr class="department"><td colspan="${3 + this.Data.operators.length}">${kvGantt.#Texts.department[this.Lang]}: ${department}</td></tr>`);
+			}
+
 			resource._work = 0;
-			this.querySelector('tbody').insertAdjacentHTML('beforeend', `<tr data-id="${resource.id}"><td>${resource.name}</td><td class="load"></td><td class="tasks"></td></tr>`);
+			this.querySelector('tbody').insertAdjacentHTML('beforeend', `<tr data-id="${resource.id}"><td><span class="expand-symbol" title="Expand/Collapse">▶</span> ${resource.name}</td><td class="load"></td><td class="tasks"></td></tr>`);
 
 			let loads = '';
 			operators.filter(operator => operator.work > 0).forEach(operator => {
@@ -92,7 +114,7 @@ class kvGantt extends HTMLElement {
 		});
 
 		this.querySelectorAll('.tasks').forEach((task, i) =>
-			task.innerHTML = Array.from(Array(25).keys()).reduce((hours, hour) => hours + `<div class="hour">${!i ? hour + ':00' : '&nbsp;'}</div>`, '') // Hours
+			task.innerHTML = Array.from(Array(24).keys()).reduce((hours, hour) => hours + `<div class="hour">${!i ? hour + ':00' : '&nbsp;'}</div>`, '') // Hours
 		);
 
 		tasks.forEach(task => {
@@ -135,6 +157,24 @@ class kvGantt extends HTMLElement {
 			const loadPercentage = parseInt(td.innerText, 10) || 0; // Parse the percentage value
 			td.style.background = this.#showLoad(loadPercentage); // Apply histogram background
 		});
+
+		// Calculate hourly loads
+		const hourlyLoads = Array(24).fill(0);
+		tasks.forEach(task => {
+			const startHour = Math.floor(task.start);
+			const endHour = Math.min(24, Math.ceil(task.start + task.duration));
+			for (let hour = startHour; hour < endHour; hour++) {
+				hourlyLoads[hour] += task.duration / (endHour - startHour); // Distribute load
+			}
+		});
+
+		// Normalize loads to percentages
+		const maxLoad = Math.max(...hourlyLoads);
+		const hourlyPercentages = hourlyLoads.map(load => (load / maxLoad) * 100);
+
+		// Render the tfoot section
+		const td = this.querySelector('tfoot td:nth-child(3)');
+		td.innerHTML = hourlyPercentages.map(percent => `<div class="bar" style="background: ${this.#showLoad(percent)}">${percent.toFixed(0)}%</div>`).join('');
 	}
 
 	#showLoad(loadPercentage) {
