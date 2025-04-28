@@ -150,7 +150,3 @@ kv-params .hide {
 xkv-params [disabled] {
 	color: FieldText;
 }
-
-kv-params thead:not(.Sheet7) {
-	display: none;
-}

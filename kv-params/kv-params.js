@@ -32,7 +32,7 @@ class kvParams extends HTMLElement {
 	static #Flags = [
 		{ en: 'Described', it: 'Descrittivo', icon: 'fas fa-font' },
 		{ en: 'Searched', it: 'Ricercabile', icon: 'fas fa-search' },
-		{ en: '', it: '', icon: '' }, // Available
+		{ en: '', it: '', icon: '' }, // Available: fas fa-code-branch multivalued for test
 		{ en: 'Imported', it: 'Importato', icon: 'fas fa-wifi' },
 		{ en: 'Technical sheet', it: 'Scheda tecnica', icon: 'fas fa-drafting-compass' },
 		{ en: 'Sales sheet', it: 'Scheda commerciali', icon: 'fas fa-handshake' },
@@ -72,8 +72,8 @@ class kvParams extends HTMLElement {
 			if (target.classList.contains('tests')) {
 				const colspan = this.querySelectorAll('tfoot th').length + 1;
 
-				if (colspan > 6)
-					return; // Limit number of tests to 5
+				if (colspan > 4)
+					return; // Limit number of tests to 3
 
 				this.querySelector('thead th[colspan]').setAttribute('colspan', colspan - 1);
 
@@ -156,6 +156,9 @@ class kvParams extends HTMLElement {
 					target.classList.remove('set');
 					this.querySelectorAll('tbody>tr').forEach(el => el.style.display = '');
 				}
+
+				// Set kvParamsSheet cookie
+				document.cookie = `kvParamsSheet=${parseInt(target.getAttribute('data-flag')) || 4}; path=/; max-age=31536000; SameSite=Strict`; // Cookie valid for 1 year
 			}
 		});
 		this.addEventListener('focusin', event => {
@@ -207,9 +210,15 @@ class kvParams extends HTMLElement {
 			name = 'mode', newValue = this.Mode || 'show';
 
 		this.innerHTML = '';
-		if (newValue == 'manage')
+		if (newValue == 'manage') {
+			const sheetCookie = document.cookie.split('; ').find(row => row.startsWith('kvParamsSheet='));
+			if (sheetCookie) {
+				const sheet = parseInt(sheetCookie.split('=')[1]);
+				if (!isNaN(sheet))
+					this.Sheet = sheet;
+			}
 			this.#manageSchema();
-		else
+		} else
 			this.#manageSheet(newValue);
 	}
 	#manageSchema() {
@@ -261,6 +270,7 @@ class kvParams extends HTMLElement {
 		this.Schema.forEach(param => {
 			const row = this.#newRow(this.querySelector('tbody>tr:last-child'));
 			row.style.display = (param.flags & (1 << this.Sheet)) ? '' : 'none';
+			row.setAttribute('title', '@' + param.id);
 
 			row.querySelectorAll("input,select").forEach(el => {
 				if (el.name == 'label') {
@@ -385,12 +395,13 @@ class kvParams extends HTMLElement {
 			if (param.flags & (1 << sheet) && (mode != 'range' || (mode == 'range' && param.type == 'number'))) {
 				const ums = kvParams.findId(UMS, param.um);
 				const um = param.um ? '[' + (ums[(mode == 'edit' || mode == 'range') ? 'msu' : this.UM] || ums.msu) + ']' : '';
+				const icons = (param.flags & 1 ? '<i class="fas fa-font"></i>' : '') + (param.flags & 1 ? '<i class="fas fa-search"></i>' : '');
 
 				let options, i;
 				switch (param.type) {
 					case 'number':
 						options = this.Data[`PR${param.id}`] || [param.options] || [[null, null, null, null]];
-						html += `<tr><td title="@${param.id}">${param.label[this.Lang]} ${um}<span>${this.#range(options[0])}</span></td>`;
+						html += `<tr><td title="@${param.id}">${param.label[this.Lang]} ${um} ${icons}<span>${this.#range(options[0])}</span></td>`;
 						kvParams.sizeArray(this.Data[`P${param.id}`], cols).forEach((value, k) => {
 							value = (mode == 'show' && this.UM != 'msu' && typeof ums?.convert == 'function' ? ums.convert(value).toFixed(options[3]) : value) || '';
 							html += `<td><input type="${mode == 'range' ? 'hidden' : 'number'}" ${attributes(param)} value="${value}" range="${JSON.stringify(options[k]).replaceAll('"', '&quot;')}" tabindex="${k * count + j}">`;
@@ -402,7 +413,7 @@ class kvParams extends HTMLElement {
 						break;
 
 					case 'text':
-						html += `<tr><td title="@${param.id}">${param.label[this.Lang]}</td>`;
+						html += `<tr><td title="@${param.id}">${param.label[this.Lang]}  ${icons}</td>`;
 						kvParams.sizeArray(this.Data[`P${param.id}`], cols).forEach((value, k) => {
 							html += `<td><input ${attributes(param)} value="${value || ''}" tabindex="${k * count + j}"></td>`;
 						});
@@ -410,7 +421,7 @@ class kvParams extends HTMLElement {
 						break;
 
 					case 'date':
-						html += `<tr><td title="@${param.id}">${param.label[this.Lang]}</td>`;
+						html += `<tr><td title="@${param.id}">${param.label[this.Lang]} ${icons}</td>`;
 						kvParams.sizeArray(this.Data[`P${param.id}`], cols).forEach((value, k) => {
 							html += `<td><input type="date" ${attributes(param)} value="${value || ''}" tabindex="${k * count + j}"></td>`;
 						});
@@ -418,7 +429,7 @@ class kvParams extends HTMLElement {
 						break;
 
 					case 'checkbox':
-						html += `<tr><td title="@${param.id}">${param.label[this.Lang]}</td>`;
+						html += `<tr><td title="@${param.id}">${param.label[this.Lang]} ${icons}</td>`;
 						kvParams.sizeArray(this.Data[`P${param.id}`], cols).forEach((value, k) => {
 							html += `<td><input type="checkbox" ${attributes(param)} ${value ? 'checked' : ''} tabindex="${k * count + j}"></td>`
 						});
@@ -437,16 +448,16 @@ class kvParams extends HTMLElement {
 							default:
 								i = param.options[1] && (param.um && this.UM == 'isu' || !param.um && this.Lang != 'en') ? 1 : 0;
 						}
-						html += `<tr><td title="@${param.id}">${param.label[this.Lang]} ${um}</td>`;
+						html += `<tr><td title="@${param.id}">${param.label[this.Lang]} ${um} ${icons}</td>`;
 						kvParams.sizeArray(this.Data[`P${param.id}`], cols).forEach((value, k) => {
 							const l = ref?.findIndex(option => option == value);
-							html += `<td><select ${attributes(param)} tabindex="${k * count + j}"><option></option>${param.options[i]?.split(',').map((option, j) => `<option value="${ref[j]}" ${l == j ? ' selected' : ''}>${option}${paired[j] ? '/' + paired[j] : ''}</option>`).join('')}</select></td>`
+							html += `<td><select ${attributes(param)} tabindex="${k * count + j}"><option></option>${param.options[i]?.split(',').map((option, j) => `<option value="${ref[j]}" ${l == j ? ' selected' : ''}>${option}${paired[j] ? ' [' + paired[j] + ums.isu + ']' : ''}</option>`).join('')}</select></td>`
 						});
 						html += '</tr>';
 						break;
 					}
 					case 'textarea':
-						html += `<tr><td colspan="*" title="@${param.id}"><label><span>${param.label[this.Lang]}${param.um ? ` [${param.um}]` : ''}</span><textarea ${attributes(param)} tabindex="${j}">${value}</textarea></label></td></tr>`;
+						html += `<tr><td colspan="*" title="@${param.id}"><label><span>${param.label[this.Lang]}${param.um ? ` [${param.um}]` : ''} ${icons}</span><textarea ${attributes(param)} tabindex="${j}">${value}</textarea></label></td></tr>`;
 						break;
 
 					case 'separator':
@@ -461,7 +472,7 @@ class kvParams extends HTMLElement {
 		});
 		html += `</tbody><tfoot><tr>${'<th></th>'.repeat(cols)}<th>${(sheet == 7 && mode == 'edit' && cols > 1) ? '<i class="far fa-trash-alt testRemove"></i>' : ''}</th></tr></tfoot>`;
 		this.insertAdjacentHTML('afterbegin',
-			`<div style="columns:${this.Columns};"><table class="test"><thead class="sheet${sheet}"><tr><th style="width:100%;text-align:left" title="${kvParams.#Flags[sheet][this.Lang]}"></th><th${(sheet == 7 && (mode == 'edit' || mode == 'range')) ? ` class="tests" colspan="${cols}">${kvParams.#Texts.tests[this.Lang]} <i class="fas fa-plus tests"></i>` : ` colspan="${cols}">`}</th></tr></thead><tbody>` +
+			`<div style="columns:${this.Columns};"><table class="test"><thead ${mode == 'manage' || sheet == 7 ? '' : 'style="display:none"'}><tr><th style="width:100%;text-align:left" title="${kvParams.#Flags[sheet][this.Lang]}"></th><th${(sheet == 7 && (mode == 'edit' || mode == 'range')) ? ` class="tests" colspan="${cols}">${kvParams.#Texts.tests[this.Lang]} <i class="fas fa-plus tests"></i>` : ` colspan="${cols}">`}</th></tr></thead><tbody>` +
 			html.replaceAll('colspan="*"', `colspan="${cols + 1}"`) +
 			'</table></div>');
 
