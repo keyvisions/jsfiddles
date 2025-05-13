@@ -7,3 +7,69 @@
     --faint_color: #efefef;
     --error_color: #FF0000;
 }
+
+/* Define the primary color and its pastel variants */
+:root {
+    --special-color: #a3c1e0; /* Pastel Blue */
+    --special-color-light: #d0e7f9; /* Light Pastel Blue for even rows */
+    --special-color-dark: #7fb3d5; /* Darker Pastel Blue */
+    --hover-color-light: #b0d4e8; /* Lighter Pastel Blue for hover in light theme */
+    --hover-color-dark: #6ba0c8; /* Darker Pastel Blue for hover in dark theme */
+}
+
+/* Base styles for the table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Light Theme Styles */
+@media (prefers-color-scheme: light) {
+    table {
+        color: #000000; /* Black text */
+    }
+
+    table tr:nth-child(even) {
+        background-color: var(--special-color-light); /* Light Gray */
+    }
+
+    table tr:nth-child(odd) {
+        background-color: #ffffff; /* White */
+    }
+
+    table tr:nth-child(even):hover {
+        background-color: var(--hover-color-light); /* Lighter Pastel Yellow on hover */
+        color: #000000; /* Black text on hover */
+    }
+
+    table tr:nth-child(odd):hover {
+        background-color: var(--hover-color-light); /* Lighter Pastel Yellow on hover */
+        color: #000000; /* Black text on hover */
+    }
+}
+
+/* Dark Theme Styles */
+@media (prefers-color-scheme: dark) {
+    table {
+        background-color: #121212; /* Dark Background */
+        color: #ffffff; /* White text */
+    }
+
+    table tr:nth-child(even) {
+        background-color: #3a3a3a; /* Dark Gray for even rows */
+    }
+
+    table tr:nth-child(odd) {
+        background-color: #000000; /* Black */
+    }
+
+    table tr:nth-child(even):hover {
+        background-color: var(--hover-color-dark); /* Darker Pastel Yellow on hover */
+        color: #000000; /* Black text on hover */
+    }
+
+    table tr:nth-child(odd):hover {
+        background-color: var(--hover-color-dark); /* Darker Pastel Yellow on hover */
+        color: #000000; /* Black text on hover */
+    }
+}

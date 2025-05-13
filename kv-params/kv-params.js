@@ -5,7 +5,7 @@
 ** Usage: <kv-params name="parameters"></kv-params>
 */
 class kvParams extends HTMLElement {
-	static observedAttributes = ['schema', 'data', 'mode', 'um', 'sheet', 'lang', 'columns']; // mode = [ *show | edit | range | manage ] um = [ *msu | isu ]
+	static observedAttributes = ['schema', 'data', 'mode', 'um', 'sheet', 'lang', 'columns', 'template']; // mode = [ *show | edit | range | manage | template] um = [ *msu | isu ]
 	static #Texts = {
 		'type': { en: 'Type', it: 'Tipo' },
 		'label': { en: 'Label', it: 'Etichetta' },
@@ -33,7 +33,7 @@ class kvParams extends HTMLElement {
 		{ en: 'Described', it: 'Descrittivo', icon: 'fas fa-font' },
 		{ en: 'Searched', it: 'Ricercabile', icon: 'fas fa-search' },
 		{ en: '', it: '', icon: '' }, // Available: fas fa-code-branch multivalued for test
-		{ en: 'Imported', it: 'Importato', icon: 'fas fa-wifi' },
+		{ en: 'Imported', it: 'Importato', icon: 'fas fa-file-download' },
 		{ en: 'Technical sheet', it: 'Scheda tecnica', icon: 'fas fa-drafting-compass' },
 		{ en: 'Sales sheet', it: 'Scheda commerciali', icon: 'fas fa-handshake' },
 		{ en: 'Production sheet', it: 'Scheda produzione', icon: 'fas fa-tools' },
@@ -48,7 +48,7 @@ class kvParams extends HTMLElement {
 	Sheet = 4;
 	Columns = 1;
 	UM = 'msu';
-	Lang = 'en';
+	Lang = 'it';
 
 	static findId(array, id) { return array.find(el => el.id == id) }
 	static sizeArray(arr = [], size = 1) {
@@ -219,7 +219,7 @@ class kvParams extends HTMLElement {
 			}
 			this.#manageSchema();
 		} else
-			this.#manageSheet(newValue);
+			this.#manageSheet(newValue, this.getAttribute('template'));
 	}
 	#manageSchema() {
 		const html =
@@ -248,7 +248,7 @@ class kvParams extends HTMLElement {
 			`<option value="separator">${kvParams.#Texts.separator[this.Lang]}</option>` +
 			`</select>` +
 			`</td>` +
-			`<td><input form="kv-params" name="label" title="Label" data-value style="width: -webkit-fill-available"></td>` +
+			`<td><input form="kv-params" name="label" title="Label" data-value="${JSON.stringify({ "en": kvParams.#Texts.new[0], "it": kvParams.#Texts.new[1] })}" style="width: -webkit-fill-available" value="${kvParams.#Texts.new[this.Lang]}"></td>` +
 			`<td>` +
 			`<select form="kv-params" name="um" title="UM">` +
 			`<option></option>` +
@@ -258,7 +258,7 @@ class kvParams extends HTMLElement {
 			`<td><input form="kv-params" type="hidden" name="options"><i class="fas fa-sliders-h manageOptions" ref="options" tabindex="0"></i></td>` +
 			`<td style="white-space:nowrap">` +
 			`<input form="kv-params" type="hidden" name="flags">` +
-			kvParams.#Flags.map((flag, i) => `<i class="${flag.icon}" name="flags" value="${i}" title="${flag[this.Lang]}" tabindex="0"></i>`).join(' ') +
+			kvParams.#Flags.map((flag, i) => `<i class="${flag.icon} deselected" name="flags" value="${i}" title="${flag[this.Lang]}" tabindex="0"></i>`).join(' ') +
 			`</td>` +
 			`<td style="white-space:nowrap"><i class="far fa-trash-alt remove" tabindex="0"></i> <i class="fas fa-plus add" tabindex="0"></i></td>` +
 			`</tr>` +
@@ -380,7 +380,12 @@ class kvParams extends HTMLElement {
 			document.getElementById('kv-params-dialog').showModal();
 		}
 	}
-	#manageSheet(mode) {
+	#manageSheet(mode, layoutId) {
+		if (document.getElementById(layoutId)) {
+			this.#manageLayout(mode, document.getElementById(layoutId));
+			return;
+		}
+
 		const sheet = parseInt(this.getAttribute('sheet')) || 5;
 		let cols = 1, html = '';
 
@@ -487,26 +492,95 @@ class kvParams extends HTMLElement {
 			return `name="P${param.id}"${(param.flags & (1 << 10)) == 0 ? '' : ' required'}${(param.flags & (1 << 3)) == 0 ? '' : ' disabled'} ${range} form="kvParams"`;
 		}
 	}
+	#manageLayout(mode, template) {
+		this.appendChild(document.importNode(template.content, true));
+
+		if (mode != 'edit')
+			mode = 'show';
+
+		this.querySelectorAll('i[name^="P"]').forEach(el => {
+			const paramName = el.getAttribute("name");
+			const param = kvParams.findId(this.Schema, parseInt(paramName.substring(1)));
+
+			if (param) {
+				const ums = kvParams.findId(UMS, param.um);
+				const um = param.um ? '[' + (ums[mode == 'edit' ? 'msu' : this.UM] || ums.msu) + ']' : '';
+				const icons = (param.flags & 1 ? '<i class="fas fa-font"></i>' : '') + (param.flags & 1 ? '<i class="fas fa-search"></i>' : '');
+
+				let options, i;
+				const value = this.Data[paramName] ? this.Data[paramName][0] : '';
+				switch (param.type) {
+					case 'number':
+						options = this.Data[`PR${param.id}`] || [param.options] || [[null, null, null, null]];
+						value = (mode == 'show' && this.UM != 'msu' && typeof ums?.convert == 'function' ? ums.convert(value).toFixed(options[3]) : value) || '';
+						el.insertAdjacentHTML('afterend', `<label title="@${param.id}"><span>${param.label[this.Lang]} ${um} ${icons} ${this.#range(options[0])}</span><input ${attributes(param)} value="${value}" range="${JSON.stringify(options[k]).replaceAll('"', '&quot;')}"></label>`);
+						break;
+
+					case 'text':
+						el.insertAdjacentHTML('afterend', `<label title="@${param.id}"><span>${param.label[this.Lang]} ${um} ${icons}</span> <input ${attributes(param)} value="${value || ''}"></label>`);
+						break;
+
+					case 'date':
+						el.insertAdjacentHTML('afterend', `<label title="@${param.id}"><span>${param.label[this.Lang]} ${um} ${icons}</span> <input type="date" ${attributes(param)} value="${value || ''}"></label>`);
+						break;
+
+					case 'checkbox':
+						el.insertAdjacentHTML('afterend', `<label title="@${param.id}"><span>${param.label[this.Lang]} ${um} ${icons}</span> <input type="checkbox" ${attributes(param)} ${value ? 'checked' : ''}></label>`);
+						break;
+
+					case 'select': {
+						const ref = param.options[0]?.split(',');
+						let paired = [];
+						switch (mode) {
+							case 'edit':
+								i = param.options[1] && !param.um && this.Lang != 'en' ? 1 : 0;
+								if (param.um)
+									paired = param.options[1]?.split(',') || [];
+								break;
+							default:
+								i = param.options[1] && (param.um && this.UM == 'isu' || !param.um && this.Lang != 'en') ? 1 : 0;
+						}
+						const l = ref?.findIndex(option => option == value);
+						el.insertAdjacentHTML('afterend', `<label title="@${param.id}"><span>${param.label[this.Lang]} ${um} ${icons}</span><select ${attributes(param)}><option></option>${param.options[i]?.split(',').map((option, j) => `<option value="${ref[j]}" ${l == j ? ' selected' : ''}>${option}${paired[j] ? ' [' + paired[j] + ums.isu + ']' : ''}</option>`).join('')}</select></label>`);
+						break;
+					}
+					case 'textarea':
+						el.insertAdjacentHTML('afterend', `<textarea ${attributes(param)}>${value}</textarea>`);
+						break;
+				}
+			}
+			el.remove();
+		});
+
+		if (mode == 'show')
+			this.querySelectorAll('input, textarea, select').forEach(el => el.setAttribute('disabled', ''));
+
+		function attributes(param) {
+			const options = param.options;
+			let range = '';
+			if (param.type == 'number')
+				range = `${isNaN(parseFloat(options[0])) ? '' : ` min="${options[0]}"`}${isNaN(parseFloat(options[1])) ? '' : ` max="${options[1]}"`}${isNaN(parseInt(options[2])) ? ' step="any"' : ` step="${Math.pow(10, -parseInt(options[2]))}"`}`;
+			return `name="P${param.id}"${(param.flags & (1 << 10)) == 0 ? '' : ' required'}${(param.flags & (1 << 3)) == 0 ? '' : ' disabled'} ${range} form="kvParams"`;
+		}
+	}
 	#range(options) {
 		return `${isNaN(parseFloat(options[0])) ? '(-∞,' : `[${parseFloat(options[0]).toFixed(parseInt(options[2]))}, `} ${isNaN(parseFloat(options[1])) ? '+∞)' : `${parseFloat(options[1]).toFixed(parseInt(options[2]))}]`}${isNaN(parseInt(options[2])) ? '' : ` ±${Math.pow(10, -parseInt(options[2]))}`}`;
 	}
 	save() {
 		if (this.querySelector('.schema') != null) {
 			this.Schema = [];
-			this.querySelectorAll('tbody>tr').forEach(tr => {
+			this.querySelectorAll('tbody>tr').forEach((tr, r) => {
 				const param = {};
 				tr.querySelectorAll('input,select').forEach(el => {
-					if (el.type == 'checkbox')
-						param[el.name] |= el.checked ? (1 << parseInt(el.value)) : 0;
-					else if (el.type == 'number')
-						param[el.name] = parseFloat(el.value);
-					else if (el.hasAttribute('data-value')) {
-						param[el.name] = JSON.parse(el.dataset.value || '{"en":null,"it":null}');
+					if (el.name == 'label') {
+						param[el.name] = JSON.parse(el.dataset.value);
 						param[el.name][this.Lang] = el.value;
 					} else if (el.name == 'options')
 						param.options = JSON.parse(el.value || '[]');
 					else if (el.name == 'flags')
-						param.flags = parseInt(el.value);
+						param.flags = parseInt(el.value) || 16;
+					else if (el.name == 'id')
+						param.id = el.value || r;
 					else
 						param[el.name] = el.value;
 				});
@@ -516,7 +590,8 @@ class kvParams extends HTMLElement {
 
 			return this.children[0].value;
 		} else if (this.Mode != 'show') {
-			const tests = this.querySelectorAll('tfoot>tr>th').length - 1;
+			let tests = this.querySelectorAll('tfoot>tr>th').length - 1;
+			tests = tests < 0 ? 1 : tests;
 			this.querySelectorAll('input, select, textarea').forEach((el, i) => {
 				const s = i % tests;
 				if (!s) {
