@@ -235,7 +235,7 @@ class kvParams extends HTMLElement {
 			`<th></th>` +
 			`</tr>` +
 			'</thead>' +
-			`<tbody>` +
+			`<tbody class="kv-params">` +
 			`<tr>` +
 			`<td><input form="kv-params" type="hidden" name="id"><select form="kv-params" title="Type" name="type">` +
 			`<option value="number">${kvParams.#Texts.number[this.Lang]}</option>` +
@@ -380,9 +380,9 @@ class kvParams extends HTMLElement {
 			document.getElementById('kv-params-dialog').showModal();
 		}
 	}
-	#manageSheet(mode, layoutId) {
-		if (document.getElementById(layoutId)) {
-			this.#manageLayout(mode, document.getElementById(layoutId));
+	#manageSheet(mode, templateId) {
+		if (document.getElementById(templateId)) {
+			this.#manageTemplate(mode, document.getElementById(templateId));
 			return;
 		}
 
@@ -477,7 +477,7 @@ class kvParams extends HTMLElement {
 		});
 		html += `</tbody><tfoot><tr>${'<th></th>'.repeat(cols)}<th>${(sheet == 7 && mode == 'edit' && cols > 1) ? '<i class="far fa-trash-alt testRemove"></i>' : ''}</th></tr></tfoot>`;
 		this.insertAdjacentHTML('afterbegin',
-			`<div style="columns:${this.Columns};"><table class="test"><thead ${mode == 'manage' || sheet == 7 ? '' : 'style="display:none"'}><tr><th style="width:100%;text-align:left" title="${kvParams.#Flags[sheet][this.Lang]}"></th><th${(sheet == 7 && (mode == 'edit' || mode == 'range')) ? ` class="tests" colspan="${cols}">${kvParams.#Texts.tests[this.Lang]} <i class="fas fa-plus tests"></i>` : ` colspan="${cols}">`}</th></tr></thead><tbody>` +
+			`<div style="columns:${this.Columns};"><table class="test"><thead ${mode == 'manage' || sheet == 7 ? '' : 'style="display:none"'}><tr><th style="width:100%;text-align:left" title="${kvParams.#Flags[sheet][this.Lang]}"></th><th${(sheet == 7 && (mode == 'edit' || mode == 'range')) ? ` class="tests" colspan="${cols}">${kvParams.#Texts.tests[this.Lang]} <i class="fas fa-plus tests"></i>` : ` colspan="${cols}">`}</th></tr></thead><tbody class="kv-params">` +
 			html.replaceAll('colspan="*"', `colspan="${cols + 1}"`) +
 			'</table></div>');
 
@@ -492,13 +492,13 @@ class kvParams extends HTMLElement {
 			return `name="P${param.id}"${(param.flags & (1 << 10)) == 0 ? '' : ' required'}${(param.flags & (1 << 3)) == 0 ? '' : ' disabled'} ${range} form="kvParams"`;
 		}
 	}
-	#manageLayout(mode, template) {
+	#manageTemplate(mode, template) {
 		this.appendChild(document.importNode(template.content, true));
 
 		if (mode != 'edit')
 			mode = 'show';
 
-		this.querySelectorAll('i[name^="P"]').forEach(el => {
+		this.querySelectorAll('slot[name^="P"]').forEach(el => {
 			const paramName = el.getAttribute("name");
 			const param = kvParams.findId(this.Schema, parseInt(paramName.substring(1)));
 
@@ -591,7 +591,7 @@ class kvParams extends HTMLElement {
 			return this.children[0].value;
 		} else if (this.Mode != 'show') {
 			let tests = this.querySelectorAll('tfoot>tr>th').length - 1;
-			tests = tests < 0 ? 1 : tests;
+			tests = this.hasAttribute('template') ? 1 : tests;
 			this.querySelectorAll('input, select, textarea').forEach((el, i) => {
 				const s = i % tests;
 				if (!s) {

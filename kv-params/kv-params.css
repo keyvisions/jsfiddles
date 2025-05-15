@@ -42,15 +42,15 @@ kv-params th {
 	padding: var(--padding);
 }
 
-kv-params tbody {
+kv-params tbody.kv-params {
 	counter-reset: row;
 }
 
-kv-params tbody tr>td:first-child {
+kv-params tbody.kv-params tr>td:first-child {
 	white-space: nowrap;
 }
 
-kv-params tbody tr>td:first-child:not([colspan])::before {
+kv-params tbody.kv-params tr>td:first-child:not([colspan])::before {
 	display: inline-block;
 	font-family: monospace;
 	counter-increment: row;
@@ -81,16 +81,16 @@ kv-params tr {
 	line-height: 1.75rem;;
 }
 
-kv-params tbody tr {
+kv-params tbody.kv-params tr {
 	border-top: thin solid GrayText;
 	border-bottom: thin solid GrayText;
 }
-kv-params tbody tr.colspan {
+kv-params tbody.kv-params tr.colspan {
 	border-bottom: thin solid ButtonText;
 	font-weight: bolder;
 }
 
-kv-params tbody tr:hover:not(.colspan) {
+kv-params tbody.kv-params tr:hover:not(.colspan) {
 	background-color: ButtonFace;
 	color: ButtonText;
 }

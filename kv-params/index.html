@@ -57,17 +57,19 @@
 	</p>
 	<form>
 		<input name="parameters">
-		<kv-params name="parameters" schema="./compressor.json" data="./data.json" columns="2" template="Sheet"></kv-params>
+		<kv-params name="parameters" schema="./compressor.json" data="./data.json" columns="2"
+			template="Sheet"></kv-params>
 
 		<template id="Sheet">
-			<h1>This is a personal sheet</h1>
-			<i name="P501"></i>
+			<table><tbody>
+				<tr><td><slot name="P461"></slot></td><td><slot name="P501"></slot></td><td><slot name="P377"></slot></td></tr>
+			</tbody></table>
 			<div style="display:flex">
-				<i name="P461"></i>
-				<i name="P377"></i>
-				<i name="P325"></i>
-				<i name="P313"></i>
-				<i name="P310"></i>
+				<slot name="P461"></slot>
+				<slot name="P377"></slot>
+				<slot name="P325"></slot>
+				<slot name="P313"></slot>
+				<slot name="P310"></slot>
 			</div>
 		</template>
 	</form>
