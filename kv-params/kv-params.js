@@ -304,7 +304,7 @@ class kvParams extends HTMLElement {
 	#newRow(sibling) {
 		const row = sibling.cloneNode(true);
 		row.querySelector('select').value = 'number';
-		row.querySelector('input[name="id"]').value = this.Schema.reduce((maxId, el) => Math.max(maxId, parseInt(el.id)), 0) + 1;
+		row.querySelector('input[name="id"]').value = '';
 		row.querySelector('input[name="label"]').setAttribute('data-value', JSON.stringify(kvParams.#Texts.new));
 		row.querySelector('input[name="label"]').value = kvParams.#Texts.new[this.Lang];
 		row.querySelector('select[name="um"]').value = '';
@@ -568,8 +568,12 @@ class kvParams extends HTMLElement {
 	}
 	save() {
 		if (this.querySelector('.schema') != null) {
+			// Before rewritting the schema save the max id, this prevents reuse of old ids in case they are deleted
+			let max = this.Schema.reduce((maxId, el) => Math.max(maxId, parseInt(el.id)), 0);
+			console.log(max);
+
 			this.Schema = [];
-			this.querySelectorAll('tbody>tr').forEach((tr, r) => {
+			this.querySelectorAll('tbody>tr').forEach(tr => {
 				const param = {};
 				tr.querySelectorAll('input,select').forEach(el => {
 					if (el.name == 'label') {
@@ -579,9 +583,11 @@ class kvParams extends HTMLElement {
 						param.options = JSON.parse(el.value || '[]');
 					else if (el.name == 'flags')
 						param.flags = parseInt(el.value) || 16;
-					else if (el.name == 'id')
-						param.id = el.value || r;
-					else
+					else if (el.name == 'id') {
+						el.value = el.value == '' ? ++max : el.value;
+						el.closest('tr').setAttribute('title', '@' + el.value);
+						param.id = parseInt(el.value);
+					} else
 						param[el.name] = el.value;
 				});
 				this.Schema.push(param);
