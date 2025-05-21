@@ -171,6 +171,8 @@ class kvParams extends HTMLElement {
 		document.addEventListener('keyup', event => {
 			if (event.key == 'Enter' && event.target.classList.contains('manageOptions'))
 				this.#manageOptions(event);
+			else if ((event.key == 'Enter' || event.key == ' ') && event.target.tagName === 'I' && event.target.hasAttribute('tabindex'))
+				event.target.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
 			else if (this.Mode == 'manage' && event.altKey && (event.key == 'ArrowUp' || event.key == 'ArrowDown')) {
 				const row = this.querySelector('tbody tr.selected');
 				if (event.key == 'ArrowUp' && row.previousElementSibling) {
@@ -232,7 +234,7 @@ class kvParams extends HTMLElement {
 			`<th>${kvParams.#Texts.um[this.Lang]}</th>` +
 			`<th></th>` +
 			`<th style="white-space:nowrap">${kvParams.#Flags.map((el, i) => `<i class="${el.icon}" title="${el[this.Lang]}" data-flag="${i}"></i>`).join(' ')}</th>` +
-			`<th></th>` +
+			`<th><i class="far fa-trash-alt" style="visibility:hidden"></i> <i class="fas fa-plus add" tabindex="0"></i></th>` +
 			`</tr>` +
 			'</thead>' +
 			`<tbody class="kv-params">` +
@@ -302,7 +304,10 @@ class kvParams extends HTMLElement {
 		this.scrollIntoView({ block: 'nearest' });
 	}
 	#newRow(sibling) {
+		if (sibling.firstChild.tagName == 'TH')
+			sibling = this.querySelector('tbody').firstElementChild;
 		const row = sibling.cloneNode(true);
+		row.style.display = '';
 		row.querySelector('select').value = 'number';
 		row.querySelector('input[name="id"]').value = '';
 		row.querySelector('input[name="label"]').setAttribute('data-value', JSON.stringify(kvParams.#Texts.new));
@@ -456,15 +461,16 @@ class kvParams extends HTMLElement {
 						html += `<tr><td title="@${param.id}">${param.label[this.Lang]} ${um} ${icons}</td>`;
 						kvParams.sizeArray(this.Data[`P${param.id}`], cols).forEach((value, k) => {
 							const l = ref?.findIndex(option => option == value);
-							html += `<td><select ${attributes(param)} tabindex="${k * count + j}"><option></option>${param.options[i]?.split(',').map((option, j) => `<option value="${ref[j]}" ${l == j ? ' selected' : ''}>${option}${paired[j] ? ' [' + paired[j] + ums.isu + ']' : ''}</option>`).join('')}</select></td>`
+							html += `<td><select ${attributes(param)} tabindex="${k * count + j}"><option></option>${param.options[i]?.split(',').map((option, j) => `<option value="${ref[j].replace(/"/g, '&quot;')}" ${l == j ? ' selected' : ''}>${option}${paired[j] ? ' [' + paired[j] + ums.isu + ']' : ''}</option>`).join('')}</select></td>`
 						});
 						html += '</tr>';
 						break;
 					}
-					case 'textarea':
+					case 'textarea': {
+						const value = typeof this.Data[`P${param.id}`] != 'undefined' ? this.Data[`P${param.id}`][0] : '';
 						html += `<tr><td colspan="*" title="@${param.id}"><label><span>${param.label[this.Lang]}${param.um ? ` [${param.um}]` : ''} ${icons}</span><textarea ${attributes(param)} tabindex="${j}">${value}</textarea></label></td></tr>`;
 						break;
-
+					}
 					case 'separator':
 						html += '<tr class="colspan"><td colspan="*">&nbsp;</td></tr>';
 						break;
@@ -541,11 +547,11 @@ class kvParams extends HTMLElement {
 								i = param.options[1] && (param.um && this.UM == 'isu' || !param.um && this.Lang != 'en') ? 1 : 0;
 						}
 						const l = ref?.findIndex(option => option == value);
-						el.insertAdjacentHTML('afterend', `<label title="@${param.id}"><span>${param.label[this.Lang]} ${um} ${icons}</span><select ${attributes(param)}><option></option>${param.options[i]?.split(',').map((option, j) => `<option value="${ref[j]}" ${l == j ? ' selected' : ''}>${option}${paired[j] ? ' [' + paired[j] + ums.isu + ']' : ''}</option>`).join('')}</select></label>`);
+						el.insertAdjacentHTML('afterend', `<label title="@${param.id}"><span>${param.label[this.Lang]} ${um} ${icons}</span><select ${attributes(param)}><option></option>${param.options[i]?.split(',').map((option, j) => `<option value="${ref[j].replace(/"/g, '&quot;')}" ${l == j ? ' selected' : ''}>${option}${paired[j] ? ' [' + paired[j] + ums.isu + ']' : ''}</option>`).join('')}</select></label>`);
 						break;
 					}
 					case 'textarea':
-						el.insertAdjacentHTML('afterend', `<textarea ${attributes(param)}>${value}</textarea>`);
+						el.insertAdjacentHTML('afterend', `<label title="@${param.id}"><span>${param.label[this.Lang]} ${icons}</span><textarea ${attributes(param)}>${value}</textarea></label>`);
 						break;
 				}
 			}
@@ -569,8 +575,7 @@ class kvParams extends HTMLElement {
 	save() {
 		if (this.querySelector('.schema') != null) {
 			// Before rewritting the schema save the max id, this prevents reuse of old ids in case they are deleted
-			let max = this.Schema.reduce((maxId, el) => Math.max(maxId, parseInt(el.id)), 0);
-			console.log(max);
+			let max = this.Schema.reduce((maxId, el) => Math.max(maxId, parseInt(el.id)), 0) || 0;
 
 			this.Schema = [];
 			this.querySelectorAll('tbody>tr').forEach(tr => {
